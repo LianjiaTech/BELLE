@@ -1,0 +1,6 @@
+numpy
+rouge_score
+fire
+openai
+transformers
+gensim==3.8.2
