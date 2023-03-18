@@ -59,8 +59,8 @@ python generate_instruction.py generate_instruction_following_data \
 |LR_scheduler | linear |
 
 
-根据指令学习数据集的规模，我们得到不同的模型版本如下所示:
-| Datasize| 0.2M | 0.6M | 1M |
+我们采取了不同大小规模（20万、60万、100万）的指令学习的数据集训练模型，我们得到不同的模型版本如下所示:
+| Datasize| 200,000 | 600,000 | 1,000,000 |
 | ----- | ----- | ----- | ----- |
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) |
 
@@ -172,8 +172,8 @@ Finetuning is done based on `BLOOMZ-7B1-mt` and `Belle.train.json` using the fol
 |LR_scheduler | linear |
 
 
-We have different versions of the model based on the size of the instruction learning dataset as shown below:
-| Datasize| 0.2M | 0.6M | 1M |
+We trained models using datasets of different sizes (200,000, 600,000, 1,000,000) for instruction learning, and we obtained different model versions as shown below:
+| Datasize| 200,000 | 600,000 | 1,000,000 |
 | ----- | ----- | ----- | ----- |
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) |
 
