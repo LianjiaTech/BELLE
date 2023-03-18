@@ -18,7 +18,7 @@
 使用Alpaca模型的在线演示服务，我们发现该模型在中文上的表现还不太好。推测是因为Stanford Alpaca 的种子任务都是英语，收集的数据也都是英文，因此训练出来的模型未对中文优化。为了提升在中文上的效果，本项目基于[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca)优化了中文种子任务，对生成代码进行了一些修改，同时选用BLOOMZ-7B作为基础模型训练得到了一个可以更好支持中文指令的开源模型 - BELLE。
 
 
-我们开源基于Alpaca的数据收集代码，基于这段代码生成了约18万条中文数据，结合Alpaca的5万条英文数据，在BLOOMZ-7B模型训练得到的checkpoint上传在[Hugging Face](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)。
+我们开源基于Alpaca的数据收集代码，基于这段代码生成了约100万条中文数据，结合Alpaca的5万条英文数据，在BLOOMZ-7B模型训练得到的checkpoint上传在[Hugging Face](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)。
 
 
 ## 数据发布
@@ -59,7 +59,7 @@ python generate_instruction.py generate_instruction_following_data \
 |LR_scheduler | linear |
 
 
-这里是当前可获取的模型:
+根据指令学习数据集的规模，我们得到不同的模型版本如下所示:
 | Datasize| 0.2M | 0.6M | 1M |
 | ----- | ----- | ----- | ----- |
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) |
@@ -131,7 +131,7 @@ The goal of this project is to promote the development of the open-source commun
 
 From the web demo of Alpaca, we found it's performance on Chinese is not as well. We speculate the reason to be that the seed tasks of Stanford Alpaca are all English, and the generated data are also in English, so model tuned on it is not optimized for Chinese. This project aims to boost Chinese performance with improved Chinese seed tasks based on [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca), some modification to to instruction generation code, and also BLOOMZ-7B as the base model. The result is a model which better supports Chinese - **BELLE**.
 
-The instruction generation code and finetuned model checkpoint [Hugging Face](https://huggingface.co/jay68/BELLE-7B-0.2M) trained on the generated dataset (approx. 180k instruction and answer pairs, plus original ~50k Alpaca pairs) based on BLOOMZ-7B are both open sourced.
+The instruction generation code and finetuned model checkpoint [Hugging Face](https://huggingface.co/jay68/BELLE-7B-0.2M) trained on the generated dataset (approx. 1m instruction and answer pairs, plus original ~50k Alpaca pairs) based on BLOOMZ-7B are both open sourced.
 
 
 ## Data Release
@@ -172,7 +172,7 @@ Finetuning is done based on `BLOOMZ-7B1-mt` and `Belle.train.json` using the fol
 |LR_scheduler | linear |
 
 
-There are current avaliable model checkpoints:
+We have different versions of the model based on the size of the instruction learning dataset as shown below:
 | Datasize| 0.2M | 0.6M | 1M |
 | ----- | ----- | ----- | ----- |
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) |
