@@ -103,6 +103,9 @@ python generate_instruction.py generate_instruction_following_data \
 <br/>
 
 
+***
+
+
 # BELLE: Bloom-Enhanced Large Language model Engine
 This project is from [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) which aims to build and share instruction-following LLaMA model. <br/>
 The seed tasks in Stanford Alpaca are English only, and the model performs relatively poorly in Chinese. <br/>
