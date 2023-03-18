@@ -68,6 +68,7 @@ python generate_instruction.py generate_instruction_following_data \
 ## 模型使用例子
 | Human | Assitant |
 | ----- | ------ |
+| 写一篇散文诗，主题是春雨，想象自己是春雨，和中国古代诗人交流 | 我是一滴春雨<br/>落在了你的窗前<br/>你静静地倾听着我的声音<br/>仿佛在思考着什么<br/><br/>我想起了唐代诗人白居易的《赋得古原草送别》<br/>他写道：“离离原上草，一岁一枯荣。<br/>野火烧不尽，春风吹又生。”<br/>是啊，春天来了，万物复苏<br/>而我也像这些草一样，<br/>经历了一年的成长和凋零<br/><br/>现在，我再次回到大地母亲的怀抱中<br/>感受到了她的温暖和慈爱<br/>她用柔和的风儿吹拂着我<br/>让我感受到生命的活力和希望<br/><br/>我想起了《红楼梦》中黛玉所说：“花谢花飞花满天，红消香断有谁怜？”<br/>是啊，人生就像这花朵一般<br/>总会有盛开和凋零的时候<br/>但只要我们心存善念、努力奋斗<br/>就一定能够迎接更美好的未来<br/><br/>于是我决定继续前进<br/>为自己的生命注入新的活力<br/>让自己在未来的日子里更加精彩<br/><br/>中国古代的诗歌与现代的散文诗<br/>有着不同的表达方式和文化内涵<br/>但我相信它们都蕴含着深刻的哲理和启示<br/>让我们在人生的道路上不断前行 |
 | Classify the sentiment of the following sentence into Positive, Neutral, or Negative: <br/>Super excited about teaching Stanford’s first course on Large Language Models! Check the syllabus out here | Positive |
 | 使用python写一个二分查找的代码 | def binary_search(arr, target):<br/>&nbsp;&nbsp;low = 0<br/>&nbsp;&nbsp;high = len(arr) - 1<br/>&nbsp;&nbsp;while (low <= high):<br/>&nbsp;&nbsp;&nbsp;&nbsp;mid = low + high // 2<br/>&nbsp;&nbsp;&nbsp;&nbsp;if arr[mid] == target:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return mid<br/>&nbsp;&nbsp;&nbsp;&nbsp;elif target < arr[mid]:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;low = mid + 1<br/>&nbsp;&nbsp;&nbsp;&nbsp;else:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;high = mid - 1<br/>&nbsp;&nbsp;return -1 |
 | 今天天气怎么样，把这句话翻译成英语 | What's the weather like today? |
