@@ -2,7 +2,7 @@
 本项目基于 [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) ，Stanford Alpaca 的目标是构建和开源一个基于LLaMA的模型。 Stanford Alpaca 的种子任务都是英语，收集的数据也都是英文，因此训练出来的模型未对中文优化。<br/>
 <br/>
 
-本项目针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。项目包含以下内容:
+本项目目标是促进中文对话大模型开源社区的发展。本项目针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。项目包含以下内容:
 - 175个中文种子任务
 - 生成数据的代码
 - 基于BLOOMZ-7B1-mt优化后的模型
@@ -110,7 +110,7 @@ python generate_instruction.py generate_instruction_following_data \
 This project is from [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) which aims to build and share instruction-following LLaMA model. <br/>
 The seed tasks in Stanford Alpaca are English only, and the model performs relatively poorly in Chinese. <br/>
 <br/>
-This project optimizes Chinese performance in addition to original Alpaca. The model finetuning uses only data generated via ChatGPT (without other data). This repo contains:
+The goal of this project is to promote the development of the open-source community for Chinese language large-scale conversational models. This project optimizes Chinese performance in addition to original Alpaca. The model finetuning uses only data generated via ChatGPT (without other data). This repo contains:
 - The 175 chinese seed tasks used for generating the data
 - The code for generating the data
 - The 183,536 generated data used for fine-tuning the model
