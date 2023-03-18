@@ -89,7 +89,7 @@ def post_process_gpt3_response(num_prompt_instructions, response):
         if intruction_match and input_match and output_match:
             inst = re.sub(r'\d+\.$', '', intruction_match.group().strip()).strip('\n')
             input = re.sub(r'\d+\.$', '', input_match.group().strip()).strip('\n')
-            input = "" if "<无输入>" in input else input
+            input = "" if "无输入" in input else input
             output = output_match.group().strip().strip('\n')
             if '指令:' in output and '输入:' in output and '输出:' in output: # 返回若没有以###号区分，取第一条数据
                 output_pattern_new = re.compile(r"(?<=(?:" + "))[\s\S]*?(?=" + '|'.join(['指令:', '指令：']) + ")")
