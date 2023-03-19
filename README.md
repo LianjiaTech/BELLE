@@ -133,7 +133,7 @@ The goal of this project is to promote the development of the open-source commun
 
 From the web demo of Alpaca, we found it's performance on Chinese is not as well. We speculate the reason to be that the seed tasks of Stanford Alpaca are all English, and the generated data are also in English, so model tuned on it is not optimized for Chinese. This project aims to boost Chinese performance with improved Chinese seed tasks based on [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca), some modification to to instruction generation code, and also BLOOMZ-7B as the base model. The result is a model which better supports Chinese - **BELLE**.
 
-The instruction generation code and finetuned model checkpoint [Hugging Face](https://huggingface.co/jay68/BELLE-7B-0.2M) trained on the generated dataset (approx. 1m instruction and answer pairs, plus original ~50k Alpaca pairs) based on BLOOMZ-7B are both open sourced.
+The instruction generation code and finetuned model checkpoint [Hugging Face](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) trained on the generated dataset (approx. 1m instruction and answer pairs, plus original ~50k Alpaca pairs) based on BLOOMZ-7B are both open sourced.
 
 
 ## Data Release
