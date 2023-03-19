@@ -18,7 +18,7 @@
 使用Alpaca模型的在线演示服务，我们发现该模型在中文上的表现还不太好。推测是因为Stanford Alpaca 的种子任务都是英语，收集的数据也都是英文，因此训练出来的模型未对中文优化。为了提升在中文上的效果，本项目基于[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca)优化了中文种子任务，对生成代码进行了一些修改，同时选用BLOOMZ-7B作为基础模型训练得到了一个可以更好支持中文指令的开源模型 - BELLE。
 
 
-我们开源基于Alpaca的数据收集代码，基于这段代码生成了约100万条中文数据，结合Alpaca的5万条英文数据，在BLOOMZ-7B模型训练得到的checkpoint上传在[Hugging Face](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)。
+我们开源基于Alpaca的数据收集代码，基于这段代码生成了约100万条中文数据，结合Alpaca的5万条英文数据，在BLOOMZ-7B模型训练得到的checkpoint上传在[Hugging Face](https://huggingface.co/BelleGroup/BELLE-7B-1M)。
 
 
 ## 数据发布
