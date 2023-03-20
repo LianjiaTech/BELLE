@@ -1,4 +1,4 @@
-# <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: Bloom-Enhanced Large Language model Engine 
+## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: Bloom-Enhanced Large Language model Engine 
 本项目基于 [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) ，Stanford Alpaca 的目标是构建和开源一个基于LLaMA的模型。 Stanford Alpaca 的种子任务都是英语，收集的数据也都是英文，因此训练出来的模型未对中文优化。<br/>
 <br/>
 
@@ -123,7 +123,7 @@ python generate_instruction.py generate_instruction_following_data \
 <br/>
 <br/>
 
-# <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: Bloom-Enhanced Large Language model Engine
+## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: Bloom-Enhanced Large Language model Engine
 This project is from [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) which aims to build and share instruction-following LLaMA model. <br/>
 The seed tasks in Stanford Alpaca are English only, and the model performs relatively poorly in Chinese. <br/>
 <br/>
