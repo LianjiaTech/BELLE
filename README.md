@@ -12,6 +12,7 @@
 
 
 ## What's New
+* March 20, 2013: [发布了2M数据训练的7B模型](https://huggingface.co/BelleGroup/BELLE-7B-2M).
 * March 18, 2023: [发布了1M数据训练的7B模型](https://huggingface.co/BelleGroup/BELLE-7B-1M). [发布了0.6M数据训练的7B模型](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)
 * March 17, 2023: [发布了0.2M数据训练的7B模型](https://huggingface.co/BelleGroup/BELLE-7B-0.2M). [发布了0.5M中文数据集](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
 
