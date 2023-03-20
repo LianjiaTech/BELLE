@@ -135,6 +135,7 @@ The goal of this project is to promote the development of the open-source commun
 
 
 ## What's New
+* March 20, 2013: [Released 7B model trained on 2M data](https://huggingface.co/BelleGroup/BELLE-7B-2M).
 * March 18, 2023: [Released 7B model trained on 1M data](https://huggingface.co/BelleGroup/BELLE-7B-1M). [Released 7B model trained on 0.6M data](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)
 * March 17, 2023: [Initial release of 7B model trained on 0.2M data](https://huggingface.co/BelleGroup/BELLE-7B-0.2M). [Released 0.5M dataset](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
 
