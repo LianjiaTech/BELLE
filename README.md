@@ -69,7 +69,7 @@ python generate_instruction.py generate_instruction_following_data \
 | ----- | ----- | ----- | ----- |
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) |
 
-随后，我们会基于我们之前的工作 （https://arxiv.org/abs/2303.07610） 中的方法对比下这几个模型的效果。
+随后，我们会基于我们之前的工作[Exploring ChatGPT's Ability to Rank Content: A Preliminary Study on Consistency with Human Preferences](https://arxiv.org/abs/2303.07610)中的方法对比下这几个模型的效果。
 
 ## 模型使用例子
 | Human | Assitant |
