@@ -64,10 +64,10 @@ python generate_instruction.py generate_instruction_following_data \
 |LR_scheduler | linear |
 
 
-我们采取了不同大小规模（20万、60万和100万样本）的指令学习的数据集训练模型，我们得到不同的模型版本如下所示:
-| Datasize| 200,000 | 600,000 | 1,000,000 |
-| ----- | ----- | ----- | ----- |
-| Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) |
+我们采取了不同大小规模（20万、60万、100万和200万样本）的指令学习的数据集训练模型，我们得到不同的模型版本如下所示:
+| Datasize| 200,000 | 600,000 | 1,000,000 | 2,000,000 |
+| ----- | ----- | ----- | ----- | ----- | 
+| Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
 
 随后，我们会基于我们之前的工作[Exploring ChatGPT's Ability to Rank Content: A Preliminary Study on Consistency with Human Preferences](https://arxiv.org/abs/2303.07610)中的方法对比下这几个模型的效果。
 
@@ -185,10 +185,10 @@ Finetuning is done based on `BLOOMZ-7B1-mt` and `Belle.train.json` using the fol
 |LR_scheduler | linear |
 
 
-We trained models using datasets of different sizes (200,000, 600,000, and 1,000,000 samples) for instruction learning, and we obtained different model versions as shown below:
-| Datasize| 200,000 | 600,000 | 1,000,000 |
-| ----- | ----- | ----- | ----- |
-| Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) |
+We trained models using datasets of different sizes (200,000, 600,000, 1,000,000 and 2,000,000 samples) for instruction learning, and we obtained different model versions as shown below:
+| Datasize| 200,000 | 600,000 | 1,000,000 | 2,000,000 |
+| ----- | ----- | ----- | ----- | ----- | 
+| Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
 
 
 
