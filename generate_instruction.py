@@ -54,30 +54,16 @@ def post_process_gpt3_response(num_prompt_instructions, response):
         raw_instructions = f"{num_prompt_instructions+1}. 指令:" + raw_instructions
     raw_instructions = re.split("###", raw_instructions)
     instructions = []
-    replace_map = {'OpenAI': 'Belle group', 'chatgpt': 'Belle', 'gpt-3': 'Belle', 'gpt-3.5': 'Belle', 'gpt-4': 'Belle'}
+    blacklist = ["图像", "图片", "照片", "文件", "图表", "图层", "曲线图", "折线图", "直线图", "柱形图", "饼状图", "链接", "http",'OpenAI', 'chatgpt', 'gpt-3', 'gpt-3.5', 'gpt-4']
+    replace_empty_list = ['要求GPT模型能够', '要求GPT能够', '要求GPT模型', '让GPT模型', '使用GPT模型', '请向GPT模型', 'GPT模型应', 'GPT模型应该', '请求GPT模型', '需要GPT模型回答', '请GPT模型'
+                          , '请让GPT模型', '训练GPT模型', 'GPT模型需要', '要求GPT', '让GPT', '使用GPT', '请向GPT', 'GPT应', 'GPT应该', '请求GPT', '需要GPT回答', '请GPT', '请让GPT'
+                          , '训练GPT', 'GPT需要', '希望GPT模型能够', '希望GPT能够', '以便GPT模型能够', '以便GPT能够', '使得GPT模型能够', '使得GPT能够', '使GPT模型能够', '使GPT能够'
+                          , '由GPT模型', '使GPT模型']
     for idx, inst in enumerate(raw_instructions):
         # if the decoding stops due to length, the last example is likely truncated so we discard it
         if idx == len(raw_instructions) - 1 and response["finish_reason"] == "length":
             continue
-        # replace
-        for key in replace_map:
-            regx = re.compile(key, re.IGNORECASE)
-            inst = regx.sub(replace_map[key], inst) 
         # filter based on keywords that are not suitable for language models.
-        blacklist = [
-            "图像",
-            "图片",
-            "照片",
-            "文件",
-            "图表",
-            "图层",
-            "曲线图",
-            "折线图",
-            "直线图",
-            "柱形图",
-            "饼状图",
-        ]
-        blacklist += []
         if any(find_word_in_string(word, inst) for word in blacklist):
             continue
         intruction_pattern = re.compile(r"(?<=(?:" + '|'.join(['指令:', '指令：']) + "))[\s\S]*?(?=" + '|'.join(['输入:', '输入：']) + ")")
@@ -99,6 +85,13 @@ def post_process_gpt3_response(num_prompt_instructions, response):
             # 去掉不合理的instruction
             if len(inst) <= 3:
                 continue
+                
+            for item in replace_empty_list:
+                inst = inst.replace(item, "") 
+            
+            if "GPT" in inst or 'GPT' in input:
+                continue
+                
             if len(input) == 0:  # input无输入
                 instructions.append({"instruction": inst, "input": input, "output": output})
             else:
