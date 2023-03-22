@@ -29,9 +29,13 @@
 
 ## 数据发布
 1. `zh_seed_tasks.jsonl`：包含175个种子任务，样例如下<br/>
-`{"id": "seed_task_20", "name": "horror_movie_opening", "instruction": "你需要为一部恐怖电影写一个创意的开场场景。", "instances": [{"input": "", "output": "太阳已经落山，留下了一个黑暗的小镇。微风吹拂空荡的街道，让每一个冒险走出门外的人感到一阵寒意。唯一的声音是被风吹动的树叶发出的轻微沙沙声。突然，一声令人毛骨悚然的尖叫声划破了寂静，随后是玻璃破碎的声音。一所房子亮起了灯光，可以看到一个人影朝镇中心奔跑。当>那个人影越来越靠近时，清楚地看到那是一个年轻女子，她浑身血迹斑斑。"}], "is_classification": false}` 
+
+```
+{"id": "seed_task_20", "name": "horror_movie_opening", "instruction": "你需要为一部恐怖电影写一个创意的开场场景。", "instances": [{"input": "", "output": "太阳已经落山，留下了一个黑暗的小镇。微风吹拂空荡的街道，让每一个冒险走出门外的人感到一阵寒意。唯一的声音是被风吹动的树叶发出的轻微沙沙声。突然，一声令人毛骨悚然的尖叫声划破了寂静，随后是玻璃破碎的声音。一所房子亮起了灯光，可以看到一个人影朝镇中心奔跑。当那个人影越来越靠近时，清楚地看到那是一个年轻女子，她浑身血迹斑斑。"}], "is_classification": false}` 
+```
+
 2. `prompt_cn.txt`: 生成所使用的提示语
-3. [0.5M生成的数据](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
+3. [0.5M生成的数据](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN) ： 为了方便模型训练，huggingface开源数据将原始生成文件中的"instruction"、"input"字段合并成"input"字段，"output"字段修改为"target"字段。
 
 
 ## 数据生成
@@ -156,7 +160,7 @@ The instruction generation code and finetuned model checkpoint [Hugging Face](ht
 1. `zh_seed_tasks.jsonl` contains 175 seed tasks, for example:<br/>
 `{"id": "seed_task_20", "name": "horror_movie_opening", "instruction": "你需要为一部恐怖电影写一个创意的开场场景。", "instances": [{"input": "", "output": "太阳已经落山，留下了一个黑暗的小镇。微风吹拂空荡的街道，让每一个冒险走出门外的人感到一阵寒意。唯一的声音是被风吹动的树叶发出的轻微沙沙声。突然，一声令人毛骨悚然的尖叫声划破了寂静，随后是玻璃破碎的声音。一所房子亮起了灯光，可以看到一个人影朝镇中心奔跑。当>那个人影越来越靠近时，清楚地看到那是一个年轻女子，她浑身血迹斑斑。"}], "is_classification": false}` 
 2. `prompt_cn.txt` Chinese prompt for generating instructions
-3. [0.5M generated data](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
+3. [0.5M generated data](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)：To facilitate model training, Hugging Face open-sourced data that merged the "instruction" and "input" fields in the original generation file into a single "input" field, and renamed the "output" field as the "target" field.
 
 
 ## Data Generation Process
