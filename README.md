@@ -23,8 +23,19 @@
 
 使用Alpaca模型的在线演示服务，我们发现该模型在中文上的表现还不太好。推测是因为Stanford Alpaca 的种子任务都是英语，收集的数据也都是英文，因此训练出来的模型未对中文优化。为了提升在中文上的效果，本项目基于[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca)优化了中文种子任务，对生成代码进行了一些修改，同时选用BLOOMZ-7B作为基础模型训练得到了一个可以更好支持中文指令的开源模型 - BELLE。
 
-
 我们开源基于Alpaca的数据收集代码，基于这段代码生成了约100万条中文数据，结合Alpaca的5万条英文数据，在BLOOMZ-7B模型训练得到的checkpoint上传在[Hugging Face](https://huggingface.co/BelleGroup)。
+
+
+## 局限性和使用限制
+基于当前数据和基础模型训练得到的SFT模型，在效果上仍存在以下问题：
+
+1. 在涉及事实性的指令上可能会产生违背事实的错误回答。
+
+2. 对于具备危害性的指令无法很好的鉴别，由此会产生危害性言论。
+
+3. 在一些涉及推理、代码等场景下模型的能力仍有待提高。
+
+基于以上模型局限性，我们要求开发者仅将我们开源的代码、数据、模型及后续用此项目生成的衍生物用于研究目的，不得用于商业，以及其他会对社会带来危害的用途。
 
 
 ## 数据发布
@@ -91,18 +102,6 @@ python generate_instruction.py generate_instruction_following_data \
 | 推荐几本金庸的武侠小说 | 以下是三本我最喜欢的金庸武侠小说的推荐： <br/>1. 《射雕英雄传》 - 一部充满智慧和机智的小说，讲述了郭靖、黄蓉夫妇的故事。 <br/>2. 《神雕侠侣》- 这是一部浪漫而感人的故事，讲述了一对情侣小龙女与杨过之间的爱情故事。 <br/>3. 《倚天屠龙记》- 这是一个宏伟而壮观的故事，描绘了明教领袖张无忌如何成为一位出色的英雄。 |
 
 
-## 局限性和使用限制
-基于当前数据和基础模型训练得到的SFT模型，在效果上仍存在以下问题：
-
-1. 在涉及事实性的指令上可能会产生违背事实的错误回答。
-
-2. 对于具备危害性的指令无法很好的鉴别，由此会产生危害性言论。
-
-3. 在一些涉及推理、代码等场景下模型的能力仍有待提高。
-
-基于以上模型局限性，我们要求开发者仅将我们开源的代码、数据、模型及后续用此项目生成的衍生物用于研究目的，不得用于商业，以及其他会对社会带来危害的用途。
-
-
 ## 引用
 
 如果使用本项目的代码、数据或模型，请引用本项目。
@@ -155,6 +154,18 @@ From the web demo of Alpaca, we found it's performance on Chinese is not as well
 
 The instruction generation code and finetuned model checkpoint [Hugging Face](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) trained on the generated dataset (approx. 1m instruction and answer pairs, plus original ~50k Alpaca pairs) based on BLOOMZ-7B are both open sourced.
 
+## Limitation and Usage Limits
+There still exists a few issues in the model trained on current base model and data:
+
+1. The model might generate factual errors when asked to follow instructions related to facts.
+
+2. Occasionally generates harmful responses since the model still struggles to identify potential harmful instructions.
+
+3. Needs improvements on reasoning and coding.
+
+Since the model still has its limitations, we require developers only use the open-sourced code, data, model and any other artifacts generated via this project for research purposes. Commercial use and other potential harmful use cases are not allowed.
+
+
 
 ## Data Release
 1. `zh_seed_tasks.jsonl` contains 175 seed tasks, for example:<br/>
@@ -199,18 +210,6 @@ We trained models using datasets of different sizes (200,000, 600,000, 1,000,000
 | ----- | ----- | ----- | ----- | ----- | 
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
 
-
-
-## Limitation and Usage Limits
-There still exists a few issues in the model trained on current base model and data:
-
-1. The model might generate factual errors when asked to follow instructions related to facts.
-
-2. Occasionally generates harmful responses since the model still struggles to identify potential harmful instructions.
-
-3. Needs improvements on reasoning and coding.
-
-Since the model still has its limitations, we require developers only use the open-sourced code, data, model and any other artifacts generated via this project for research purposes. Commercial use and other potential harmful use cases are not allowed.
 
 
 ## Citation
