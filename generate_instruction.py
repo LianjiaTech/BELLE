@@ -49,7 +49,13 @@ def encode_prompt(prompt_instructions):
 def post_process_gpt3_response(num_prompt_instructions, response):
     if response is None:
         return []
-    raw_instructions = response["message"]["content"]
+    try: #for gpt-3.5-turbo
+        raw_instructions = response["message"]["content"]
+    except:
+        try:
+            raw_instructions = response["text"]  #for text-davinci-003
+        except:
+            print("ERROR parse!")
     if '指令:' not in raw_instructions[0: 10] and '指令：' not in raw_instructions[0: 10]:
         raw_instructions = f"{num_prompt_instructions+1}. 指令:" + raw_instructions
     raw_instructions = re.split("###", raw_instructions)
@@ -111,11 +117,11 @@ def find_word_in_string(w, s):
 def generate_instruction_following_data(
     output_dir="./",
     seed_tasks_path="./zh_seed_tasks.json",
-    num_instructions_to_generate=100,
+    num_instructions_to_generate=1,
     api="completion",
     model_name="text-davinci-003",
     num_prompt_instructions=3,
-    request_batch_size=3,
+    request_batch_size=1,
     temperature=1.0,
     top_p=1.0,
     num_cpus=16,
@@ -162,7 +168,7 @@ def generate_instruction_following_data(
         decoding_args = utils.OpenAIDecodingArguments(
             temperature=temperature,
             n=1,
-            max_tokens=3072,  # hard-code to maximize the length. the requests will be automatically adjusted
+            max_tokens=1024,  # hard-code to maximize the length. the requests will be automatically adjusted
             top_p=top_p,
             stop=["\n20", "20.", "20."],
         )
