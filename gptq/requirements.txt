@@ -1,0 +1,4 @@
+safetensors==0.3.0
+datasets==2.10.1
+sentencepiece
+git+https://github.com/huggingface/transformers
