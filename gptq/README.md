@@ -1,5 +1,5 @@
 # GPTQ-for-Bloom
-4 bits quantization of [Bloom](https://arxiv.org/pdf/2211.05100.pdf) using [GPTQ](https://arxiv.org/abs/2210.17323)
+8 bits quantization of [Bloom](https://arxiv.org/pdf/2211.05100.pdf) using [GPTQ](https://arxiv.org/abs/2210.17323)
 
 GPTQ is SOTA one-shot weight quantization method
 
