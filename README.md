@@ -8,6 +8,8 @@
 - 0.5M生成的数据
 - 基于BLOOMZ-7B1-mt优化后的模型
 
+[Colab Playground](https://colab.research.google.com/github/GoooIce/BELLE-Serve/blob/main/notebooks/belle_in_colab.ipynb)
+
 **欢迎大家通过issue贡献更多的prompts！**
 
 
