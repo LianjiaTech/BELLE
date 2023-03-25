@@ -11,10 +11,8 @@
 **欢迎大家通过issue贡献更多的prompts！**
 
 
-## What's Coming Next
-* March 23, 2023: 应很多朋友的建议(https://github.com/LianjiaTech/BELLE/issues/18, https://github.com/LianjiaTech/BELLE/issues/10, https://github.com/LianjiaTech/BELLE/issues/9, https://github.com/LianjiaTech/BELLE/issues/9, https://github.com/LianjiaTech/BELLE/issues/3 )，我们正在研发量化功能（LoRA下次一定），将大大降低推理的硬件需求，预计本周发布
-
 ## What's New
+* March 25, 2023: [发布了GPTQ量化后的模型](https://huggingface.co/BelleGroup/BELLE-7B-gptq)，大大降低了推理的硬件需求，相关代码在gptq目录下
 * March 25, 2023: [发布了全新的更高质量1M中文数据集](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)，与之前发布的[0.5M中文数据集](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)不重复
 * March 20, 2023: [发布了2M数据训练的7B模型](https://huggingface.co/BelleGroup/BELLE-7B-2M).
 * March 18, 2023: [发布了1M数据训练的7B模型](https://huggingface.co/BelleGroup/BELLE-7B-1M). [发布了0.6M数据训练的7B模型](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)
@@ -145,11 +143,8 @@ The goal of this project is to promote the development of the open-source commun
 **More prompts are welcomed via issues!**
 
 
-## What's Coming Next
-* March 23, 2023: As many friends' requested (https://github.com/LianjiaTech/BELLE/issues/18, https://github.com/LianjiaTech/BELLE/issues/10, https://github.com/LianjiaTech/BELLE/issues/9, https://github.com/LianjiaTech/BELLE/issues/9, https://github.com/LianjiaTech/BELLE/issues/3 )，we are working on quantization (LoRA may be next time), will decrease hardware requirement. Coming this week (maybe)!
-
-
 ## What's New
+* March 25, 2023: [Released GPTQ quantized model](https://huggingface.co/BelleGroup/BELLE-7B-gptq)，greatly reduces the hardware requirements for inference, and the relevant code is located in the 'gptq' directory.
 * March 25, 2023: [Released all new higher quality 1M Chinese dataset](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)，not overlap with previous [0.5M Chinese dataset](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
 * March 20, 2023: [Released 7B model trained on 2M data](https://huggingface.co/BelleGroup/BELLE-7B-2M).
 * March 18, 2023: [Released 7B model trained on 1M data](https://huggingface.co/BelleGroup/BELLE-7B-1M). [Released 7B model trained on 0.6M data](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)
