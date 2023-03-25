@@ -111,7 +111,7 @@ if __name__ == '__main__':
     if args.load:
         model = load_quant(args.model, args.load, args.wbits, args.groupsize)
     else:
-        model = get_llama(args.model)
+        model = get_bloom(args.model)
         model.eval()
         
     model.to(DEV)
