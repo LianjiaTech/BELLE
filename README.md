@@ -1,32 +1,31 @@
-## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: Bloom-Enhanced Large Language model Engine 
-本项目基于 [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) ，Stanford Alpaca 的目标是构建和开源一个基于LLaMA的模型。 Stanford Alpaca 的种子任务都是英语，收集的数据也都是英文，因此训练出来的模型未对中文优化。<br/>
+## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: BE Large Language model Engine 
+本项目目标是促进中文对话大模型开源社区的发展。现阶段本项目基于BLOOM和LLAMA针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
 <br/>
 
-本项目目标是促进中文对话大模型开源社区的发展。本项目针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。项目包含以下内容:
-- 175个中文[种子任务](https://github.com/LianjiaTech/BELLE/blob/main/zh_seed_tasks.json)
-- 生成数据的[代码](https://github.com/LianjiaTech/BELLE/blob/main/generate_instruction.py)
-- [1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)生成的中文数据集
-- 基于BLOOMZ-7B1-mt优化后的[模型](https://huggingface.co/BelleGroup/BELLE-7B-2M)
+项目包含以下内容:
+* 数据开放：参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) 生成的中文数据集[1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
+* 基于BLOOMZ-7B1-mt优化后的模型：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
+* 基于LLAMA优化后的模型：[BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)，[BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)
 
 **欢迎大家通过issue贡献更多的prompts！**
-
+<br/>
 
 ## What's New
-* March 25, 2023: [发布了GPTQ量化后的模型](https://huggingface.co/BelleGroup/BELLE-7B-gptq)，大大降低了推理的硬件需求，相关代码在[gptq目录](https://github.com/LianjiaTech/BELLE/tree/main/gptq)下
-* March 25, 2023: [发布了全新的更高质量1M中文数据集](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)，与之前发布的[0.5M中文数据集](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)不重复
-* March 20, 2023: [发布了2M数据训练的7B模型](https://huggingface.co/BelleGroup/BELLE-7B-2M).
-* March 18, 2023: [发布了1M数据训练的7B模型](https://huggingface.co/BelleGroup/BELLE-7B-1M). [发布了0.6M数据训练的7B模型](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)
-* March 17, 2023: [发布了0.2M数据训练的7B模型](https://huggingface.co/BelleGroup/BELLE-7B-0.2M). [发布了0.5M中文数据集](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
+* 2023年3月26日: [发布了基于2M指令数据训练的LLAMA-7B模型](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)。[发布了基于0.6M指令数据训练的LLAMA-7B模型](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)
+* 2023年3月25日: [发布了GPTQ量化后的模型](https://huggingface.co/BelleGroup/BELLE-7B-gptq)，大大降低了推理的硬件需求，相关代码在[gptq目录](https://github.com/LianjiaTech/BELLE/tree/main/gptq)下
+* 2023年3月25日: [发布了全新的更高质量1M中文数据集](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)，与之前发布的[0.5M中文指令数据集](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)不重复
+* 2023年3月20日: [发布了基于2M指令数据训练的BLOOM-7B模型](https://huggingface.co/BelleGroup/BELLE-7B-2M).
+* 2023年3月18日: [发布了基于1M指令数据训练的BLOOM-7B模型](https://huggingface.co/BelleGroup/BELLE-7B-1M). [发布了基于0.6M指令数据训练的BLOOM-7B模型](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)
+* 2023年3月17日: [发布了基于0.2M指令数据训练的BLOOM-7B模型](https://huggingface.co/BelleGroup/BELLE-7B-0.2M). [发布了0.5M中文指令数据集](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
 
+<br/>
 
 ## 概述
- [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) 中提到
-> 使用了Self-Instruct论文中介绍的技术生成了52K条指令数据，同时进行了一些修改，在初步的人类评估中，发现Alpaca 7B模型在Self-Instruct指令评估上的表现类似于text-davinci-003模型。
+为了促进中文对话大模型开源社区的发展，本项目参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca)项目，优化了中文数据流程，同时选用开源预训练大语言模型（BLOOM或者LLAMA）作为基础模型训练得到了一个可以更好支持中文指令的开源模型 - BELLE（BE Large Language model Engine）。
 
-使用Alpaca模型的在线演示服务，我们发现该模型在中文上的表现还不太好。推测是因为Stanford Alpaca 的种子任务都是英语，收集的数据也都是英文，因此训练出来的模型未对中文优化。为了提升在中文上的效果，本项目基于[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca)优化了中文种子任务，对生成代码进行了一些修改，同时选用BLOOMZ-7B作为基础模型训练得到了一个可以更好支持中文指令的开源模型 - BELLE。
+我们开源基于Alpaca的数据收集代码，基于这段代码生成了约200万条中文数据，结合Alpaca的5万条英文数据，在BLOOMZ-7B模型和LLAMA模型训练得到的checkpoint上传在[Hugging Face](https://huggingface.co/BelleGroup)。
 
-我们开源基于Alpaca的数据收集代码，基于这段代码生成了约100万条中文数据，结合Alpaca的5万条英文数据，在BLOOMZ-7B模型训练得到的checkpoint上传在[Hugging Face](https://huggingface.co/BelleGroup)。
-
+<br/>
 
 ## 局限性和使用限制
 基于当前数据和基础模型训练得到的SFT模型，在效果上仍存在以下问题：
@@ -39,17 +38,32 @@
 
 基于以上模型局限性，我们要求开发者仅将我们开源的代码、数据、模型及后续用此项目生成的衍生物用于研究目的，不得用于商业，以及其他会对社会带来危害的用途。
 
+<br/>
+
+## 模型发布
+
+我们采取了不同大小规模（20万、60万、100万和200万样本）的指令学习的数据集训练模型，基于BLOOMZ-7B1-mt训练调优后的模型，现已开放:
+| Datasize| 200,000 | 600,000 | 1,000,000 | 2,000,000 |
+| ----- | ----- | ----- | ----- | ----- | 
+| Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
+
+此外，方便大家使用，也对模型进行了量化[基于GPTQ量化后的模型](https://huggingface.co/BelleGroup/BELLE-7B-gptq)，其中包含4bit和8bit的量化模型。
+
+我们也采用对应数据集基于LLAMA-7B训练调优了模型，现已开放:
+| Datasize| 600,000 | 2,000,000 |
+| ----- | ----- | ----- | 
+| Finetuned Model | [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
+
+
+随后，我们会基于我们之前的工作[Exploring ChatGPT's Ability to Rank Content: A Preliminary Study on Consistency with Human Preferences](https://arxiv.org/abs/2303.07610)中的方法对比下这几个模型的效果。
+
+<br/>
 
 ## 数据发布
-1. `zh_seed_tasks.jsonl`：包含175个种子任务，样例如下<br/>
-
-```
-{"id": "seed_task_20", "name": "horror_movie_opening", "instruction": "你需要为一部恐怖电影写一个创意的开场场景。", "instances": [{"input": "", "output": "太阳已经落山，留下了一个黑暗的小镇。微风吹拂空荡的街道，让每一个冒险走出门外的人感到一阵寒意。唯一的声音是被风吹动的树叶发出的轻微沙沙声。突然，一声令人毛骨悚然的尖叫声划破了寂静，随后是玻璃破碎的声音。一所房子亮起了灯光，可以看到一个人影朝镇中心奔跑。当那个人影越来越靠近时，清楚地看到那是一个年轻女子，她浑身血迹斑斑。"}], "is_classification": false}` 
-```
-
-2. `prompt_cn.txt`: 生成所使用的提示语
-3. [0.5M生成的数据](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN) ： 为了方便模型训练，huggingface开源数据将原始生成文件中的"instruction"、"input"字段合并成"input"字段，"output"字段修改为"target"字段。
-4. [1M生成的数据](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)：生成方式与0.5M数据集相同，在后处理中去掉了一些质量不高的数据，例如自称`GPT模型`的数据、由于input不完善导致模型无法回答的数据，以及指令是中文但input或target是英文的数据。
+1. [zh_seed_tasks.jsonl](https://github.com/LianjiaTech/BELLE/blob/main/zh_seed_tasks.json)：包含175个种子任务。
+2. [0.5M生成的数据](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN) ： 为了方便模型训练，huggingface开源数据将原始生成文件中的"instruction"、"input"字段合并成"input"字段，"output"字段修改为"target"字段。
+3. [1M生成的数据](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)：生成方式与0.5M数据集相同，在后处理中去掉了一些质量不高的数据，例如自称`GPT模型`的数据、由于input不完善导致模型无法回答的数据，以及指令是中文但input或target是英文的数据。
+<br/>
 
 
 ## 数据生成
@@ -69,28 +83,26 @@ python generate_instruction.py generate_instruction_following_data \
 
 输出文件在`Belle.train.json`，可以人工筛选后再使用。
 
-## 模型调优
-我们基于BLOOMZ-7B1-mt模型和Belle.train.json训练模型，具体参数如下：<br/>
+<br/>
 
+## 引用
 
-| 参数 | 值 |
-| ------ | ------ |
-| Batch size | 64 |
-| Learning rate | 3e-6 |
-| Epochs | 3 |
-|Weight_decay | 0.001 |
-|Warmup_rate | 0.1 |
-|LR_scheduler | linear |
+如果使用本项目的代码、数据或模型，请引用本项目。
 
+```
+@misc{BELLE,
+  author = {Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Baochang Ma and Xiangang Li},
+  title = {BELLE: BE Large Language model Engine },
+  year = {2023},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/LianjiaTech/BELLE}},
+}
+```
 
-我们采取了不同大小规模（20万、60万、100万和200万样本）的指令学习的数据集训练模型，我们得到不同的模型版本如下所示:
-| Datasize| 200,000 | 600,000 | 1,000,000 | 2,000,000 |
-| ----- | ----- | ----- | ----- | ----- | 
-| Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
+当然，你也需要引用原始的BLOOM论文、LLaMA论文、Stanford Alpaca和Self-Instruct论文。
+<br/>
 
-此外，[基于GPTQ量化后的模型](https://huggingface.co/BelleGroup/BELLE-7B-gptq)
-
-随后，我们会基于我们之前的工作[Exploring ChatGPT's Ability to Rank Content: A Preliminary Study on Consistency with Human Preferences](https://arxiv.org/abs/2303.07610)中的方法对比下这几个模型的效果。
 
 ## 模型使用例子
 | Human | Assitant |
@@ -106,60 +118,42 @@ python generate_instruction.py generate_instruction_following_data \
 | 父母都姓吴，取一些男宝宝和女宝宝的名字 | - 男宝：吴俊杰、吴雨辰、吴子墨、吴思源、吴泽阳、吴宇航、吴博文、吴哲毅。 <br/>- 女宝：吴美琪、吴佳怡、吴欣瑜、吴香凝、吴雪柔、吴颖诗、吴语嫣。 |
 | 推荐几本金庸的武侠小说 | 以下是三本我最喜欢的金庸武侠小说的推荐： <br/>1. 《射雕英雄传》 - 一部充满智慧和机智的小说，讲述了郭靖、黄蓉夫妇的故事。 <br/>2. 《神雕侠侣》- 这是一部浪漫而感人的故事，讲述了一对情侣小龙女与杨过之间的爱情故事。 <br/>3. 《倚天屠龙记》- 这是一个宏伟而壮观的故事，描绘了明教领袖张无忌如何成为一位出色的英雄。 |
 
-
-## 引用
-
-如果使用本项目的代码、数据或模型，请引用本项目。
-
-```
-@misc{BELLE,
-  author = {Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Baochang Ma, Xiangang Li},
-  title = {BELLE: Bloom-Enhanced Large Language model Engine },
-  year = {2023},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/LianjiaTech/BELLE}},
-}
-```
-
-当然，你也需要引用原始的BLOOM论文、Stanford Alpaca和Self-Instruct论文。
-<br/>
 <br/>
 
 ***
 ***
 
 <br/>
+
+## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: BE Large Language model Engine
+The goal of this project is to promote the development of the open-source community for Chinese language large-scale conversational models. This project optimizes Chinese performance in addition to original Alpaca. The model finetuning uses only data generated via ChatGPT (without other data). 
 <br/>
 
-## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: Bloom-Enhanced Large Language model Engine
-This project is from [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) which aims to build and share instruction-following LLaMA model. <br/>
-The seed tasks in Stanford Alpaca are English only, and the model performs relatively poorly in Chinese. <br/>
-<br/>
-The goal of this project is to promote the development of the open-source community for Chinese language large-scale conversational models. This project optimizes Chinese performance in addition to original Alpaca. The model finetuning uses only data generated via ChatGPT (without other data). This repo contains:
-- The 175 chinese [seed tasks](https://github.com/LianjiaTech/BELLE/blob/main/zh_seed_tasks.json) used for generating the data
-- The [code](https://github.com/LianjiaTech/BELLE/blob/main/generate_instruction.py) for generating the data
-- The [1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN) generated data used for fine-tuning the model
-- The [model](https://huggingface.co/BelleGroup/BELLE-7B-2M) finetuned from BLOOMZ-7B1-mt on data generated by this project
+This repo contains:
+* Data Release: The Chinese dataset generated [1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN), using [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) as reference
+* The model optimized based on BLOOMZ-7B1-mt: [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
+* The model optimized based on LLAMA: [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)，[BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)
 
 **More prompts are welcomed via issues!**
 
+<br/>
 
 ## What's New
+* March 26, 2023: [Released finetuned LLAMA 7B model trained on 2M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)。[Released finetuned LLAMA 7B model trained on 0.6M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)
 * March 25, 2023: [Released GPTQ quantized model](https://huggingface.co/BelleGroup/BELLE-7B-gptq)，greatly reduces the hardware requirements for inference, and the relevant code is located in the ['gptq' directory](https://github.com/LianjiaTech/BELLE/tree/main/gptq).
 * March 25, 2023: [Released all new higher quality 1M Chinese dataset](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)，not overlap with previous [0.5M Chinese dataset](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
-* March 20, 2023: [Released 7B model trained on 2M data](https://huggingface.co/BelleGroup/BELLE-7B-2M).
-* March 18, 2023: [Released 7B model trained on 1M data](https://huggingface.co/BelleGroup/BELLE-7B-1M). [Released 7B model trained on 0.6M data](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)
-* March 17, 2023: [Initial release of 7B model trained on 0.2M data](https://huggingface.co/BelleGroup/BELLE-7B-0.2M). [Released 0.5M dataset](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
+* March 20, 2023: [Released finetuned BLOOM 7B model trained on 2M instruction data](https://huggingface.co/BelleGroup/BELLE-7B-2M).
+* March 18, 2023: [Released finetuned BLOOM 7B model trained on 1M instruction data](https://huggingface.co/BelleGroup/BELLE-7B-1M). [Released finetuned BLOOM 7B model trained on 0，6M instruction data](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)
+* March 17, 2023: [Released finetuned BLOOM 7B model trained on 0，6M instruction data](https://huggingface.co/BelleGroup/BELLE-7B-0.2M). [Released 0.5M dataset](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
 
+<br/>
 
 ## Overview
- [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) mentioned
-> The current Alpaca model is fine-tuned from a 7B LLaMA model on 52K instruction-following data generated by the techniques in the Self-Instruct paper, with some modifications... . In a preliminary human evaluation, we found that the Alpaca 7B model behaves similarly to the text-davinci-003 model on the Self-Instruct instruction-following evaluation suite.
+To promote the development of the Chinese conversational large model open-source community, this project refers to the [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) project, optimizes the Chinese data processing flow, and selects open-source pre-trained large language models (BLOOM or LLAMA) as the basis for training a better open-source model that supports Chinese instructions - BELLE (BE Large Language model Engine).
 
-From the web demo of Alpaca, we found it's performance on Chinese is not as well. We speculate the reason to be that the seed tasks of Stanford Alpaca are all English, and the generated data are also in English, so model tuned on it is not optimized for Chinese. This project aims to boost Chinese performance with improved Chinese seed tasks based on [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca), some modification to to instruction generation code, and also BLOOMZ-7B as the base model. The result is a model which better supports Chinese - **BELLE**.
+We open-sourced the data collection code based on Alpaca. Based on this code, we generated about 2 million Chinese data. Combined with Alpaca's 50,000 English data, the checkpoint trained on the BLOOMZ-7B model and LLAMA model were uploaded to [Hugging Face](https://huggingface.co/BelleGroup)。
 
-The instruction generation code and finetuned model checkpoint [Hugging Face](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) trained on the generated dataset (approx. 1m instruction and answer pairs, plus original ~50k Alpaca pairs) based on BLOOMZ-7B are both open sourced.
+<br/>
 
 ## Limitation and Usage Limits
 There still exists a few issues in the model trained on current base model and data:
@@ -172,15 +166,31 @@ There still exists a few issues in the model trained on current base model and d
 
 Since the model still has its limitations, we require developers only use the open-sourced code, data, model and any other artifacts generated via this project for research purposes. Commercial use and other potential harmful use cases are not allowed.
 
+<br/>
+
+## Fine-tuning and Models Release
+
+We trained models on instruction learning datasets of different sizes (200,000, 600,000, 1 million, and 2 million samples) and based on the BLOOMZ-7B1-mt trained and optimized model. They are now release for use, you can download the checkpoints in [haggingface BELLE group](https://huggingface.co/BelleGroup):
+| Datasize| 200,000 | 600,000 | 1,000,000 | 2,000,000 |
+| ----- | ----- | ----- | ----- | ----- | 
+| Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
+
+In addition, for the convenience of users, we have also quantized the [model](https://huggingface.co/BelleGroup/BELLE-7B-gptq) based on GPTQ, which includes 4-bit and 8-bit quantized models
+
+We have also trained and optimized models based on LLAMA-7B using corresponding datasets, which are now open for use:
+| Datasize| 600,000 | 2,000,000 |
+| ----- | ----- | ----- | 
+| Finetuned Model | [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
+
+<br/>
 
 
 ## Data Release
-1. `zh_seed_tasks.jsonl` contains 175 seed tasks, for example:<br/>
-`{"id": "seed_task_20", "name": "horror_movie_opening", "instruction": "你需要为一部恐怖电影写一个创意的开场场景。", "instances": [{"input": "", "output": "太阳已经落山，留下了一个黑暗的小镇。微风吹拂空荡的街道，让每一个冒险走出门外的人感到一阵寒意。唯一的声音是被风吹动的树叶发出的轻微沙沙声。突然，一声令人毛骨悚然的尖叫声划破了寂静，随后是玻璃破碎的声音。一所房子亮起了灯光，可以看到一个人影朝镇中心奔跑。当>那个人影越来越靠近时，清楚地看到那是一个年轻女子，她浑身血迹斑斑。"}], "is_classification": false}` 
-2. `prompt_cn.txt` Chinese prompt for generating instructions
-3. [0.5M generated data](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)：To facilitate model training, Hugging Face open-sourced data that merged the "instruction" and "input" fields in the original generation file into a single "input" field, and renamed the "output" field as the "target" field.
-4. [1M generated data](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN). Same generation pipeline as 0.5M dataset, removed lower-quality items in postprocessing, e.g. items regarding `GPT model`, bad items because of incomplete/invalid input, items with Chinese instructionb but English input or target.
+1. [zh_seed_tasks.jsonl](https://github.com/LianjiaTech/BELLE/blob/main/zh_seed_tasks.json) contains 175 seed tasks
+2. [0.5M generated data](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)：To facilitate model training, Hugging Face open-sourced data that merged the "instruction" and "input" fields in the original generation file into a single "input" field, and renamed the "output" field as the "target" field.
+3. [1M generated data](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN). Same generation pipeline as 0.5M dataset, removed lower-quality items in postprocessing, e.g. items regarding `GPT model`, bad items because of incomplete/invalid input, items with Chinese instructionb but English input or target.
 
+<br/>
 
 ## Data Generation Process
 Following Alpaca:
@@ -199,26 +209,7 @@ python generate_instruction.py generate_instruction_following_data \
 
 Generated instructions are in `Belle.train.json`, you can check manually before using it.
 
-
-## Fine-tuning
-Finetuning is done based on `BLOOMZ-7B1-mt` and `Belle.train.json` using the following hyperparameters:<br/>
-
-| Hyperparameter | Value |
-| ------ | ------ |
-| Batch size | 64 |
-| Learning rate | 3e-6 |
-| Epochs | 3 |
-|Weight_decay | 0.001 |
-|Warmup_rate | 0.1 |
-|LR_scheduler | linear |
-
-
-We trained models using datasets of different sizes (200,000, 600,000, 1,000,000 and 2,000,000 samples) for instruction learning, and we obtained different model versions as shown below:
-| Datasize| 200,000 | 600,000 | 1,000,000 | 2,000,000 |
-| ----- | ----- | ----- | ----- | ----- | 
-| Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
-
-Besides, [GPTQ quantized model](https://huggingface.co/BelleGroup/BELLE-7B-gptq)
+<br/>
 
 
 ## Citation
@@ -227,8 +218,8 @@ Please cite us when using our code, data or model.
 
 ```
 @misc{BELLE,
-  author = {Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Baochang Ma, Xiangang Li},
-  title = {BELLE: Bloom-Enhanced Large Language model Engine },
+  author = {Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Baochang Ma and Xiangang Li},
+  title = {BELLE: BE Large Language model Engine},
   year = {2023},
   publisher = {GitHub},
   journal = {GitHub repository},
@@ -236,4 +227,4 @@ Please cite us when using our code, data or model.
 }
 ```
 
-Cite the original BLOOM, Stanford Alpaca and Self-Instruct papers as well!
+Cite the original BLOOM, LLaMA, Stanford Alpaca and Self-Instruct papers as well!
