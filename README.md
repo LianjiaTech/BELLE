@@ -139,7 +139,7 @@ This repo contains:
 <br/>
 
 ## What's New
-* March 26, 2023: [Released finetuned LLAMA 7B model trained on 2M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)。[Released finetuned LLAMA 7B model trained on 0.6M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)
+* March 26, 2023: [Released finetuned LLAMA 7B model trained on 2M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M). [Released finetuned LLAMA 7B model trained on 0.6M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)
 * March 25, 2023: [Released GPTQ quantized model](https://huggingface.co/BelleGroup/BELLE-7B-gptq)，greatly reduces the hardware requirements for inference, and the relevant code is located in the ['gptq' directory](https://github.com/LianjiaTech/BELLE/tree/main/gptq).
 * March 25, 2023: [Released all new higher quality 1M Chinese dataset](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)，not overlap with previous [0.5M Chinese dataset](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
 * March 20, 2023: [Released finetuned BLOOM 7B model trained on 2M instruction data](https://huggingface.co/BelleGroup/BELLE-7B-2M).
