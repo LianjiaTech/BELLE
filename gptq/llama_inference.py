@@ -89,7 +89,7 @@ if __name__ == '__main__':
     )
     
     parser.add_argument(
-        '--max_length', type=int, default=50,
+        '--max_length', type=int, default=1024,
         help='The maximum length of the sequence to be generated.'
     )
     
@@ -116,15 +116,23 @@ if __name__ == '__main__':
         
     model.to(DEV)
     tokenizer = AutoTokenizer.from_pretrained(args.model)
-    input_ids = tokenizer.encode(args.text, return_tensors="pt").to(DEV)
 
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=True,
-            min_length=args.min_length,
-            max_length=args.max_length,
-            top_p=args.top_p,
-            temperature=args.temperature,
-        )
-    print(tokenizer.decode([el.item() for el in generated_ids[0]]))
+    print("Human:")
+    line = input()
+    while line:
+        inputs = 'Human: ' + line.strip() + '\n\nAssistant:'
+        input_ids = tokenizer.encode(inputs, return_tensors="pt").to(DEV)
+
+        with torch.no_grad():
+            generated_ids = model.generate(
+                input_ids,
+                do_sample=True,
+                min_length=args.min_length,
+                max_length=args.max_length,
+                top_p=args.top_p,
+                temperature=args.temperature,
+            )
+        print("Assistant:\n") 
+        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
+        print("\n-------------------------------\n")
+        line = input()

@@ -104,7 +104,7 @@ def llama_sequential(model, dataloader, dev):
             for name in subset:
                 print(i, name)
                 print('Quantizing ...')
-                scale,zero = gptq[name].fasterquant(percdamp=args.percdamp, groupsize=args.groupsize, actorder=args.act_order)
+                scale,zero = gptq[name].fasterquant(percdamp=args.percdamp, groupsize=args.groupsize)
                 quantizers['model.layers.%d.%s' % (i, name)] = (gptq[name].quantizer,scale,zero)
                 gptq[name].free()
                 
@@ -461,7 +461,7 @@ if __name__ == '__main__':
     if args.load:
         exit()
 
-    datasets = ['wikitext2', 'ptb', 'c4'] 
+    datasets = ['wikitext2'] 
     if args.new_eval:
       datasets = ['wikitext2', 'ptb-new', 'c4-new']
     for dataset in datasets: 
