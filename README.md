@@ -11,6 +11,7 @@
 <br/>
 
 ## What's New
+* 2023年3月28日: 探索了不同量级的指令数据对模型效果的影响：[Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)
 * 2023年3月26日: [发布了2M指令数据训练的LLAMA-7B模型](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)，[发布了0.6M指令数据训练的LLAMA-7B模型](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)
 * 2023年3月25日: [发布了GPTQ量化后的模型](https://huggingface.co/BelleGroup/BELLE-7B-gptq)，大大降低了推理的硬件需求，相关代码在[gptq目录](https://github.com/LianjiaTech/BELLE/tree/main/gptq)下
 * 2023年3月25日: [发布了全新的更高质量1M中文数据集](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)，与之前发布的[0.5M中文指令数据集](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)不重复
@@ -238,6 +239,13 @@ Please cite us when using our code, data or model.
   publisher = {GitHub},
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/LianjiaTech/BELLE}},
+}
+
+@article{belle2023exploring,
+  title={Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases},
+  author={Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Lei Zhang, Baochang Ma, Xiangang Li},
+  journal={arXiv preprint arXiv:2303.14742},
+  year={2023}
 }
 ```
 
