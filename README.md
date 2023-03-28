@@ -48,14 +48,17 @@
 | ----- | ----- | ----- | ----- | ----- | 
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
 
-此外，方便大家使用，也对模型进行了量化[基于GPTQ量化后的模型](https://huggingface.co/BelleGroup/BELLE-7B-gptq)，其中包含4bit和8bit的量化模型。
+此外，方便大家使用，也对模型进行了量化[基于GPTQ量化后的模型](https://huggingface.co/BelleGroup/)，其中包含4bit和8bit的量化模型。
 | model name |  file size | GPU memory usage |
 | ----- | ----- | ----- |
-| base  | 27G   | ~28.2G |
+| bloom7b-2m  | 27G   | ~28.2G |
 | bloom7b-2m-8bit-128g.pt | 9.7G | ~11.4G |
 | bloom7b-2m-4bit-128g.pt | 6.9G | ~8.4G |
 | bloom7b-0.2m-8bit-128g.pt | 9.7G | ~11.4G |
 | bloom7b-0.2m-4bit-128g.pt | 6.9G | ~8.4G |
+|           llama7b-2m                 |          26G        |       ~15G         |
+|           llama7b-2m-8bit-128g.pt                  |          6.8G        |       ~8.9G          |
+|           llama7b-2m-4bit-128g.pt                  |          3.8G        |        ~5.6G          |
 
 我们也采用对应数据集基于LLAMA-7B训练调优了模型，现已开放:
 | Datasize| 600,000 | 2,000,000 |
@@ -190,14 +193,17 @@ We trained models on instruction learning datasets of different sizes (200,000, 
 | ----- | ----- | ----- | ----- | ----- | 
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
 
-In addition, for the convenience of users, we have also quantized the [model](https://huggingface.co/BelleGroup/BELLE-7B-gptq) based on GPTQ, which includes 4-bit and 8-bit quantized models
+In addition, for the convenience of users, we have also quantized the [model](https://huggingface.co/BelleGroup/) based on GPTQ, which includes 4-bit and 8-bit quantized models
 | model name |  file size | GPU memory usage |
 | ----- | ----- | ----- |
-| base  | 27G   | ~28.2G |
+| bloom7b-2m  | 27G   | ~28.2G |
 | bloom7b-2m-8bit-128g.pt | 9.7G | ~11.4G |
 | bloom7b-2m-4bit-128g.pt | 6.9G | ~8.4G |
 | bloom7b-0.2m-8bit-128g.pt | 9.7G | ~11.4G |
 | bloom7b-0.2m-4bit-128g.pt | 6.9G | ~8.4G |
+|           llama7b-2m                 |          26G        |       ~15G         |
+|           llama7b-2m-8bit-128g.pt                  |          6.8G        |       ~8.9G          |
+|           llama7b-2m-4bit-128g.pt                  |          3.8G        |        ~5.6G          |
 
 We have also trained and optimized models based on LLAMA-7B using corresponding datasets, which are now open for use:
 | Datasize| 600,000 | 2,000,000 |
