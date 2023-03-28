@@ -106,6 +106,12 @@ python generate_instruction.py generate_instruction_following_data \
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/LianjiaTech/BELLE}},
 }
+@article{belle2023exploring,
+  title={Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases},
+  author={Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Lei Zhang, Baochang Ma, Xiangang Li},
+  journal={arXiv preprint arXiv:2303.14742},
+  year={2023}
+}
 ```
 
 当然，你也需要引用原始的BLOOM论文、LLaMA论文、Stanford Alpaca和Self-Instruct论文。
