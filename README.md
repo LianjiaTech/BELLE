@@ -15,9 +15,6 @@
 * 2023年3月26日: [发布了2M指令数据训练的LLAMA-7B模型](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)，[发布了0.6M指令数据训练的LLAMA-7B模型](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)
 * 2023年3月25日: [发布了GPTQ量化后的模型](https://huggingface.co/BelleGroup/BELLE-7B-gptq)，大大降低了推理的硬件需求，相关代码在[gptq目录](https://github.com/LianjiaTech/BELLE/tree/main/gptq)下
 * 2023年3月25日: [发布了全新的更高质量1M中文数据集](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)，与之前发布的[0.5M中文指令数据集](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)不重复
-* 2023年3月20日: [发布了2M指令数据训练的BLOOM-7B模型](https://huggingface.co/BelleGroup/BELLE-7B-2M)
-* 2023年3月18日: [发布了1M指令数据训练的BLOOM-7B模型](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[发布了基于0.6M指令数据训练的BLOOM-7B模型](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)
-* 2023年3月17日: [发布了0.2M指令数据训练的BLOOM-7B模型](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[发布了0.5M中文指令数据集](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
 
 <br/>
 
@@ -160,9 +157,6 @@ This repo contains:
 * March 26, 2023: [Released finetuned LLAMA 7B model trained on 2M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M). [Released finetuned LLAMA 7B model trained on 0.6M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)
 * March 25, 2023: [Released GPTQ quantized model](https://huggingface.co/BelleGroup/BELLE-7B-gptq)，greatly reduces the hardware requirements for inference, and the relevant code is located in the ['gptq' directory](https://github.com/LianjiaTech/BELLE/tree/main/gptq).
 * March 25, 2023: [Released all new higher quality 1M Chinese dataset](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)，not overlap with previous [0.5M Chinese dataset](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
-* March 20, 2023: [Released finetuned BLOOM 7B model trained on 2M instruction data](https://huggingface.co/BelleGroup/BELLE-7B-2M).
-* March 18, 2023: [Released finetuned BLOOM 7B model trained on 1M instruction data](https://huggingface.co/BelleGroup/BELLE-7B-1M). [Released finetuned BLOOM 7B model trained on 0，6M instruction data](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)
-* March 17, 2023: [Released finetuned BLOOM 7B model trained on 0，6M instruction data](https://huggingface.co/BelleGroup/BELLE-7B-0.2M). [Released 0.5M dataset](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
 
 <br/>
 
