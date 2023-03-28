@@ -46,6 +46,7 @@ CUDA_VISIBLE_DEVICES=0 python test_kernel.py
 ## Model inference with the saved model
 ```
 # BELLE-7B-gptq: local saved model path from Huggingface
+git lfs install
 git clone https://huggingface.co/BelleGroup/BELLE-7B-gptq
 # model inference with the saved model
 CUDA_VISIBLE_DEVICES=0 python bloom_inference.py BELLE-7B-gptq --wbits 8 --groupsize 128 --load BELLE-7B-gptq/bloom7b-2m-8bit-128g.pt --text "hello"
