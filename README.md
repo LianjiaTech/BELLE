@@ -65,6 +65,10 @@
 
 随后，我们会基于我们之前的工作[Exploring ChatGPT's Ability to Rank Content: A Preliminary Study on Consistency with Human Preferences](https://arxiv.org/abs/2303.07610)中的方法对比下这几个模型的效果。
 
+### 模型效果比较
+以Bloomz-7b1-mt为基础，我们评估了不同数量的instruction tuning数据，对模型效果的影响。总的来说，提升数据量能持续带来效果的提升，但是在不同类型的任务上表现有所不同。在Extract, Classification, Closed QA, 和Summarization任务上，增加数据能持续带来效果的提升，还未达到瓶颈。在Translation, Rewrite, 和Brainstorming任务上，几十万的数据量就能获得较好的效果。在Math, Code, 和COT任务上，模型效果较差，而且增加数据量已经无法带来效果的提升。
+![Image text](assets/model_compare.jpg)
+
 <br/>
 
 ## 数据发布
@@ -201,6 +205,14 @@ In addition, for the convenience of users, we have also quantized the [model](ht
 | llama7b-2m | 26G | ~15G |
 | llama7b-2m-8bit-128g.pt | 6.8G | ~8.9G |
 | llama7b-2m-4bit-128g.pt | 3.8G | ~5.6G |
+
+### Model performance comparison 
+Based on the Bloomz-7b1-mt model, we evaluated the impact of different amounts of instruction data on our released models' performance. 
+Overall, increasing the amount of data consistently improved performance, but the extent of improvement varied across different types of tasks. 
+For Extract, Classification, Closed QA, and Summarization tasks, increasing data continued to improve performance without reaching a plateau. 
+For Translation, Rewrite, and Brainstorming tasks, good performance could be achieved with only hundreds of thousands of data. 
+However, for Math, Code, and COT tasks, these models' performance were poor, and increasing data did not lead to further improvement.
+![Image text](assets/model_compare.jpg)
 
 <br/>
 
