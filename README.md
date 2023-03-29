@@ -11,10 +11,8 @@
 <br/>
 
 ## What's New
-* 2023年3月28日: 探索了不同量级的指令数据对模型效果的影响：[Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)
-* 2023年3月26日: [发布了2M指令数据训练的LLAMA-7B模型](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)，[发布了0.6M指令数据训练的LLAMA-7B模型](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)
-* 2023年3月25日: [发布了GPTQ量化后的模型](https://huggingface.co/BelleGroup/BELLE-7B-gptq)，大大降低了推理的硬件需求，相关代码在[gptq目录](https://github.com/LianjiaTech/BELLE/tree/main/gptq)下
-* 2023年3月25日: [发布了全新的更高质量1M中文数据集](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)，与之前发布的[0.5M中文指令数据集](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)不重复
+* 探索了不同量级的指令数据对模型效果的影响：[Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)
+* [发布了2M指令数据训练的LLAMA-7B模型](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)，[发布了0.6M指令数据训练的LLAMA-7B模型](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)
 
 <br/>
 
@@ -155,10 +153,8 @@ This repo contains:
 <br/>
 
 ## What's New
-* March 28, 2023: Released a paper [Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)
-* March 26, 2023: [Released finetuned LLAMA 7B model trained on 2M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M). [Released finetuned LLAMA 7B model trained on 0.6M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)
-* March 25, 2023: [Released GPTQ quantized model](https://huggingface.co/BelleGroup/BELLE-7B-gptq)，greatly reduces the hardware requirements for inference, and the relevant code is located in the ['gptq' directory](https://github.com/LianjiaTech/BELLE/tree/main/gptq).
-* March 25, 2023: [Released all new higher quality 1M Chinese dataset](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)，not overlap with previous [0.5M Chinese dataset](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
+* Released a paper [Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)
+* [Released finetuned LLAMA 7B model trained on 2M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M). [Released finetuned LLAMA 7B model trained on 0.6M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)
 
 <br/>
 
