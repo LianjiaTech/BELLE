@@ -10,13 +10,6 @@
 **欢迎大家通过issue贡献更多的prompts！**
 <br/>
 
-## 概述
-为了促进中文对话大模型开源社区的发展，本项目参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca)项目，优化了中文数据流程，同时选用开源预训练大语言模型（BLOOM或者LLAMA）作为基础模型训练得到了一个可以更好支持中文指令的开源模型 - BELLE（BE Large Language model Engine）。
-
-我们开源基于Alpaca的数据收集代码，基于这段代码生成了约200万条中文数据，结合Alpaca的5万条英文数据，在BLOOMZ-7B模型和LLAMA模型训练得到的checkpoint上传在[Hugging Face](https://huggingface.co/BelleGroup)。
-
-<br/>
-
 ## 局限性和使用限制
 基于当前数据和基础模型训练得到的SFT模型，在效果上仍存在以下问题：
 
@@ -145,13 +138,6 @@ This repo contains:
 * The model optimized based on LLAMA: [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)，[BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)
 
 **More prompts are welcomed via issues!**
-<br/>
-
-## Overview
-To promote the development of the Chinese conversational large model open-source community, this project refers to the [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) project, optimizes the Chinese data processing flow, and selects open-source pre-trained large language models (BLOOM or LLAMA) as the basis for training a better open-source model that supports Chinese instructions - BELLE (BE Large Language model Engine).
-
-We open-sourced the data collection code based on Alpaca. Based on this code, we generated about 2 million Chinese data. Combined with Alpaca's 50,000 English data, the checkpoint trained on the BLOOMZ-7B model and LLAMA model were uploaded to [Hugging Face](https://huggingface.co/BelleGroup)。
-
 <br/>
 
 ## Limitation and Usage Limits
