@@ -10,12 +10,6 @@
 **欢迎大家通过issue贡献更多的prompts！**
 <br/>
 
-## What's New
-* 探索了不同量级的指令数据对模型效果的影响：[Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)
-* [发布了2M指令数据训练的LLAMA-7B模型](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)，[发布了0.6M指令数据训练的LLAMA-7B模型](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)
-
-<br/>
-
 ## 概述
 为了促进中文对话大模型开源社区的发展，本项目参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca)项目，优化了中文数据流程，同时选用开源预训练大语言模型（BLOOM或者LLAMA）作为基础模型训练得到了一个可以更好支持中文指令的开源模型 - BELLE（BE Large Language model Engine）。
 
@@ -62,13 +56,11 @@
 | llama7b-2m-4bit-128g.pt | 3.8G | ~5.6G |
 
 
-
-随后，我们会基于我们之前的工作[Exploring ChatGPT's Ability to Rank Content: A Preliminary Study on Consistency with Human Preferences](https://arxiv.org/abs/2303.07610)中的方法对比下这几个模型的效果。
-
 ### 模型效果比较
 以Bloomz-7b1-mt为基础，我们评估了不同数量的instruction tuning数据，对模型效果的影响。总的来说，提升数据量能持续带来效果的提升，但是在不同类型的任务上表现有所不同。在Extract, Classification, Closed QA, 和Summarization任务上，增加数据能持续带来效果的提升，还未达到瓶颈。在Translation, Rewrite, 和Brainstorming任务上，几十万的数据量就能获得较好的效果。在Math, Code, 和COT任务上，模型效果较差，而且增加数据量已经无法带来效果的提升。
 ![Image text](assets/model_compare.jpg)
-
+<br/>
+详见论文：[Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)。
 <br/>
 
 ## 数据发布
@@ -153,13 +145,6 @@ This repo contains:
 * The model optimized based on LLAMA: [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)，[BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)
 
 **More prompts are welcomed via issues!**
-
-<br/>
-
-## What's New
-* Released a paper [Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)
-* [Released finetuned LLAMA 7B model trained on 2M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M). [Released finetuned LLAMA 7B model trained on 0.6M instruction data](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)
-
 <br/>
 
 ## Overview
@@ -213,9 +198,9 @@ For Extract, Classification, Closed QA, and Summarization tasks, increasing data
 For Translation, Rewrite, and Brainstorming tasks, good performance could be achieved with only hundreds of thousands of data. 
 However, for Math, Code, and COT tasks, these models' performance were poor, and increasing data did not lead to further improvement.
 ![Image text](assets/model_compare.jpg)
-
 <br/>
-
+More details are in paper [Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)。
+<br/>
 
 ## Data Release
 1. [zh_seed_tasks.jsonl](https://github.com/LianjiaTech/BELLE/blob/main/zh_seed_tasks.json) contains 175 seed tasks
