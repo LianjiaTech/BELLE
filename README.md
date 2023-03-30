@@ -1,11 +1,10 @@
 ## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: BE Large Language model Engine 
-本项目目标是促进中文对话大模型开源社区的发展。现阶段本项目基于BLOOM和LLAMA针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
+本项目目标是促进中文对话大模型开源社区的发展。现阶段本项目基于BLOOM针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
 <br/>
 
 项目包含以下内容:
 * 数据开放：参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) 生成的中文数据集[1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
 * 基于BLOOMZ-7B1-mt优化后的模型：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
-* 基于LLAMA优化后的模型：[BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)，[BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)（强烈建议大家重新下载最新的BELLE-LLAMA模型，调优了模型学习过程，性能有所提升）
 
 **欢迎大家通过issue贡献更多的prompts！**
 <br/>
@@ -30,13 +29,8 @@
 | ----- | ----- | ----- | ----- | ----- | 
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
 
-我们也采用对应数据集基于LLAMA-7B训练调优了模型，现已开放:
-| Datasize| 600,000 | 2,000,000 | 2,000,000 |
-| ----- | ----- | ----- |  ----- |
-| Finetuned Model | [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M) | [BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M) | BELLE-LLAMA-13B-2M (to be released) |
 
-
-此外，方便大家使用，也对模型进行了量化[基于GPTQ量化后的模型](https://huggingface.co/BelleGroup/)，其中包含针对bloom和llama基础的模型上的4bit和8bit的量化模型。
+此外，方便大家使用，也对模型进行了量化[基于GPTQ量化后的模型](https://huggingface.co/BelleGroup/)，其中包含针对基础的模型上的4bit和8bit的量化模型。
 | model name |  file size | GPU memory usage |
 | ----- | ----- | ----- |
 | bloom7b-2m  | 27G   | ~28.2G |
@@ -44,9 +38,6 @@
 | bloom7b-2m-4bit-128g.pt | 6.9G | ~8.4G |
 | bloom7b-0.2m-8bit-128g.pt | 9.7G | ~11.4G |
 | bloom7b-0.2m-4bit-128g.pt | 6.9G | ~8.4G |
-| llama7b-2m | 26G | ~15G |
-| llama7b-2m-8bit-128g.pt | 6.8G | ~8.9G |
-| llama7b-2m-4bit-128g.pt | 3.8G | ~5.6G |
 
 
 ### 模型效果比较
@@ -103,7 +94,7 @@ python generate_instruction.py generate_instruction_following_data \
 }
 ```
 
-当然，你也需要引用原始的BLOOM论文、LLaMA论文、Stanford Alpaca和Self-Instruct论文。
+当然，你也需要引用原始的BLOOM论文、Stanford Alpaca和Self-Instruct论文。
 <br/>
 
 
@@ -135,7 +126,6 @@ The goal of this project is to promote the development of the open-source commun
 This repo contains:
 * Data Release: The Chinese dataset generated [1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN), using [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) as reference
 * The model optimized based on BLOOMZ-7B1-mt: [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
-* The model optimized based on LLAMA: [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M)，[BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)(Highly recommend the the lastest version of these models, which have be improved through optimizing the learning process)
 
 **More prompts are welcomed via issues!**
 <br/>
@@ -160,12 +150,7 @@ We trained models on instruction learning datasets of different sizes (200,000, 
 | ----- | ----- | ----- | ----- | ----- | 
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
 
-We have also trained and optimized models based on LLAMA-7B using corresponding datasets, which are now open for use:
-| Datasize| 600,000 | 2,000,000 | 2,000,000 |
-| ----- | ----- | ----- | ----- | 
-| Finetuned Model | [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/LLAMA-7B-0.6M) | [BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M) | BELLE-LLAMA-13B-2M (to be released) |
-
-In addition, for the convenience of users, we have also quantized the [model](https://huggingface.co/BelleGroup/) based on GPTQ, which includes 4-bit and 8-bit quantized models for bloom and llama based models.
+In addition, for the convenience of users, we have also quantized the [model](https://huggingface.co/BelleGroup/) based on GPTQ, which includes 4-bit and 8-bit quantized models.
 | model name |  file size | GPU memory usage |
 | ----- | ----- | ----- |
 | bloom7b-2m  | 27G   | ~28.2G |
@@ -173,9 +158,6 @@ In addition, for the convenience of users, we have also quantized the [model](ht
 | bloom7b-2m-4bit-128g.pt | 6.9G | ~8.4G |
 | bloom7b-0.2m-8bit-128g.pt | 9.7G | ~11.4G |
 | bloom7b-0.2m-4bit-128g.pt | 6.9G | ~8.4G |
-| llama7b-2m | 26G | ~15G |
-| llama7b-2m-8bit-128g.pt | 6.8G | ~8.9G |
-| llama7b-2m-4bit-128g.pt | 3.8G | ~5.6G |
 
 ### Model performance comparison 
 Based on the Bloomz-7b1-mt model, we evaluated the impact of different amounts of instruction data on our released models' performance. 
@@ -237,4 +219,4 @@ Please cite us when using our code, data or model.
 }
 ```
 
-Cite the original BLOOM, LLaMA, Stanford Alpaca and Self-Instruct papers as well!
+Cite the original BLOOM, Stanford Alpaca and Self-Instruct papers as well!
