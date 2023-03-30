@@ -31,9 +31,9 @@
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
 
 我们也采用对应数据集基于LLAMA-7B训练调优了模型，现已开放:
-| Datasize| 600,000 | 2,000,000 |
-| ----- | ----- | ----- | 
-| Finetuned Model | [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M) | [BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M) |
+| Datasize| 600,000 | 2,000,000 | 2,000,000 |
+| ----- | ----- | ----- |  ----- |
+| Finetuned Model | [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M) | [BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M) | BELLE-LLAMA-13B-2M (to be released) |
 
 
 此外，方便大家使用，也对模型进行了量化[基于GPTQ量化后的模型](https://huggingface.co/BelleGroup/)，其中包含针对bloom和llama基础的模型上的4bit和8bit的量化模型。
@@ -161,9 +161,9 @@ We trained models on instruction learning datasets of different sizes (200,000, 
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
 
 We have also trained and optimized models based on LLAMA-7B using corresponding datasets, which are now open for use:
-| Datasize| 600,000 | 2,000,000 |
-| ----- | ----- | ----- | 
-| Finetuned Model | [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/LLAMA-7B-0.6M) | [BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M) |
+| Datasize| 600,000 | 2,000,000 | 2,000,000 |
+| ----- | ----- | ----- | ----- | 
+| Finetuned Model | [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/LLAMA-7B-0.6M) | [BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M) | BELLE-LLAMA-13B-2M (to be released) |
 
 In addition, for the convenience of users, we have also quantized the [model](https://huggingface.co/BelleGroup/) based on GPTQ, which includes 4-bit and 8-bit quantized models for bloom and llama based models.
 | model name |  file size | GPU memory usage |
