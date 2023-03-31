@@ -1,4 +1,7 @@
 ## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: BE Large Language model Engine 
+
+[![](https://dcbadge.vercel.app/api/server/zZJR2QuQ?compact=true&style=flat)](https://discord.gg/zZJR2QuQ)
+
 本项目目标是促进中文对话大模型开源社区的发展。现阶段本项目基于BLOOM针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
 <br/>
 
@@ -120,6 +123,9 @@ python generate_instruction.py generate_instruction_following_data \
 <br/>
 
 ## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: BE Large Language model Engine
+
+[![](https://dcbadge.vercel.app/api/server/zZJR2QuQ?compact=true&style=flat)](https://discord.gg/zZJR2QuQ)
+
 The goal of this project is to promote the development of the open-source community for Chinese language large-scale conversational models. This project optimizes Chinese performance in addition to original Alpaca. The model finetuning uses only data generated via ChatGPT (without other data). 
 <br/>
 
