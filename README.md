@@ -6,7 +6,7 @@
 <br/>
 
 项目包含以下内容:
-* 数据开放：参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) 生成的中文数据集[1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)
+* 数据开放：参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) 生成的中文数据集[1M](https://huggingface.co/datasets/BelleGroup/train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN)
 * 基于BLOOMZ-7B1-mt优化后的模型：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
 
 **欢迎大家通过issue贡献更多的prompts！**
@@ -52,8 +52,8 @@
 
 ## 数据发布
 1. [zh_seed_tasks.jsonl](https://github.com/LianjiaTech/BELLE/blob/main/zh_seed_tasks.json)：包含175个种子任务。
-2. [0.5M生成的数据](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN) ： 为了方便模型训练，huggingface开源数据将原始生成文件中的"instruction"、"input"字段合并成"input"字段，"output"字段修改为"target"字段。
-3. [1M生成的数据](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN)：生成方式与0.5M数据集相同，在后处理中去掉了一些质量不高的数据，例如自称`GPT模型`的数据、由于input不完善导致模型无法回答的数据，以及指令是中文但input或target是英文的数据。
+2. [0.5M生成的数据](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN) ： 为了方便模型训练，huggingface开源数据将原始生成文件中的"instruction"、"input"字段合并成"input"字段，"output"字段修改为"target"字段。
+3. [1M生成的数据](https://huggingface.co/datasets/BelleGroup/train_1M_CN)：生成方式与0.5M数据集相同，在后处理中去掉了一些质量不高的数据，例如自称`GPT模型`的数据、由于input不完善导致模型无法回答的数据，以及指令是中文但input或target是英文的数据。
 <br/>
 
 
@@ -130,7 +130,7 @@ The goal of this project is to promote the development of the open-source commun
 <br/>
 
 This repo contains:
-* Data Release: The Chinese dataset generated [1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN), using [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) as reference
+* Data Release: The Chinese dataset generated [1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN), using [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) as reference
 * The model optimized based on BLOOMZ-7B1-mt: [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
 
 **More prompts are welcomed via issues!**
@@ -178,8 +178,8 @@ More details are in paper [Exploring the Impact of Instruction Data Scaling on L
 
 ## Data Release
 1. [zh_seed_tasks.jsonl](https://github.com/LianjiaTech/BELLE/blob/main/zh_seed_tasks.json) contains 175 seed tasks
-2. [0.5M generated data](https://huggingface.co/datasets/BelleGroup/generated_train_0.5M_CN)：To facilitate model training, Hugging Face open-sourced data that merged the "instruction" and "input" fields in the original generation file into a single "input" field, and renamed the "output" field as the "target" field.
-3. [1M generated data](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN). Same generation pipeline as 0.5M dataset, removed lower-quality items in postprocessing, e.g. items regarding `GPT model`, bad items because of incomplete/invalid input, items with Chinese instructionb but English input or target.
+2. [0.5M generated data](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN)：To facilitate model training, Hugging Face open-sourced data that merged the "instruction" and "input" fields in the original generation file into a single "input" field, and renamed the "output" field as the "target" field.
+3. [1M generated data](https://huggingface.co/datasets/BelleGroup/train_1M_CN). Same generation pipeline as 0.5M dataset, removed lower-quality items in postprocessing, e.g. items regarding `GPT model`, bad items because of incomplete/invalid input, items with Chinese instructionb but English input or target.
 
 <br/>
 
