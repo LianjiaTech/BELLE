@@ -1,4 +1,4 @@
-## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: BE Large Language model Engine 
+## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: Be Everyone's Large Language model Engine 
 
 [![](https://dcbadge.vercel.app/api/server/zZJR2QuQ?compact=true&style=flat)](https://discord.gg/zZJR2QuQ)
 
@@ -122,7 +122,7 @@ python generate_instruction.py generate_instruction_following_data \
 
 <br/>
 
-## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: BE Large Language model Engine
+## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: Be Everyone's Large Language model Engine
 
 [![](https://dcbadge.vercel.app/api/server/zZJR2QuQ?compact=true&style=flat)](https://discord.gg/zZJR2QuQ)
 
