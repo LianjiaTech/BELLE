@@ -2,7 +2,7 @@
 
 [![](https://dcbadge.vercel.app/api/server/zZJR2QuQ?compact=true&style=flat)](https://discord.gg/zZJR2QuQ)
 
-本项目目标是促进中文对话大模型开源社区的发展。现阶段本项目基于BLOOM针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
+本项目目标是促进中文对话大模型开源社区的发展，愿景做能帮到每一个人的LLM Engine。现阶段本项目基于一些开源预训练大语言模型（如BLOOM、LAMMA等），针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
 <br/>
 
 项目包含以下内容:
@@ -126,7 +126,7 @@ python generate_instruction.py generate_instruction_following_data \
 
 [![](https://dcbadge.vercel.app/api/server/zZJR2QuQ?compact=true&style=flat)](https://discord.gg/zZJR2QuQ)
 
-The goal of this project is to promote the development of the open-source community for Chinese language large-scale conversational models. This project optimizes Chinese performance in addition to original Alpaca. The model finetuning uses only data generated via ChatGPT (without other data). 
+The goal of this project is to promote the development of the open-source community for Chinese language large-scale conversational models, and our vision is to help building large language model engine for everyone. This project optimizes Chinese performance based on opensource pretrained large language models. These models finetuning uses only data generated via ChatGPT (without other data). 
 <br/>
 
 This repo contains:
