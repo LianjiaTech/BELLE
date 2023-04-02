@@ -23,7 +23,7 @@
   * 持续开放的数据集，详见[BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/models/">![Docs](https://img.shields.io/badge/模型-blue)</a>
   * 基于BLOOMZ-7B1-mt优化后的模型：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
-  * 基于[haggingface的LLaMA实例](https://huggingface.co/decapoda-research)实现[调优的模型](https://huggingface.co/BelleGroup)。请注意，本项目不能保证其是原版的LLaMA模型，也不能保证调优后的模型和LLaMA原版模型之间的关系。考虑到LLaMA的license约束，目前也仅供学习交流。请严遵守LLaMA的使用限制。建议大家基于训练脚本和开放数据调优模型
+  * 基于[haggingface的LLaMA实例](https://huggingface.co/decapoda-research)实现[调优的模型](https://huggingface.co/BelleGroup)。请注意，本项目不能保证其是原版的LLaMA模型，也不能保证调优后的模型和LLaMA原版模型之间的关系。请参考[Meta LLaMA的License](https://github.com/facebookresearch/llama/blob/main/LICENSE)，目前也仅供学习交流。请严遵守LLaMA的使用限制。建议大家基于训练脚本和开放数据调优模型
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/模型量化gptq-blue)
   * 详见[BELLE/gptq](https://github.com/LianjiaTech/BELLE/tree/main/gptq)，参考gptq的实现，对本项目中相关模型进行了量化
 
