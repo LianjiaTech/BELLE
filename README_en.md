@@ -1,16 +1,16 @@
 
 ## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: Be Everyone's Large Language model Engine
 
+*[中文README](README.md).*
 
 <div align="center">
 
 <a href="https://github.com/LianjiaTech/BELLE/stargazers">![GitHub Repo stars](https://img.shields.io/github/stars/LianjiaTech/BELLE?style=social)</a>
-[![](https://dcbadge.vercel.app/api/server/zZJR2QuQ?compact=true&style=flat)](https://discord.gg/zZJR2QuQ)
-<a href="https://github.com/LianjiaTech/BELLE/tree/main/1.5M/">![Docs](https://img.shields.io/badge/DataRelease1.5M-BELLE%2F1.5M-green)</a>
-<a href="https://github.com/LianjiaTech/BELLE/tree/main/10M/">![Docs](https://img.shields.io/badge/DataRelease10M-BELLE%2F10M-green)</a>
-<a href="https://huggingface.co/BelleGroup/">![Docs](https://img.shields.io/badge/ModelRelease-Huggingface%2FBelleGroup-green)</a>
+[![Generic badge](https://dcbadge.vercel.app/api/server/zZJR2QuQ?compact=true&style=flat)](https://discord.gg/zZJR2QuQ)
+[![Generic badge](https://img.shields.io/badge/🤗-Huggingface%20Repo-blue.svg)](https://https://huggingface.co/BelleGroup)
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/docs/">![Docs](https://img.shields.io/badge/papers-BELLE%2Fdocs-green)</a>
-<a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/quantization-BELLE%2Fgptq-green)</a>
+<a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/quantization_recipe-BELLE%2Fgptq-green)</a>
+<a href="https://github.com/LianjiaTech/BELLE/tree/main/train/">![Docs](https://img.shields.io/badge/train_recipe-BELLE%2Ftrain-green)</a>
 
 
 </div>
@@ -27,6 +27,10 @@ This repo contains:
   * The finetuned models(https://huggingface.co/BelleGroup) based on [haggingface version LLaMA](https://huggingface.co/decapoda-research). Please note that this project cannot guarantee that it is the original LLaMA model, nor can it guarantee the relationship between the fine-tuned model and the original LLaMA model. Considering LLaMA's license constraints, the model is for research and learning only. Please strictly respect LLaMA's usage policy. Users are suggested to finetune the model with open-source scripts and datasets.
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/Quantized_models-blue)
   * Details in [BELLE/gptq](https://github.com/LianjiaTech/BELLE/tree/main/gptq)，Referring to the implementation of GPT-Q, the relevant models in this project have been quantized.
+* <a href="https://github.com/LianjiaTech/BELLE/tree/main/train/">![Docs](https://img.shields.io/badge/Traning_recipe-blue)
+  * Details in [BELLE/train](https://github.com/LianjiaTech/BELLE/tree/main/train), A simplified implementation of training code with support for finetune, LORA, and DeepSpeed as much as possible.
+
+
 
 
 **More prompts are welcomed via issues!**
