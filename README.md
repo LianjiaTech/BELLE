@@ -5,6 +5,9 @@
 <a href="https://github.com/LianjiaTech/BELLE/stargazers">![GitHub Repo stars](https://img.shields.io/github/stars/LianjiaTech/BELLE?style=social)</a>
 [![](https://dcbadge.vercel.app/api/server/zZJR2QuQ?compact=true&style=flat)](https://discord.gg/zZJR2QuQ)
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/docs/">![Docs](https://img.shields.io/badge/papers-BELLE%2Fdocs-green)</a>
+<a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/quantization-BELLE%2Fgptq-green)</a>
+<a href="https://huggingface.co/BelleGroup/">![Docs](https://img.shields.io/badge/DataRelease-Huggingface%2FBelleGroup-green)</a>
+<a href="https://huggingface.co/BelleGroup/">![Docs](https://img.shields.io/badge/ModelRelease-Huggingface%2FBelleGroup-green)</a>
 
 </div>
 
@@ -136,6 +139,10 @@ python generate_instruction.py generate_instruction_following_data \
 <a href="https://github.com/LianjiaTech/BELLE/stargazers">![GitHub Repo stars](https://img.shields.io/github/stars/LianjiaTech/BELLE?style=social)</a>
 [![](https://dcbadge.vercel.app/api/server/zZJR2QuQ?compact=true&style=flat)](https://discord.gg/zZJR2QuQ)
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/docs/">![Docs](https://img.shields.io/badge/papers-BELLE%2Fdocs-green)</a>
+<a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/quantization-BELLE%2Fgptq-green)</a>
+<a href="https://huggingface.co/BelleGroup/">![Docs](https://img.shields.io/badge/DataRelease-Huggingface%2FBelleGroup-green)</a>
+<a href="https://huggingface.co/BelleGroup/">![Docs](https://img.shields.io/badge/ModelRelease-Huggingface%2FBelleGroup-green)</a>
+
 
 </div>
 
