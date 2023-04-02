@@ -1,6 +1,6 @@
 # 项目说明
 
-本仓库用于微调Bloom和Llama两个大语言模型，并且支持两种训练模式：Deepspeed和 LoRA
+本仓库用于微调Bloom和Llama两个大语言模型，并且支持LoRA训练
 
 ## 环境安装
 
@@ -25,12 +25,9 @@ python download_data.py
 - Bloom_config.json: 配置Bloom模型的超参数
 - Llama_config.json: 配置Llama模型的超参数
 - deepspeed_config.json: 配置Deepspeed策略的参数
-- lora_hyperparams_bloom.json: LoRA策略训练Bloom模型的参数
-- lora_hyperparams_llama.json: LoRA策略训练Llama模型的参数
+- lora_hyperparams_bloom.json: LoRA训练Bloom模型的参数
+- lora_hyperparams_llama.json: LoRA训练Llama模型的参数
 
-### Deepspeed
-
-使用deepspeed命令运行训练脚本
 
 训练Bloom模型的启动命令：
 
@@ -48,13 +45,13 @@ deepspeed --num_gpus=8 finetune.py --model_config_file run_config/Llama_config.j
 
 如果采用LoRA，需要使用torchrun命令启动分布式训练(使用deepspeed启动会出现错误)，同时需要指定use_lora参数并且给出LoRA需要的参数配置文件lora_hyperparams_file
 
-采用LoRA训练Bloom模型的启动命令:
+采用LoRA训练的启动命令(Bloom模型):
 
 ```bash
 torchrun --nproc_per_node=8 finetune.py --model_config_file run_config/Bloom_config.json --lora_hyperparams_file run_config/lora_hyperparams_bloom.json  --use_lora
 ```
 
-采用LoRA训练Llama模型的启动命令:
+采用LoRA训练的启动命令(Llama模型):
 
 ```bash
 torchrun --nproc_per_node=8 finetune.py --model_config_file run_config/Llama_config.json --lora_hyperparams_file run_config/lora_hyperparams_llama.json  --use_lora
@@ -78,7 +75,7 @@ python generate.py --dev_file data_dir/Belle_open_source_0.5M.dev.json --model_n
 
 # Usage
 
-This repository is used to fine-tune the Bloom and Llama large language models, and supports two training modes: Deepspeed and LoRA.
+This repository is used to fine-tune the Bloom and Llama large language models, and supports LoRA training.
 
 ## Environment Setup
 
@@ -103,12 +100,9 @@ The model training configuration files are stored in the `run_config` folder.
 - `Bloom_config.json`: hyperparameters for the Bloom model
 - `Llama_config.json`: hyperparameters for the Llama model
 - `deepspeed_config.json`: parameters for the Deepspeed strategy
-- `lora_hyperparams_bloom.json`: parameters for training the Bloom model with LoRA strategy
-- `lora_hyperparams_llama.json`: parameters for training the Llama model with LoRA strategy
+- `lora_hyperparams_bloom.json`: parameters for training the Bloom model with LoRA 
+- `lora_hyperparams_llama.json`: parameters for training the Llama model with LoRA 
 
-### Deepspeed 
-
-Use the `deepspeed` command to run the training script.
 
 Command to train the Bloom model:
 
@@ -127,13 +121,13 @@ deepspeed --num_gpus=8 finetune.py --model_config_file run_config/Llama_config.j
 
 If using LoRA, start the distributed training using the `torchrun` command (an error will occur if starting with `deepspeed`). Also, the `use_lora` parameter needs to be specified, and the `lora_hyperparams_file` file that LoRA needs should be provided.
 
-Command to train the Bloom model using LoRA:
+Command to train using LoRA(Bloom):
 
 ```bash
 torchrun --nproc_per_node=8 finetune.py --model_config_file run_config/Bloom_config.json --lora_hyperparams_file run_config/lora_hyperparams_bloom.json  --use_lora
 ```
 
-Command to train the Llama model using LoRA:
+Command to train using LoRA(Llama):
 
 ```bash
 torchrun --nproc_per_node=8 finetune.py --model_config_file run_config/Llama_config.json --lora_hyperparams_file run_config/lora_hyperparams_llama.json  --use_lora
