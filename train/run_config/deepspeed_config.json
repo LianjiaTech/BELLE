@@ -1,0 +1,39 @@
+{
+  "train_batch_size": "auto",
+
+    "optimizer": {
+      "type": "Adam",
+      "params": {
+        "lr": "auto",
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "eps": "auto",
+        "weight_decay": "auto"
+      }
+    },
+    
+  "overwrite":true,
+  "steps_per_print": 5,
+  "fp16": {
+    "enabled": true,
+    "min_loss_scale": 1,
+    "opt_level": "O2"
+  },
+  "zero_optimization": {
+    "stage": 2,
+    "allgather_partitions": true,
+    "allgather_bucket_size": 5e8,
+    "contiguous_gradients": true
+  },
+
+  "scheduler": {
+    "type": "WarmupLR",
+    "params": {
+      "warmup_min_lr": "auto",
+      "warmup_max_lr": "auto",
+      "warmup_num_steps": "auto"
+    }
+  }
+}
