@@ -4,19 +4,27 @@
 
 <a href="https://github.com/LianjiaTech/BELLE/stargazers">![GitHub Repo stars](https://img.shields.io/github/stars/LianjiaTech/BELLE?style=social)</a>
 [![](https://dcbadge.vercel.app/api/server/zZJR2QuQ?compact=true&style=flat)](https://discord.gg/zZJR2QuQ)
+<a href="https://github.com/LianjiaTech/BELLE/tree/main/1.5M/">![Docs](https://img.shields.io/badge/DataRelease1.5M-BELLE%2F1.5M-green)</a>
+<a href="https://github.com/LianjiaTech/BELLE/tree/main/10M/">![Docs](https://img.shields.io/badge/DataRelease10M-BELLE%2F10M-green)</a>
+<a href="https://huggingface.co/BelleGroup/">![Docs](https://img.shields.io/badge/ModelRelease-Huggingface%2FBelleGroup-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/docs/">![Docs](https://img.shields.io/badge/papers-BELLE%2Fdocs-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/quantization-BELLE%2Fgptq-green)</a>
-<a href="https://huggingface.co/BelleGroup/">![Docs](https://img.shields.io/badge/DataRelease-Huggingface%2FBelleGroup-green)</a>
-<a href="https://huggingface.co/BelleGroup/">![Docs](https://img.shields.io/badge/ModelRelease-Huggingface%2FBelleGroup-green)</a>
-
 </div>
 
-本项目目标是促进中文对话大模型开源社区的发展，愿景做能帮到每一个人的LLM Engine。现阶段本项目基于一些开源预训练大语言模型（如BLOOM、LAMMA等），针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
+本项目目标是促进中文对话大模型开源社区的发展，愿景做能帮到每一个人的LLM Engine。现阶段本项目基于一些开源预训练大语言模型（如BLOOM），针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
 <br/>
 
 项目包含以下内容:
-* 数据开放：参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) 生成的中文数据集[1M](https://huggingface.co/datasets/BelleGroup/train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN)
-* 基于BLOOMZ-7B1-mt优化后的模型：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
+
+* <a href="https://github.com/LianjiaTech/BELLE/tree/main/1.5M/">![Docs](https://img.shields.io/badge/数据开放1.5M-blue)</a> <a href="https://github.com/LianjiaTech/BELLE/tree/main/10M/">![Docs](https://img.shields.io/badge/数据开放10M-blue)</a>
+  * 详见[BELLE/1.5M](https://github.com/LianjiaTech/BELLE/tree/main/1.5M)，参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) 生成的中文数据集[1M](https://huggingface.co/datasets/BelleGroup/train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN)；
+  * 持续开放的数据集，详见[BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)
+* <a href="https://github.com/LianjiaTech/BELLE/tree/main/models/">![Docs](https://img.shields.io/badge/模型-blue)</a>
+  * 基于BLOOMZ-7B1-mt优化后的模型：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
+  * 基于[haggingface的LLaMA实例](https://huggingface.co/decapoda-research)实现[调优的模型](https://huggingface.co/BelleGroup)。请注意，本项目不能保证其是原版的LLaMA模型，也不能保证调优后的模型和LLaMA原版模型之间的关系。考虑到LLaMA的license约束，目前也仅供学习交流。请严遵守LLaMA的使用限制。建议大家基于训练脚本和开放数据调优模型
+* <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/模型量化gptq-blue)
+  * 详见[BELLE/gptq](https://github.com/LianjiaTech/BELLE/tree/main/gptq)，参考gptq的实现，对本项目中相关模型进行了量化
+
 
 **欢迎大家通过issue贡献更多的prompts！**
 <br/>
@@ -31,57 +39,6 @@
 3. 在一些涉及推理、代码等场景下模型的能力仍有待提高。
 
 基于以上模型局限性，我们要求开发者仅将我们开源的代码、数据、模型及后续用此项目生成的衍生物用于研究目的，不得用于商业，以及其他会对社会带来危害的用途。
-
-<br/>
-
-## 模型发布
-
-我们采取了不同大小规模（20万、60万、100万和200万样本）的指令学习的数据集训练模型，基于BLOOMZ-7B1-mt训练调优后的模型，现已开放:
-| Datasize| 200,000 | 600,000 | 1,000,000 | 2,000,000 |
-| ----- | ----- | ----- | ----- | ----- | 
-| Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
-
-
-此外，方便大家使用，也对模型进行了量化[基于GPTQ量化后的模型](https://huggingface.co/BelleGroup/)，其中包含针对基础的模型上的4bit和8bit的量化模型。
-| model name |  file size | GPU memory usage |
-| ----- | ----- | ----- |
-| bloom7b-2m  | 27G   | ~28.2G |
-| bloom7b-2m-8bit-128g.pt | 9.7G | ~11.4G |
-| bloom7b-2m-4bit-128g.pt | 6.9G | ~8.4G |
-| bloom7b-0.2m-8bit-128g.pt | 9.7G | ~11.4G |
-| bloom7b-0.2m-4bit-128g.pt | 6.9G | ~8.4G |
-
-
-### 模型效果比较
-以Bloomz-7b1-mt为基础，我们评估了不同数量的instruction tuning数据，对模型效果的影响。总的来说，提升数据量能持续带来效果的提升，但是在不同类型的任务上表现有所不同。在Extract, Classification, Closed QA, 和Summarization任务上，增加数据能持续带来效果的提升，还未达到瓶颈。在Translation, Rewrite, 和Brainstorming任务上，几十万的数据量就能获得较好的效果。在Math, Code, 和COT任务上，模型效果较差，而且增加数据量已经无法带来效果的提升。
-![Image text](assets/model_compare.jpg)
-<br/>
-详见论文：[Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)。
-<br/>
-
-## 数据发布
-1. [zh_seed_tasks.jsonl](https://github.com/LianjiaTech/BELLE/blob/main/zh_seed_tasks.json)：包含175个种子任务。
-2. [0.5M生成的数据](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN) ： 为了方便模型训练，huggingface开源数据将原始生成文件中的"instruction"、"input"字段合并成"input"字段，"output"字段修改为"target"字段。
-3. [1M生成的数据](https://huggingface.co/datasets/BelleGroup/train_1M_CN)：生成方式与0.5M数据集相同，在后处理中去掉了一些质量不高的数据，例如自称`GPT模型`的数据、由于input不完善导致模型无法回答的数据，以及指令是中文但input或target是英文的数据。
-<br/>
-
-
-## 数据生成
-沿用Alpaca的方式：
-```
-pip install -r requirements.txt
-export OPENAI_API_KEY=YOUR_API_KEY
-python generate_instruction.py generate_instruction_following_data
-```
-
-默认使用`Completion` API，模型`text-davinci-003`。如果想使用`Chat` API并使用`gpt-3.5-turbo`模型，可通过参数控制：
-
-```
-python generate_instruction.py generate_instruction_following_data \
-    --api=chat --model_name=gpt-3.5-turbo
-```
-
-输出文件在`Belle.train.json`，可以人工筛选后再使用。
 
 <br/>
 
@@ -106,7 +63,7 @@ python generate_instruction.py generate_instruction_following_data \
 }
 ```
 
-当然，你也需要引用原始的BLOOM论文、Stanford Alpaca和Self-Instruct论文。
+当然，你也需要引用原始的BLOOM论文、LLaMA论文、Stanford Alpaca和Self-Instruct论文。
 <br/>
 
 
@@ -138,10 +95,11 @@ python generate_instruction.py generate_instruction_following_data \
 
 <a href="https://github.com/LianjiaTech/BELLE/stargazers">![GitHub Repo stars](https://img.shields.io/github/stars/LianjiaTech/BELLE?style=social)</a>
 [![](https://dcbadge.vercel.app/api/server/zZJR2QuQ?compact=true&style=flat)](https://discord.gg/zZJR2QuQ)
+<a href="https://github.com/LianjiaTech/BELLE/tree/main/1.5M/">![Docs](https://img.shields.io/badge/DataRelease1.5M-BELLE%2F1.5M-green)</a>
+<a href="https://github.com/LianjiaTech/BELLE/tree/main/10M/">![Docs](https://img.shields.io/badge/DataRelease10M-BELLE%2F10M-green)</a>
+<a href="https://huggingface.co/BelleGroup/">![Docs](https://img.shields.io/badge/ModelRelease-Huggingface%2FBelleGroup-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/docs/">![Docs](https://img.shields.io/badge/papers-BELLE%2Fdocs-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/quantization-BELLE%2Fgptq-green)</a>
-<a href="https://huggingface.co/BelleGroup/">![Docs](https://img.shields.io/badge/DataRelease-Huggingface%2FBelleGroup-green)</a>
-<a href="https://huggingface.co/BelleGroup/">![Docs](https://img.shields.io/badge/ModelRelease-Huggingface%2FBelleGroup-green)</a>
 
 
 </div>
@@ -150,8 +108,15 @@ The goal of this project is to promote the development of the open-source commun
 <br/>
 
 This repo contains:
-* Data Release: The Chinese dataset generated [1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN), using [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) as reference
-* The model optimized based on BLOOMZ-7B1-mt: [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
+* <a href="https://github.com/LianjiaTech/BELLE/tree/main/1.5M/">![Docs](https://img.shields.io/badge/DataRelease1.5M-blue)</a> <a href="https://github.com/LianjiaTech/BELLE/tree/main/10M/">![Docs](https://img.shields.io/badge/DataRelease10M-blue)</a>
+  * Details in [BELLE/1.5M](https://github.com/LianjiaTech/BELLE/tree/main/1.5M)，The Chinese dataset generated [1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN), using [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) as reference
+  * 10M more data will be released gradually，details in [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)
+* <a href="https://github.com/LianjiaTech/BELLE/tree/main/models/">![Docs](https://img.shields.io/badge/Models-blue)</a>
+  * The model optimized based on BLOOMZ-7B1-mt：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
+  * The finetuned models(https://huggingface.co/BelleGroup) based on [haggingface version LLaMA](https://huggingface.co/decapoda-research). Please note that this project cannot guarantee that it is the original LLaMA model, nor can it guarantee the relationship between the fine-tuned model and the original LLaMA model. Considering LLaMA's license constraints, the model is for research and learning only. Please strictly respect LLaMA's usage policy. Users are suggested to finetune the model with open-source scripts and datasets.
+* <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/Quantized_models-blue)
+  * Details in [BELLE/gptq](https://github.com/LianjiaTech/BELLE/tree/main/gptq)，Referring to the implementation of GPT-Q, the relevant models in this project have been quantized.
+
 
 **More prompts are welcomed via issues!**
 <br/>
@@ -168,60 +133,6 @@ There still exists a few issues in the model trained on current base model and d
 Since the model still has its limitations, we require developers only use the open-sourced code, data, model and any other artifacts generated via this project for research purposes. Commercial use and other potential harmful use cases are not allowed.
 
 <br/>
-
-## Fine-tuning and Models Release
-
-We trained models on instruction learning datasets of different sizes (200,000, 600,000, 1 million, and 2 million samples) and based on the BLOOMZ-7B1-mt trained and optimized model. They are now release for use, you can download the checkpoints in [haggingface BELLE group](https://huggingface.co/BelleGroup):
-| Datasize| 200,000 | 600,000 | 1,000,000 | 2,000,000 |
-| ----- | ----- | ----- | ----- | ----- | 
-| Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
-
-In addition, for the convenience of users, we have also quantized the [model](https://huggingface.co/BelleGroup/) based on GPTQ, which includes 4-bit and 8-bit quantized models.
-| model name |  file size | GPU memory usage |
-| ----- | ----- | ----- |
-| bloom7b-2m  | 27G   | ~28.2G |
-| bloom7b-2m-8bit-128g.pt | 9.7G | ~11.4G |
-| bloom7b-2m-4bit-128g.pt | 6.9G | ~8.4G |
-| bloom7b-0.2m-8bit-128g.pt | 9.7G | ~11.4G |
-| bloom7b-0.2m-4bit-128g.pt | 6.9G | ~8.4G |
-
-### Model performance comparison 
-Based on the Bloomz-7b1-mt model, we evaluated the impact of different amounts of instruction data on our released models' performance. 
-Overall, increasing the amount of data consistently improved performance, but the extent of improvement varied across different types of tasks. 
-For Extract, Classification, Closed QA, and Summarization tasks, increasing data continued to improve performance without reaching a plateau. 
-For Translation, Rewrite, and Brainstorming tasks, good performance could be achieved with only hundreds of thousands of data. 
-However, for Math, Code, and COT tasks, these models' performance were poor, and increasing data did not lead to further improvement.
-![Image text](assets/model_compare.jpg)
-<br/>
-More details are in paper [Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)。
-<br/>
-
-## Data Release
-1. [zh_seed_tasks.jsonl](https://github.com/LianjiaTech/BELLE/blob/main/zh_seed_tasks.json) contains 175 seed tasks
-2. [0.5M generated data](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN)：To facilitate model training, Hugging Face open-sourced data that merged the "instruction" and "input" fields in the original generation file into a single "input" field, and renamed the "output" field as the "target" field.
-3. [1M generated data](https://huggingface.co/datasets/BelleGroup/train_1M_CN). Same generation pipeline as 0.5M dataset, removed lower-quality items in postprocessing, e.g. items regarding `GPT model`, bad items because of incomplete/invalid input, items with Chinese instructionb but English input or target.
-
-<br/>
-
-## Data Generation Process
-Following Alpaca:
-```
-pip install -r requirements.txt
-export OPENAI_API_KEY=YOUR_API_KEY
-python generate_instruction.py generate_instruction_following_data
-```
-
-Uses the `Completion` API and `text-davinci-003` model by default. To use `Chat` API and `gpt-3.5-turbo` model, just change the arguments:
-
-```
-python generate_instruction.py generate_instruction_following_data \
-    --api=chat --model_name=gpt-3.5-turbo
-```
-
-Generated instructions are in `Belle.train.json`, you can check manually before using it.
-
-<br/>
-
 
 ## Citation
 
@@ -245,4 +156,4 @@ Please cite us when using our code, data or model.
 }
 ```
 
-Cite the original BLOOM, Stanford Alpaca and Self-Instruct papers as well!
+Cite the original BLOOM, LLaMA, Stanford Alpaca and Self-Instruct papers as well!
