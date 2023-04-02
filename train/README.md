@@ -53,3 +53,6 @@ python generate.py --dev_file data_dir/Belle_open_source_0.5M.dev.json --model_n
 ```
 
 If the model is trained with LoRA, you need specify --lora_weights.
+
+## Reference
+The code is based on [alpaca-lora](https://github.com/tloen/alpaca-lora)
