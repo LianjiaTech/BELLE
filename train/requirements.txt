@@ -1,9 +1,0 @@
-torch==1.12.1+cu113
-torchaudio==0.12.1+cu113
-torchvision==0.13.1+cu113
-pytorch-lightning==1.7.2
-lightning-transformers==0.2.5
-git+https://github.com/huggingface/transformers.git
-accelerate
-sentencepiece
-deepspeed
