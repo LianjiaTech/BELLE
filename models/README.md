@@ -22,7 +22,7 @@ BELLE项目目标是促进中文对话大模型开源社区的发展，愿景做
 
 我们采取了不同大小规模（20万、60万、100万和200万样本）的指令学习的数据集训练模型，基于BLOOMZ-7B1-mt训练调优后的模型，现已开放:
 | Datasize| 200,000 | 600,000 | 1,000,000 | 2,000,000 |
-| ----- | ----- | ----- | ----- | ----- |
+| :-----: | :-----: | :-----: | :-----: | :-----: |
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
 
 此外，方便大家使用，也对模型进行了量化[基于GPTQ量化后的模型](https://huggingface.co/BelleGroup/)，其中包含针对基础的模型上的4bit和8bit的量化模型。
@@ -39,7 +39,7 @@ BELLE项目目标是促进中文对话大模型开源社区的发展，愿景做
 
 请注意，不能保证是基于原版的LLaMA模型调优的结果，考虑到LLaMA的license约束，目前也仅供学习交流。请严遵守LLaMA的使用限制。建议大家给予训练脚本和开放数据调优模型。
 | Datasize | 600,000 | 2,000,000 | 2,000,000 |
-| ----- | ----- | ----- | ----- |
+| :-----: | :-----: | :-----: | :-----: |
 | Modelsize | 7B | 7B | 13B |
 | Finetuned Model | [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M) | [BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M) | [BELLE-LLAMA-13B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-13B-2M) |
 
@@ -70,7 +70,7 @@ Since the model still has its limitations, we require developers only use the op
 
 We trained models on instruction learning datasets of different sizes (200,000, 600,000, 1 million, and 2 million samples) and based on the BLOOMZ-7B1-mt trained and optimized model. They are now release for use, you can download the checkpoints in [haggingface BELLE group](https://huggingface.co/BelleGroup):
 | Datasize| 200,000 | 600,000 | 1,000,000 | 2,000,000 |
-| ----- | ----- | ----- | ----- | ----- | 
+| :-----: | :-----: | :-----: | :-----: | :-----: | 
 | Finetuned Model | [BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M) | [BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M) | [BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M) | [BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M) |
 
 In addition, for the convenience of users, we have also quantized the [model](https://huggingface.co/BelleGroup/) based on GPTQ, which includes 4-bit and 8-bit quantized models.
@@ -92,6 +92,6 @@ More details are in paper [Exploring the Impact of Instruction Data Scaling on L
 Attention: It cannot be guaranteed that the model is based on the original LLaMA. Considering LLaMA's license constraints, the model is for research and learning only. Please strictly respect LLaMA's usage policy. Users are suggested to finetune the model with open-source scripts and datasets.
 
 | Datasize | 600,000 | 2,000,000 | 2,000,000 |
-| ----- | ----- | ----- | ----- |
+| :-----: | :-----: | :-----: | :-----: |
 | Modelsize | 7B | 7B | 13B |
 | Finetuned Model | [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M) | [BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M) | [BELLE-LLAMA-13B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-13B-2M) |
