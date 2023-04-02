@@ -1,6 +1,8 @@
 # 10M中文数据集
 
-**10M**中文数据集包含数个由BELLE项目产生的不同指令类型、不同领域的子集。目前正在逐步整理中，将会逐渐发布。
+**10M**中文数据集包含数个由BELLE项目产生的不同指令类型、不同领域的子集。
+
+目前正在逐步整理中，将会逐渐发布。
 
 
 ## 字段
@@ -43,7 +45,9 @@ output: 输出
 
 # The 10M Chinese Dataset
 
-The **10M** Chinese dataset is composed of subsets spanning multiple (instruction) types and multiple fields. Currently, these data is being gradually organized and will be released gradually.
+The **10M** Chinese dataset is composed of subsets spanning multiple (instruction) types and multiple fields.
+
+Currently, these data is being gradually organized and will be released gradually.
 
 
 ## Schema
