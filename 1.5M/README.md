@@ -6,8 +6,9 @@
 ## 字段
 各子集使用统一的字段
 ```
+instruction: 指令
 input: 输入
-target: 输出
+output: 输出
 ```
 
 ## 局限性和使用限制
@@ -53,6 +54,7 @@ The **1.5M** Chinese dataset is composed of subsets spanning multiple (instructi
 ## Schema
 All subsets follow the same schema:
 ```
+instruction: the instruction
 input: the input
 output: the expected output
 ```
