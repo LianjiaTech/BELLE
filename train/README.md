@@ -74,7 +74,7 @@ python generate.py --dev_file data_dir/Belle_open_source_0.5M.dev.json --model_n
 本仓库的代码基于[alpaca-lora](https://github.com/tloen/alpaca-lora)
 
 ## 常见问题
-1. torchrun --nproc_per_node=1 finetune.py 启动报错
+**1. torchrun --nproc_per_node=1 finetune.py 启动报错**
 报错信息如下：
 ```bash
 ValueError: DistributedDataParallel device_ids and output_device arguments only work with single-device/multiple-device GPU modules or CPU modules, but got device_ids [0], output_device 0, and module parameters {device(type='cuda', index=0), device(type='cuda', index=1), device(type='cuda', index=2)}.
@@ -84,3 +84,8 @@ ValueError: DistributedDataParallel device_ids and output_device arguments only 
 ```bash
 CUDA_VISIBLE_DEVICES=0 python finetune.py 
 ```
+
+**2. RuntimeError: expected scalar type Half but found Float**
+在跑Bloom模型时，可能会遇到这个问题。经过我们的实验，有如下结论：
+如果显卡是A100，不会出现expected scalar type Half but found Float的问题，Bloom和Llama都可以跑起来
+如果显卡是V100，可以跑起来Llama模型，但是Bloom模型就会出现这个错误，此时需要把代码中fp16改为False，才能跑Bloom模型
