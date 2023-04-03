@@ -38,10 +38,6 @@ BELLE项目目标是促进中文对话大模型开源社区的发展，愿景做
 ## 基于[huggingface的LLaMA实例](https://huggingface.co/decapoda-research)LLAMA-HF调优了后的模型
 
 请注意，不能保证是基于原版的LLaMA模型调优的结果，考虑到LLaMA的license约束，目前也仅供学习交流。请严遵守LLaMA的使用限制。建议大家给予训练脚本和开放数据调优模型。
-| Datasize | 600,000 | 2,000,000 | 2,000,000 |
-| :-----: | :-----: | :-----: | :-----: |
-| Modelsize | 7B | 7B | 13B |
-| Finetuned Model | [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M) | [BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M) | [BELLE-LLAMA-13B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-13B-2M) |
 
 
 ***
@@ -82,7 +78,7 @@ Overall, increasing the amount of data consistently improved performance, but th
 For Extract, Classification, Closed QA, and Summarization tasks, increasing data continued to improve performance without reaching a plateau. 
 For Translation, Rewrite, and Brainstorming tasks, good performance could be achieved with only hundreds of thousands of data. 
 However, for Math, Code, and COT tasks, these models' performance were poor, and increasing data did not lead to further improvement.
-![Image text](assets/model_compare.jpg)
+![Image text](../assets/model_compare.jpg)
 <br/>
 More details are in paper [Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)。
 <br/>
@@ -90,8 +86,3 @@ More details are in paper [Exploring the Impact of Instruction Data Scaling on L
 
 ## Model based on [HuggingFace version of LLaMA](https://huggingface.co/decapoda-research) LLAMA-HF finetuning
 Attention: It cannot be guaranteed that the model is based on the original LLaMA. Considering LLaMA's license constraints, the model is for research and learning only. Please strictly respect LLaMA's usage policy. Users are suggested to finetune the model with open-source scripts and datasets.
-
-| Datasize | 600,000 | 2,000,000 | 2,000,000 |
-| :-----: | :-----: | :-----: | :-----: |
-| Modelsize | 7B | 7B | 13B |
-| Finetuned Model | [BELLE-LLAMA-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-0.6M) | [BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M) | [BELLE-LLAMA-13B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-13B-2M) |
