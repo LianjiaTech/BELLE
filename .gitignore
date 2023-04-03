@@ -4,3 +4,4 @@ __pycache__
 .vscode
 regen.json
 .ipynb_checkpoints
+.idea
