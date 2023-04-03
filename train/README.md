@@ -72,3 +72,15 @@ python generate.py --dev_file data_dir/Belle_open_source_0.5M.dev.json --model_n
 ## 参考
 
 本仓库的代码基于[alpaca-lora](https://github.com/tloen/alpaca-lora)
+
+## 常见问题
+1. torchrun --nproc_per_node=1 finetune.py 启动报错
+报错信息如下：
+```bash
+ValueError: DistributedDataParallel device_ids and output_device arguments only work with single-device/multiple-device GPU modules or CPU modules, but got device_ids [0], output_device 0, and module parameters {device(type='cuda', index=0), device(type='cuda', index=1), device(type='cuda', index=2)}.
+```
+解决办法：
+如果是单张显卡，建议使用如下命令启动：
+```bash
+CUDA_VISIBLE_DEVICES=0 python finetune.py 
+```
