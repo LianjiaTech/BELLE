@@ -12,7 +12,7 @@
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/docs/">![Docs](https://img.shields.io/badge/papers-BELLE%2Fdocs-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/quantization_recipe-BELLE%2Fgptq-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/train/">![Docs](https://img.shields.io/badge/train_recipe-BELLE%2Ftrain-green)</a>
-
+<a href="https://github.com/LianjiaTech/BELLE/tree/main/eval/">![Docs](https://img.shields.io/badge/eval_set-BELLE%2Feval-green)</a>
 
 </div>
 
@@ -26,6 +26,8 @@ This repo contains:
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/1.5M/">![Docs](https://img.shields.io/badge/DataRelease1.5M-blue)</a> <a href="https://github.com/LianjiaTech/BELLE/tree/main/10M/">![Docs](https://img.shields.io/badge/DataRelease10M-blue)</a>
   * Details in [BELLE/1.5M](https://github.com/LianjiaTech/BELLE/tree/main/1.5M)，The Chinese dataset generated [1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN), using [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) as reference
   * 10M more data will be released gradually，details in [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M). Currently, we have 0.8M multiturn data, and 0.25 math data.
+* <a href="https://github.com/LianjiaTech/BELLE/tree/main/eval/">![Docs](https://img.shields.io/badge/验证集合&验证方法-blue)
+  * Details in [BELLE/eval](https://github.com/LianjiaTech/BELLE/tree/main/eval). A test set with over 1k samples and corresponding scoring prompts. It includes multiple categories and is evaluated using either GPT-4 or ChatGPT.
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/models/">![Docs](https://img.shields.io/badge/Models-blue)</a>
   * The model optimized based on BLOOMZ-7B1-mt：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
   * The finetuned models based on [Huggingface's LLaMA implementation](https://huggingface.co/decapoda-research). Please note that this project cannot guarantee that it is the original LLaMA model, nor can it guarantee the relationship between the fine-tuned model and the original LLaMA model. Considering [LLaMA's License](https://github.com/facebookresearch/llama/blob/main/LICENSE) and [Haggingface's LLaMA License](https://huggingface.co/decapoda-research/llama-7b-hf/blob/main/LICENSE) constraints, the model is for research and learning only. Please strictly respect LLaMA's usage policy. Users are suggested to finetune the model with open-source scripts and datasets.
