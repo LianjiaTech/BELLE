@@ -1,6 +1,7 @@
 # 中文测试集
 
 *Read this in [English](README_en.md).*
+
 中文测试集包含由BELLE项目产生的不同指令类型、不同领域的测试集，总共有12个指令类型。
 
 ## eval_set.json
@@ -67,14 +68,14 @@ python generation_html.py
 
 感谢GPT4，这个html是在GPT4的帮助下完成的代码工作。
 
-2.Open the ChatGPT_Score.html file in your browser.
+2.使用浏览器打开ChatGPT_Score.html。
 
-When using it, please note the following:
+使用时，有以下几个注意点：
 
-1）Enter your API_KEY to ensure that you can access OpenAI's services.
+1）请输入您的API_KEY，保证能正常访问openai的服务。
 
-2）Select a question. After each selection, it will be automatically copied to your clipboard, making it easier to call other models for answers.
+2）然后请选择问题，每一次选择问题后，会默认复制到您的剪切板，从而方便去调用其他模型得到回答。
 
-3）Enter your response, click "Get Score", and wait for the score from ChatGPT to be returned.
+3）输入你的回答，点击“获取得分”等待返回chatgpt的得分。
 
 ![ChatGPT评分](../assets/chatgpt_evaluation.png)
