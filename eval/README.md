@@ -54,23 +54,20 @@ demo_output_2: 输出样例2
 
 ## 使用ChatGPT自动打分小工具
 
-1. 使用eval_set.json和eval_prompt.json文件，运行下面代码生成ChatGPT评估html文件“ChatGPT_Score.html”
+使用eval_set.json和eval_prompt.json文件，运行下面代码生成ChatGPT评估html文件“ChatGPT_Score.html”
 大家可以按照对应数据格式在eval_set.json中增加测试用例，或者修改eval_prompt中的测试prompt
 
 ```shell
 python generation_html.py 
 ```
-
 感谢GPT4，这个html是在GPT4的帮助下完成的代码工作。
 
-2. 使用浏览器打开ChatGPT_Score.html。
-
-使用时，有以下几个注意点：
+使用浏览器打开ChatGPT_Score.html。使用时，有以下几个注意点：
 
 1）请输入您的API_KEY，保证能正常访问openai的服务。
 
 2）然后请选择问题，每一次选择问题后，会默认复制到您的剪切板，从而方便去调用其他模型得到回答。
 
-3）输入你的回答，点击“获取得分”等待返回chatgpt的得分。
+3）输入你的回答，点击“获取得分”等待返回ChatGPT的得分。
 
 ![ChatGPT评分](../assets/chatgpt_evaluation.png)
