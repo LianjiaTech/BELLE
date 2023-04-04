@@ -58,12 +58,11 @@ demo_output_2: 输出样例2
 
 ### 使用ChatGPT自动打分
 
-1.运行下面代码生ChatGPT评估html文件ChatGPT_Score.html
+1.使用eval_set.json和eval_prompt.json文件，运行下面代码生成ChatGPT评估html文件“ChatGPT_Score.html”
 ```shell
 python generation_html.py 
-
 ```
-2.使用浏览器打开ChatGPT_Score.html,选择问题，输入你的回答，返回chatgpt的得分。
+2.使用浏览器打开ChatGPT_Score.html，选择问题，输入你的回答，返回chatgpt的得分。
 
 
 ![ChatGPT评分](../assets/chatgpt_evaluation.png)
