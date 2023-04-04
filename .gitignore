@@ -1,4 +1,3 @@
-*.tmp
 *.swp
 __pycache__
 .vscode
