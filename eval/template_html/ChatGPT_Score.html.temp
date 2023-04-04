@@ -30,43 +30,57 @@
       font-weight: bold;
     }
 
-#loading {
-  border: 8px solid #f3f3f3; /* 设置边框 */
-  border-top: 8px solid #3498db; /* 设置顶部边框颜色 */
-  border-radius: 50%; /* 设置圆角 */
-  width: 50px; /* 设置宽度 */
-  height: 50px; /* 设置高度 */
-  animation: spin 2s linear infinite; /* 设置动画 */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-}
+    #loading {
+      border: 8px solid #f3f3f3;
+      /* 设置边框 */
+      border-top: 8px solid #3498db;
+      /* 设置顶部边框颜色 */
+      border-radius: 50%;
+      /* 设置圆角 */
+      width: 50px;
+      /* 设置宽度 */
+      height: 50px;
+      /* 设置高度 */
+      animation: spin 2s linear infinite;
+      /* 设置动画 */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); } /* 开始位置 */
-  100% { transform: rotate(360deg); } /* 结束位置 */
-}
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      /* 开始位置 */
+      100% {
+        transform: rotate(360deg);
+      }
+
+      /* 结束位置 */
+    }
 
   </style>
 </head>
 
 <body>
-  <h1>ChatGPT 评分</h1>
+  <h1>ChatGPT 评分 // Score</h1>
   <div id="loading"></div>
   <div>
-    <label for="api_key">请输入您的ChatGPT API KEY:</label>
-    <input type="text" id="api_key" placeholder="API KEY" >
+    <label for="api_key">请输入您的ChatGPT API KEY: // Please insert your ChatGPT API KEY</label>
+    <input type="text" id="api_key" placeholder="API KEY">
   </div>
   <div>
-    <label for="question_select">请选择一个问题:</label>
+    <label for="question_select">请选择一个问题: // Please select a question</label>
     <select id="question_select">
     </select>
   </div>
   <div>
-    <label for="user_answer">请输入您的答案:</label>
+    <label for="user_answer">请输入您的答案: // Please insert your answer</label>
     <input type="text" id="user_answer" placeholder="答案">
   </div>
-  <button id="submit_btn" onclick="getScore()">获取得分</button>
+  <button id="submit_btn" onclick="getScore()">获取得分// Get the score</button>
   <div id="result"></div>
   <script>
     const eval_set = [];
@@ -93,6 +107,20 @@
         option.text = item.question;
         select.add(option);
       });
+
+      select.addEventListener('change', copyToClipboard);
+    }
+
+    async function copyToClipboard() {
+      const selectedQuestionIndex = document.getElementById('question_select').value;
+      const question = eval_set[selectedQuestionIndex].question;
+
+      try {
+        await navigator.clipboard.writeText(question);
+        console.log('问题已复制到剪贴板');
+      } catch (err) {
+        console.error('无法复制问题到剪贴板', err);
+      }
     }
 
 
