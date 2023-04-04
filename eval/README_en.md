@@ -11,18 +11,14 @@ The test set includes over 1,000 test cases covering multiple categories. It sho
 
 Please note that for some types of questions, such as generation, there is no need for a standard answer, and in these cases, the std_answer field is empty.
 
-
-### Field
-
-The test set uses unified fields
+The test set uses unified fields:
 ```
 question: question or instruction
 class: the instruction types, such as generation, classification
 std_answer: the standard answer. In some case, it may be empty
 ```
 
-### Example
-
+The example:
 ```
 {
   "question": "将以下句子翻译成英语:我想学一门新语言，法语听起来很有趣。",
@@ -36,9 +32,7 @@ std_answer: the standard answer. In some case, it may be empty
 It includes prompts corresponding to the test data for each category, and the eval_set.json test cases are integrated through the corresponding prompts for each category. The evaluation scores are obtained by calling ChatGPT or GPT-4.
 
 
-### Field
-
-
+The core field:
 ```
 class: the instruction types, such as generation, classification
 prompt: evaluate prompt for geting the score
@@ -48,8 +42,7 @@ demo_input_2: demo input2
 demo_output_2: demo input2
 ```
 
-### Example
-
+The example:
 ```
 {
     "class": "translation", 
@@ -61,9 +54,9 @@ demo_output_2: demo input2
 }
 ```
 
-### Using ChatGPT for automatic scoring
+## Using ChatGPT for automatic scoring
 
-1.Using the eval_set.json and eval_prompt.json files, run the following code to generate the ChatGPT evaluation HTML file "ChatGPT_Score.html".
+Using the eval_set.json and eval_prompt.json files, run the following code to generate the ChatGPT evaluation HTML file "ChatGPT_Score.html".
 You can add test cases to eval_set.json according to the corresponding data format, or modify the test prompts in eval_prompt.
 
 ```shell
@@ -72,14 +65,12 @@ python generation_html.py
 
 Thanks, GPT-4. This HTML file was generated with the help of the code written using GPT-4.
 
-2.Open the ChatGPT_Score.html file in your browser.
+Open the ChatGPT_Score.html file in your browser. When using it, please note the following:
 
-When using it, please note the following:
+* Enter your API_KEY to ensure that you can access OpenAI's services.
 
-1) Enter your API_KEY to ensure that you can access OpenAI's services.
+* Select a question. After each selection, it will be automatically copied to your clipboard, making it easier to call other models for answers.
 
-2) Select a question. After each selection, it will be automatically copied to your clipboard, making it easier to call other models for answers.
-
-3) Enter your response, click "Get Score", and wait for the score from ChatGPT to be returned.
+* Enter your response, click "Get Score", and wait for the score from ChatGPT to be returned.
 
 ![ChatGPT评分](../assets/chatgpt_evaluation.png)
