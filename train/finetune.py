@@ -156,8 +156,9 @@ def train(args):
     print(data)
 
     val_set_size = model_config['val_set_size']
+    training_nums = len(data['train'])
     if val_set_size > 0:
-        val_set_size = min(val_set_size, int(len(data['train'])*model_config['val_set_rate']))
+        val_set_size = min(val_set_size, int(training_nums*model_config['val_set_rate']))
         train_val = data["train"].train_test_split(
             test_size=val_set_size, shuffle=True, seed=42
         )
@@ -168,6 +169,10 @@ def train(args):
         val_data = None
 
     print("start train...")
+    num_gpus = torch.cuda.device_count()
+    t_total = (training_nums//(gradient_accumulation_steps*num_gpus + 1))*model_config["num_epochs"]
+    warmup_steps = int(t_total * model_config.get("warmup_rate", 0.1))
+    logger.info("num_gpus = {}, training_nums = {}, t_total = {}, warmup_steps = {}".format(num_gpus, training_nums, t_total, warmup_steps))
     trainer = transformers.Trainer(
         model=model,
         train_dataset=train_data,
@@ -175,7 +180,7 @@ def train(args):
         args=transformers.TrainingArguments(
             per_device_train_batch_size=model_config['per_device_train_batch_size'],
             gradient_accumulation_steps=gradient_accumulation_steps,
-            warmup_steps=model_config['warmup_steps'],
+            warmup_steps=warmup_steps,
             num_train_epochs=model_config['num_epochs'],
             learning_rate=model_config['learning_rate'],
             fp16=True,
