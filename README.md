@@ -31,8 +31,9 @@
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/模型量化gptq-blue)
   * 详见[BELLE/gptq](https://github.com/LianjiaTech/BELLE/tree/main/gptq)，参考gptq的实现，对本项目中相关模型进行了量化
 
+  * 提供了colab上面可运行的推理代码[Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/notebook/BELLE_INFER_COLAB.ipynb)
 
-**欢迎大家通过issue贡献更多的prompts！**
+**欢迎大家通过issue贡献更多的prompts！** 
 <br/>
 
 ## 局限性和使用限制
