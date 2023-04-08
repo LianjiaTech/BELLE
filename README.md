@@ -22,7 +22,7 @@
   * 详见[BELLE/train](https://github.com/LianjiaTech/BELLE/tree/main/train)，尽可能简化的一个训练代码实现，支持finetune，lora，deepspeed
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/1.5M/">![Docs](https://img.shields.io/badge/数据开放1.5M-blue)</a> <a href="https://github.com/LianjiaTech/BELLE/tree/main/10M/">![Docs](https://img.shields.io/badge/数据开放10M-blue)</a>
   * 详见[BELLE/1.5M](https://github.com/LianjiaTech/BELLE/tree/main/1.5M)，参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) 生成的中文数据集[1M](https://huggingface.co/datasets/BelleGroup/train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN)；
-  * 持续开放的数据集，详见[BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)，目前开放了[0.25M数学指令数据集](https://huggingface.co/datasets/BelleGroup/school_math_0.25M)和[0.8M多轮任务对话数据集](https://huggingface.co/datasets/BelleGroup/multiturn_chat_0.8M)
+  * 持续开放的数据集，详见[BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/eval/">![Docs](https://img.shields.io/badge/验证集合&验证方法-blue)
   * 详见[BELLE/eval](https://github.com/LianjiaTech/BELLE/tree/main/eval)，一个1k+的测试集合，和对应打分prompt。包含多个类别，采用GPT-4或者ChatGPT打分。同时提供了一个打分的网页，方便针对单个case使用。
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/models/">![Docs](https://img.shields.io/badge/模型-blue)</a>
@@ -35,6 +35,12 @@
 
 **欢迎大家通过issue贡献更多的prompts！** 
 <br/>
+
+## 最近更新
+* [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)中，新加40万条生成的给定角色的多轮对话[Generated Chat](https://huggingface.co/datasets/BelleGroup/generated_chat_0.4M)，新加200万条生成多样化指令任务数据[train_2M_CN](https://huggingface.co/datasets/BelleGroup/train_2M_CN)。
+
+* 提供了colab上面可运行的推理代码[Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)
+
 
 ## 局限性和使用限制
 基于当前数据和基础模型训练得到的SFT模型，在效果上仍存在以下问题：
