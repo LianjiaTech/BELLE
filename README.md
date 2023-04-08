@@ -17,7 +17,12 @@
 
 本项目目标是促进中文对话大模型开源社区的发展，愿景做能帮到每一个人的LLM Engine。现阶段本项目基于一些开源预训练大语言模型（如BLOOM），针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
 
-项目包含以下内容:
+## 最近更新
+* [2023/04/08] [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)中，新加40万条生成的给定角色的多轮对话[Generated Chat](https://huggingface.co/datasets/BelleGroup/generated_chat_0.4M)，新加200万条生成多样化指令任务数据[train_2M_CN](https://huggingface.co/datasets/BelleGroup/train_2M_CN)。
+
+* [2023/04/05] 提供了colab上面可运行的推理代码[Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)
+
+## 项目包含以下内容:
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/train/">![Docs](https://img.shields.io/badge/训练代码train-blue)
   * 详见[BELLE/train](https://github.com/LianjiaTech/BELLE/tree/main/train)，尽可能简化的一个训练代码实现，支持finetune，lora，deepspeed
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/1.5M/">![Docs](https://img.shields.io/badge/数据开放1.5M-blue)</a> <a href="https://github.com/LianjiaTech/BELLE/tree/main/10M/">![Docs](https://img.shields.io/badge/数据开放10M-blue)</a>
@@ -27,7 +32,7 @@
   * 详见[BELLE/eval](https://github.com/LianjiaTech/BELLE/tree/main/eval)，一个1k+的测试集合，和对应打分prompt。包含多个类别，采用GPT-4或者ChatGPT打分。同时提供了一个打分的网页，方便针对单个case使用。
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/models/">![Docs](https://img.shields.io/badge/模型-blue)</a>
   * 基于BLOOMZ-7B1-mt优化后的模型：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
-  * 基于[huggingface的LLaMA实例](https://huggingface.co/decapoda-research)实现调优的模型。请注意，本项目不能保证其是原版的LLaMA模型，也不能保证调优后的模型和LLaMA原版模型之间的关系。请参考[Meta LLaMA的License](https://github.com/facebookresearch/llama/blob/main/LICENSE)和[huggingface的LLaMA实例的License](https://huggingface.co/decapoda-research/llama-7b-hf/blob/main/LICENSE)，目前仅供学习交流。请严遵守LLaMA的使用限制。强烈建议大家基于训练脚本和开放数据调优模型。
+  * 基于[huggingface的LLaMA实例](https://huggingface.co/decapoda-research)实现调优的模型：[BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LAMMA-7B-2M)，[BELLE-LLAMA-13B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-13B-2M)。请注意，本项目不能保证其是原版的LLaMA模型，也不能保证调优后的模型和LLaMA原版模型之间的关系。请参考[Meta LLaMA的License](https://github.com/facebookresearch/llama/blob/main/LICENSE)，目前仅供学习交流。请严遵守LLaMA的使用限制。强烈建议大家基于训练脚本和开放数据调优模型。
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/模型量化gptq-blue)
   * 详见[BELLE/gptq](https://github.com/LianjiaTech/BELLE/tree/main/gptq)，参考gptq的实现，对本项目中相关模型进行了量化
 
@@ -35,12 +40,6 @@
 
 **欢迎大家通过issue贡献更多的prompts！** 
 <br/>
-
-## 最近更新
-* [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)中，新加40万条生成的给定角色的多轮对话[Generated Chat](https://huggingface.co/datasets/BelleGroup/generated_chat_0.4M)，新加200万条生成多样化指令任务数据[train_2M_CN](https://huggingface.co/datasets/BelleGroup/train_2M_CN)。
-
-* 提供了colab上面可运行的推理代码[Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)
-
 
 ## 局限性和使用限制
 基于当前数据和基础模型训练得到的SFT模型，在效果上仍存在以下问题：
@@ -52,7 +51,6 @@
 3. 在一些涉及推理、代码、多轮对话等场景下模型的能力仍有待提高。
 
 基于以上模型局限性，我们要求开发者仅将我们开源的代码、数据、模型及后续用此项目生成的衍生物用于研究目的，不得用于商业，以及其他会对社会带来危害的用途。
-
 <br/>
 
 ## 引用
