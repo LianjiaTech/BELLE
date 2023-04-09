@@ -1,7 +1,6 @@
 import sys, os
 import argparse
 import json
-import fire
 import torch
 from peft import PeftModel
 import transformers
@@ -87,19 +86,20 @@ def generate_text(dev_data, batch_size, tokenizer, model, skip_special_tokens = 
             input_text = "Human: " + item['instruction'] + item['input'] + "\n\nAssistant: " 
             batch_text.append(tokenizer.bos_token + input_text if tokenizer.bos_token!=None else input_text)
 
-        features = tokenizer(batch_text, padding=True, return_tensors="pt", truncation=True, max_length = args.max_length)
-        input_ids = features['input_ids'].to("cuda")
-        attention_mask = features['attention_mask'].to("cuda")
+        with torch.autocast("cuda"):
+            features = tokenizer(batch_text, padding=True, return_tensors="pt", truncation=True, max_length = args.max_length)
+            input_ids = features['input_ids'].to("cuda")
+            attention_mask = features['attention_mask'].to("cuda")
 
-        output_texts = model.generate(
-            input_ids=input_ids,
-            attention_mask=attention_mask,
-            num_beams = 4,
-            do_sample = False,
-            min_new_tokens=1,
-            max_new_tokens=512,
-            early_stopping= True 
-        )
+            output_texts = model.generate(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                num_beams = 4,
+                do_sample = False,
+                min_new_tokens=1,
+                max_new_tokens=512,
+                early_stopping= True 
+            )
         output_texts = tokenizer.batch_decode(
             output_texts.cpu().numpy().tolist(),
             skip_special_tokens=skip_special_tokens,
@@ -114,7 +114,7 @@ def generate_text(dev_data, batch_size, tokenizer, model, skip_special_tokens = 
 
 
 def main(args):
-    dev_data = load_dev_data(args.dev_file)[:10]#For simplify and save time, we only evaluate ten samples
+    dev_data = load_dev_data(args.dev_file)[:2]
     res = generate_text(dev_data, batch_size, tokenizer, model)
     with open(args.output_file, 'w') as f:
         json.dump(res, f, ensure_ascii=False, indent=4)
@@ -133,6 +133,8 @@ if __name__ == "__main__":
     batch_size = args.dev_batch_size
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+    tokenizer.pad_token_id = 0
+    tokenizer.padding_side = "left"
     # model = AutoModelForCausalLM.from_pretrained(args.model_name_or_path)
     model = get_model(args.model_name_or_path)
     main(args)

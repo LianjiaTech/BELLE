@@ -4,7 +4,6 @@ import sys
 from typing import List
 import argparse, logging
 
-import fire
 import torch
 import torch.nn as nn
 import bitsandbytes as bnb
@@ -48,12 +47,7 @@ def get_logger(logger_name,output_dir):
     return logger
 
 
-def train(
-    train_on_inputs: bool = False,  # if False, masks out inputs in loss
-    group_by_length: bool = True,  # faster, but produces an odd training loss curve,
-    resume_from_checkpoint: str = None,  # either training checkpoint or final adapter
-):
-
+def train(args):
     model_config = json.load(open(args.model_config_file))
     model_type = model_config['model_type']
     model_name_or_path = model_config['model_name_or_path']
@@ -71,6 +65,7 @@ def train(
 
     gradient_accumulation_steps = model_config['batch_size'] // model_config['per_device_train_batch_size'] if "gradient_accumulation_steps" not in model_config else model_config['gradient_accumulation_steps']
 
+    logger.info("per_device_train_batch_size = {}, gradient_accumulation_steps = {}".format(model_config["per_device_train_batch_size"], gradient_accumulation_steps))
     device_map = "auto"
     world_size = int(os.environ.get("WORLD_SIZE", 1))
     ddp = world_size != 1
@@ -129,7 +124,7 @@ def train(
         target_text = data_point["output"] + tokenizer.eos_token
         full_prompt = input_text+target_text
         tokenized_full_prompt = tokenize(full_prompt)
-        if not train_on_inputs:
+        if not args.train_on_inputs:
             user_prompt = input_text
             tokenized_user_prompt = tokenize(user_prompt, add_eos_token=False)
             user_prompt_len = len(tokenized_user_prompt["input_ids"])
@@ -161,8 +156,9 @@ def train(
     print(data)
 
     val_set_size = model_config['val_set_size']
+    training_nums = len(data['train'])
     if val_set_size > 0:
-        val_set_size = min(val_set_size, int(len(data['train'])*model_config['val_set_rate']))
+        val_set_size = min(val_set_size, int(training_nums*model_config['val_set_rate']))
         train_val = data["train"].train_test_split(
             test_size=val_set_size, shuffle=True, seed=42
         )
@@ -173,6 +169,10 @@ def train(
         val_data = None
 
     print("start train...")
+    num_gpus = torch.cuda.device_count()
+    t_total = (training_nums//(gradient_accumulation_steps*num_gpus + 1))*model_config["num_epochs"]
+    warmup_steps = int(t_total * model_config.get("warmup_rate", 0.1))
+    logger.info("num_gpus = {}, training_nums = {}, t_total = {}, warmup_steps = {}".format(num_gpus, training_nums, t_total, warmup_steps))
     trainer = transformers.Trainer(
         model=model,
         train_dataset=train_data,
@@ -180,7 +180,7 @@ def train(
         args=transformers.TrainingArguments(
             per_device_train_batch_size=model_config['per_device_train_batch_size'],
             gradient_accumulation_steps=gradient_accumulation_steps,
-            warmup_steps=model_config['warmup_steps'],
+            warmup_steps=warmup_steps,
             num_train_epochs=model_config['num_epochs'],
             learning_rate=model_config['learning_rate'],
             fp16=True,
@@ -194,7 +194,7 @@ def train(
             load_best_model_at_end=False,
             ddp_find_unused_parameters=False if ddp else None,
             deepspeed=args.deepspeed if not args.use_lora else None,
-            group_by_length=group_by_length
+            group_by_length=True
         ),
         data_collator=transformers.DataCollatorForSeq2Seq(
             tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
@@ -226,9 +226,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_config_file", type=str, required=True)
     parser.add_argument("--deepspeed", type=str, help="deepspeed config")
-    parser.add_argument("--resume_from_checkpoint", action="store_true", default=False)
+    parser.add_argument("--resume_from_checkpoint", action="store_true", help="either training checkpoint or final adapter")
+    parser.add_argument("--train_on_inputs", action="store_true", help="Target loss only. If False, masks out inputs in loss")
+    #parser.add_argument("--group_by_length", action="store_true", help="Faster, but produces an odd training loss curve,")
     parser.add_argument("--lora_hyperparams_file", default="", type=str, help="Provide it when use_lora=True")
     parser.add_argument("--use_lora", action="store_true", default=False, help="Use lora")
     parser.add_argument("--local_rank", type=int)
     args = parser.parse_args()
-    fire.Fire(train)
+    train(args)

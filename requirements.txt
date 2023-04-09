@@ -4,3 +4,7 @@ fire
 openai
 transformers
 gensim==3.8.2
+peft==0.2.0
+datasets
+bitsandbytes
+deepspeed

@@ -19,7 +19,12 @@
 The goal of this project is to promote the development of the open-source community for Chinese language large-scale conversational models, and our vision is to help building large language model engine for everyone. This project optimizes Chinese performance based on opensource pretrained large language models. These models finetuning uses only data generated via ChatGPT (without other data). 
 <br/>
 
-This repo contains:
+## What‘s new:
+
+* [2023/04/08] In [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M), a new dataset named ["Generated Chat"]((https://huggingface.co/datasets/BelleGroup/generated_chat_0.4M)) containing newly generated multi-turn dialogues with given roles, and a new dataset named ["train_2M_CN"](https://huggingface.co/datasets/BelleGroup/train_2M_CN) containing 2 million newly added diverse instruction task data.
+* [2023/04/05] The inference code that can be run on [Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb) is provided
+
+## This repo contains:
 
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/train/">![Docs](https://img.shields.io/badge/Traning_recipe-blue)
   * Details in [BELLE/train](https://github.com/LianjiaTech/BELLE/tree/main/train), A simplified implementation of training code with support for finetune, LORA, and DeepSpeed as much as possible.
@@ -35,8 +40,6 @@ This repo contains:
   * Details in [BELLE/gptq](https://github.com/LianjiaTech/BELLE/tree/main/gptq)，Referring to the implementation of GPT-Q, the relevant models in this project have been quantized.
 
 
-
-
 **More prompts are welcomed via issues!**
 <br/>
 
@@ -50,7 +53,6 @@ There still exists a few issues in the model trained on current base model and d
 3. Needs improvements on reasoning and coding.
 
 Since the model still has its limitations, we require developers only use the open-sourced code, data, model and any other artifacts generated via this project for research purposes. Commercial use and other potential harmful use cases are not allowed.
-
 <br/>
 
 ## Citation

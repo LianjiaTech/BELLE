@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatGPT获取分数</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f3f3f3;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    input,
+    select,
+    button {
+      margin-bottom: 10px;
+      padding: 5px;
+      width: 100%;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    #loading {
+      border: 8px solid #f3f3f3;
+      /* 设置边框 */
+      border-top: 8px solid #3498db;
+      /* 设置顶部边框颜色 */
+      border-radius: 50%;
+      /* 设置圆角 */
+      width: 50px;
+      /* 设置宽度 */
+      height: 50px;
+      /* 设置高度 */
+      animation: spin 2s linear infinite;
+      /* 设置动画 */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      /* 开始位置 */
+      100% {
+        transform: rotate(360deg);
+      }
+
+      /* 结束位置 */
+    }
+
+  </style>
+</head>
+
+<body>
+  <h1>ChatGPT 评分 // Score</h1>
+  <div id="loading"></div>
+  <div>
+    <label for="api_key">请输入您的ChatGPT API KEY: // Please insert your ChatGPT API KEY</label>
+    <input type="text" id="api_key" placeholder="API KEY">
+  </div>
+  <div>
+    <label for="question_select">请选择一个问题: // Please select a question</label>
+    <select id="question_select">
+    </select>
+  </div>
+  <div>
+    <label for="user_answer">请输入您的答案: // Please insert your answer</label>
+    <input type="text" id="user_answer" placeholder="答案">
+  </div>
+  <button id="submit_btn" onclick="getScore()">获取得分// Get the score</button>
+  <div id="result"></div>
+  <script>
+    const eval_set = [];
+    const eval_prompt = [];
+    // 定义随机化函数
+    function shuffleList() {
+    for (var i = eval_set.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = eval_set[i];
+      eval_set[i] = eval_set[j];
+      eval_set[j] = temp;
+    }
+  }
+
+    shuffleList();
+    loading.style.display = 'none';
+
+    console.log("init shuffle list")
+    function populateQuestions() {
+      const select = document.getElementById('question_select');
+      eval_set.forEach((item, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.text = item.question;
+        select.add(option);
+      });
+
+      select.addEventListener('change', copyToClipboard);
+    }
+
+    async function copyToClipboard() {
+      const selectedQuestionIndex = document.getElementById('question_select').value;
+      const question = eval_set[selectedQuestionIndex].question;
+
+      try {
+        await navigator.clipboard.writeText(question);
+        console.log('问题已复制到剪贴板');
+      } catch (err) {
+        console.error('无法复制问题到剪贴板', err);
+      }
+    }
+
+
+    async function getScore() {
+      const apiKey = document.getElementById('api_key').value;
+      const selectedQuestionIndex = document.getElementById('question_select').value;
+      const userAnswer = document.getElementById('user_answer').value;
+
+      if (!apiKey) {
+        alert('请输入API KEY');
+        return;
+      }
+
+      if (!userAnswer) {
+        alert('请输入答案');
+        return;
+      }
+
+      const question = eval_set[selectedQuestionIndex];
+      const prompt = eval_prompt.find(item => item.class === question.class).prompt;
+      let inputPrompt;
+      if (["generation", "brainstorming", "rewrite"].includes(question.class)) {
+        inputPrompt = `${prompt} ${question.question}  模型回答： '${userAnswer}'。请针对模型回答给出得分，顺便给出理由：`;
+      } else {
+        inputPrompt = `${prompt} ${question.question} 标准回答:${question.std_answer}  模型回答：' ${userAnswer}'。请针对模型回答给出得分，顺便给出理由：`;
+      }
+
+      loading.style.display = 'block';
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          "max_tokens": 3000,
+          "model": "gpt-3.5-turbo",
+          "messages": [
+            {
+              "role": "user",
+              "content": inputPrompt
+            }
+          ],
+          "temperature": 0.0,
+        }),
+      });
+      if (!response.ok) {
+        alert('请求失败，请检查您的API KEY');
+        return;
+      }
+      loading.style.display = 'none';
+      const data = await response.json();
+      const score = data.choices[0].message.content.trim();
+      document.getElementById('result').innerHTML = `${score}`;
+    }
+
+    // 初始化问题列表
+    populateQuestions();
+  </script>
+</body>
+
+</html>
