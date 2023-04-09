@@ -66,10 +66,10 @@ def train(args):
     gradient_accumulation_steps = model_config['batch_size'] // model_config['per_device_train_batch_size'] if "gradient_accumulation_steps" not in model_config else model_config['gradient_accumulation_steps']
 
     logger.info("per_device_train_batch_size = {}, gradient_accumulation_steps = {}".format(model_config["per_device_train_batch_size"], gradient_accumulation_steps))
-    device_map = "auto"
-    world_size = int(os.environ.get("WORLD_SIZE", 1))
+    device_map = "auto" # 使用cpu时 不能用auto
+    world_size = int(os.environ.get("WORLD_SIZE", 1)) # 进程数目。一般一个进程用一个GPU
     ddp = world_size != 1
-    if ddp:
+    if ddp: # 有多个进程，分布式训练
         device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
         gradient_accumulation_steps = max(gradient_accumulation_steps // world_size, 1)
 
