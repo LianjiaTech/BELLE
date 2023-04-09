@@ -133,6 +133,7 @@ if __name__ == '__main__':
                 temperature=args.temperature,
             )
         print("Assistant:\n") 
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
+        print(tokenizer.decode([el.item() for el in generated_ids[0]])[len(inputs):])
         print("\n-------------------------------\n")
+        print("Human:") #每次终端用户输入前，加上Human提示。
         line = input()
