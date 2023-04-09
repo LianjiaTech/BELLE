@@ -5,3 +5,4 @@ __pycache__
 regen.json
 .ipynb_checkpoints
 .idea
+train/pretrain_model
