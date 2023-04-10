@@ -14,7 +14,7 @@ import json
 assert (
     "LlamaTokenizer" in transformers._import_structure["models.llama"]
 ), "LLaMA is now in HuggingFace's main branch.\nPlease reinstall it: pip uninstall transformers && pip install git+https://github.com/huggingface/transformers.git"
-from transformers import LlamaForCausalLM, LlamaTokenizer
+# from transformers import LlamaForCausalLM, LlamaTokenizer
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import (
     prepare_model_for_int8_training,
@@ -183,7 +183,7 @@ def train(args):
             warmup_steps=warmup_steps,
             num_train_epochs=model_config['num_epochs'],
             learning_rate=model_config['learning_rate'],
-            fp16=True,
+            fp16=model_config['fp16'],
             logging_steps=model_config['logging_steps'],
             evaluation_strategy="steps" if val_set_size > 0 else "no",
             save_strategy="steps",
