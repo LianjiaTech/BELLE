@@ -133,6 +133,7 @@ if __name__ == '__main__':
                 temperature=args.temperature,
             )
         print("Assistant:\n") 
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
+        print(tokenizer.decode([el.item() for el in generated_ids[0]])[len(inputs)+4:]) # generated_ids开头加上了bos_token,需要将inpu的内容截断,只输出Assistant 
         print("\n-------------------------------\n")
+        print("Human:") #每次终端用户输入前，加上Human提示。
         line = input()
