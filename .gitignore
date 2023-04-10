@@ -7,3 +7,5 @@ regen.json
 .idea
 train/pretrain_model
 train/data_dir
+train/output_models
+venv
