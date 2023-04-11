@@ -86,6 +86,7 @@ def train(args):
             model_name_or_path,
             load_in_8bit = load_in_8bit,
             device_map=device_map,
+            load_in_8bit_fp32_cpu_offload = true
         )
         tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
 
