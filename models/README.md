@@ -37,17 +37,22 @@ BELLE项目目标是促进中文对话大模型开源社区的发展，愿景做
 
 ## 调优LLaMA模型
 
-考虑到LLaMA模型的限制，调优后的模型只能用作研究和学习使用，请严格遵守LLaMA的使用约束。LLaMA模型不允许发布调优后的完整模型权重，但是可以发布原始的模型的差异。因此，我们使用文件间的XOR，保证拥有LLaMA原始模型授权的人才可以将本项目发布的模型转化成可以使用的格式。文件XOR的代码参考[point-alpaca](https://github.com/pointnetwork/point-alpaca) .
-
+考虑到LLaMA模型的限制，调优后的模型只能用作研究和学习使用，请严格遵守LLaMA的使用约束。LLaMA模型不允许发布调优后的完整模型权重，但是可以发布原始的模型的diff。因此，我们使用文件间的XOR，保证拥有LLaMA原始模型授权的人才可以将本项目发布的模型转化成可以使用的格式。文件XOR的代码参考[point-alpaca](https://github.com/pointnetwork/point-alpaca) 
 ### 模型列表
-[BELLE-LLaMA-7B-0.6M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-0.6M-enc)
-[BELLE-LLaMA-7B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc)
-[BELLE-LLaMA-7B-2M-gptq-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-gptq-enc)
-[https://huggingface.co/BelleGroup/BELLE-LLaMA-13B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-13B-2M-enc)
+* [BELLE-LLaMA-7B-0.6M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-0.6M-enc)
+* [BELLE-LLaMA-7B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc)
+* [BELLE-LLaMA-7B-2M-gptq-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-gptq-enc)
+* [BELLE-LLaMA-13B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-13B-2M-enc)
 
 ### 使用说明
-1. 从[LLaMA](https://github.com/facebookresearch/llama)官方获取pth文件
-
+1. 从[LLaMA](https://github.com/facebookresearch/llama)官方获取7B/13B模型的pth文件，放到`original`目录
+2. 从[Huggingface Belle Group](https://huggingface.co/BelleGroup/) 下载发布的LLaMA模型diff，放到`encrypted`目录
+3. 运行下面的命令
+```
+for f in "encrypted"/*; do if [ -f "$f" ]; then python3 decrypt.py "$f" "original/7B/consolidated.00.pth" "result/"; fi; done
+```
+4. 参照Huggingface的README，检查`result`目录文件的md5值
+5. GPTQ量化模型推理代码参照[GPTQ推理代码](https://github.com/LianjiaTech/BELLE/tree/main/gptq)；非量化模型代码参照[基于transformers推理代码](https://github.com/LianjiaTech/BELLE/tree/main/train)
 
 ***
 
@@ -93,5 +98,20 @@ More details are in paper [Exploring the Impact of Instruction Data Scaling on L
 <br/>
 
 
-## Model based on [HuggingFace version of LLaMA](https://huggingface.co/decapoda-research) LLAMA-HF finetuning
-Attention: It cannot be guaranteed that the model is based on the original LLaMA. Considering LLaMA's license constraints, the model is for research and learning only. Please strictly respect LLaMA's usage policy. Users are suggested to finetune the model with open-source scripts and datasets.
+## Finetuned LLaMA Model
+Considering LLaMA's license constraints, the model is for research and learning only. Please strictly respect LLaMA's usage policy. We are not allowed to publish weights for LLaMA, of course, even finetuned, but there is no problem publishing the difference, a patch that we suggest to apply to the files. The encryption is a simple XOR between files, ensuring that only the people that have access to the original weights (from completely legal sources, of course) can transform them into finetuned weights. The encryption code is based on [point-alpaca](https://github.com/pointnetwork/point-alpaca) .
+
+### Model list
+* [BELLE-LLaMA-7B-0.6M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-0.6M-enc)
+* [BELLE-LLaMA-7B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc)
+* [BELLE-LLaMA-7B-2M-gptq-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-gptq-enc)
+* [BELLE-LLaMA-13B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-13B-2M-enc)
+### Usage
+1. From [LLaMA](https://github.com/facebookresearch/llama) download 7B/13B model's pth file，put it to `original` directory
+2. From [Huggingface Belle Group](https://huggingface.co/BelleGroup/) download finetuned LLaMA model diff，put it to `encrypted` directory
+3. Run 
+```
+for f in "encrypted"/*; do if [ -f "$f" ]; then python3 decrypt.py "$f" "original/7B/consolidated.00.pth" "result/"; fi; done
+```
+4. Check the md5 value of `result` directory
+5. [GPTQ infer code](https://github.com/LianjiaTech/BELLE/tree/main/gptq)；[transformers infer code](https://github.com/LianjiaTech/BELLE/tree/main/train)
