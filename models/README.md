@@ -35,9 +35,18 @@ BELLE项目目标是促进中文对话大模型开源社区的发展，愿景做
 详见论文：[Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)。
 <br/>
 
-## 基于[huggingface的LLaMA实例](https://huggingface.co/decapoda-research)LLAMA-HF调优了后的模型
+## 调优LLaMA模型
 
-请注意，不能保证是基于原版的LLaMA模型调优的结果，考虑到LLaMA的license约束，目前也仅供学习交流。请严遵守LLaMA的使用限制。建议大家给予训练脚本和开放数据调优模型。
+考虑到LLaMA模型的限制，调优后的模型只能用作研究和学习使用，请严格遵守LLaMA的使用约束。LLaMA模型不允许发布调优后的完整模型权重，但是可以发布原始的模型的差异。因此，我们使用文件间的XOR，保证拥有LLaMA原始模型授权的人才可以将本项目发布的模型转化成可以使用的格式。文件XOR的代码参考[point-alpaca](https://github.com/pointnetwork/point-alpaca) .
+
+### 模型列表
+[BELLE-LLaMA-7B-0.6M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-0.6M-enc)
+[BELLE-LLaMA-7B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc)
+[BELLE-LLaMA-7B-2M-gptq-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-gptq-enc)
+[https://huggingface.co/BelleGroup/BELLE-LLaMA-13B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-13B-2M-enc)
+
+### 使用说明
+1. 从[LLaMA](https://github.com/facebookresearch/llama)官方获取pth文件
 
 
 ***
