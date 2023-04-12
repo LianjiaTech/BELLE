@@ -13,12 +13,24 @@
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/quantization_recipe-BELLE%2Fgptq-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/train/">![Docs](https://img.shields.io/badge/train_recipe-BELLE%2Ftrain-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/eval/">![Docs](https://img.shields.io/badge/eval_set-BELLE%2Feval-green)</a>
+<a href="https://github.com/LianjiaTech/BELLE/tree/main/chat/">![Docs](https://img.shields.io/badge/ChatBELLE-BELLE%2Fchat-green)</a>
 
 </div>
 
 本项目目标是促进中文对话大模型开源社区的发展，愿景做能帮到每一个人的LLM Engine。现阶段本项目基于一些开源预训练大语言模型（如BLOOM），针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
 
+## ChatBELLE App
+可以使用App在设备端本地运行4bit量化的BELLE-7B模型。
+下图是在M1 Max CPU上实时运行的效果（未加速）：
+
+**App下载**：请见Releases
+
+[App配套模型下载及使用说明](chat/README.md)
+
+<img src="./chat/chatbelle-demo.gif"></img>
+
 ## 最近更新
+* [2023/04/12] 发布了[ChatBELLE App](chat/README.md)，基于[llama.cpp](https://github.com/ggerganov/llama.cpp)和[Flutter](https://flutter.dev/)，实现跨平台的BELLE-7B离线模型实时交互。
 * [2023/04/11] 更新了一个人工精校的eval集合，大约一千多条
 * [2023/04/08] [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)中，新加40万条生成的给定角色的多轮对话[Generated Chat](https://huggingface.co/datasets/BelleGroup/generated_chat_0.4M)，新加200万条生成多样化指令任务数据[train_2M_CN](https://huggingface.co/datasets/BelleGroup/train_2M_CN)。
 
@@ -42,6 +54,8 @@
   * 详见[BELLE/gptq](https://github.com/LianjiaTech/BELLE/tree/main/gptq)，参考gptq的实现，对本项目中相关模型进行了量化
 
   * [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb) 提供了colab上面可运行的推理代码[Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)
+* <a href="https://github.com/LianjiaTech/BELLE/tree/main/chat/">![Docs](https://img.shields.io/badge/ChatBELLE%20App-blue)
+  * 详见[BELLE/chat](chat/README.md)，基于[BELLE](https://github.com/LianjiaTech/BELLE)模型的跨平台离线大语言模型交谈App。使用量化后的离线端上模型配合Flutter，可在macOS（已支持）、Windows、Android、iOS等设备上运行。
 
 **欢迎大家通过issue贡献更多的prompts！** 
 <br/>

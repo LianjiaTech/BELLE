@@ -1,0 +1,130 @@
+# ChatBELLE 跨平台应用
+
+[English Version](#ChatBelle-Cross-platform-Native-App)
+
+基于[BELLE](https://github.com/LianjiaTech/BELLE)模型的跨平台离线大语言模型交谈App。使用量化后的离线端上模型配合Flutter，可在macOS（已支持）、Windows、Android、iOS(参考[Known Issues](#known-issues))等设备上运行。
+
+
+## App下载
+请见Releases。
+
+
+## 模型下载
+[BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/blob/main/belle-model.bin)
+如果已经登录Huggingface：[直接下载](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/resolve/main/belle-model.bin)
+
+
+## 模型量化
+使用[llama.cpp的4bit量化](https://github.com/ggerganov/llama.cpp)优化设备端离线推理的速度和内存占用。量化会带来计算精度的损失，影响模型的生成效果。4bit是比较激进的量化方式，目前的4bit模型效果相比fp32和fp16还有明显差距，仅供尝试。随着模型算法的发展和设备端算力的演进，我们相信离线推理的效果会有很大改善，我们也会持续跟进。
+
+### GPTQ
+[GPTQ](https://github.com/IST-DASLab/gptq)使用one-shot量化方式来获得更小的量化损失或更高的压缩率。我们将持续跟进基于GPTQ的设备端量化模型。
+
+
+## 路线图
+* 更多设备
+* 多轮对话
+* 模型选择
+* 聊天历史
+* 聊天列表
+
+
+## 使用说明
+
+### macOS
+* 下载App，建议放在`应用程序`目录中。
+* 右键App，按住Ctrl并左键单击`打开`，点`打开`。
+* App会显示模型加载失败，并显示模型路径。关闭App。
+* 下载量化后的模型[BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/blob/main/belle-model.bin)。
+* 移动并重命名模型至app显示的路径。默认为`~/Library/Containers/com.barius.chatbelle/Data/belle-model.bin`。
+* 重新打开App（直接双击）。
+
+### Windows
+* 敬请期待
+
+### Android
+* 敬请期待
+
+### iOS
+* 敬请期待
+
+
+## 已知问题
+* 推理在8GB内存的macOS设备上会非常慢，原因是内存不足导致疯狂swapping。16GB内存的设备在内存占用较高的情况下也可能遇到同样状况。
+* 推理在Intel芯片的Mac设备上比较慢。
+* iOS的3GB App内存限制导致最小模型(~4.3G)也无法加载。[参考](https://github.com/mikeger/llama-ios)
+
+
+## 免责声明
+本程序仅供学习、研究使用，因使用、传播本程序带来的任何损害，本程序的开发者不负任何责任。
+
+
+## 致谢
+* LLaMa模型设备端推理 [llama.cpp](https://github.com/ggerganov/llama.cpp)
+* Flutter聊天UI [flyer.chat](https://github.com/flyerhq/flutter_chat_ui)
+
+
+***
+
+
+# ChatBELLE Cross-platform App
+A minimal, cross-platform LLM chat app with [BELLE](https://github.com/LianjiaTech/BELLE) using quantized on-device offline models and Flutter UI, running on macOS (done), Windows, Android, iOS(see [Known Issues](#known-issues)) and more.
+
+
+## App Downloading
+Please refer to Releases.
+
+
+## Model Downloading
+[BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/blob/main/belle-model.bin)
+If already logged into Huggingface：[Direct Download](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/resolve/main/belle-model.bin)
+
+
+## Model Quantization
+Utilizes [llama.cpp's 4bit quantization](https://github.com/ggerganov/llama.cpp) to optimize on-device inferencing speed and RAM occupation. Quantization leads to accuracy loss and model performance degradation. 4-bit quantization trades accuracy for model size, our current 4-bit model sees significant performance gap compared with fp32 or fp16 ones and is just for users to take a try. With better algorithms being developed and more powerful chips landing on mobile devices, we believe on-device model performance will thrive and will keep a close track on this.
+
+### GPTQ
+[GPTQ](https://github.com/IST-DASLab/gptq) employs one-shot quantization to achieve lower accuracy loss or higher model compression rate. We will keep track of this line of work.
+
+
+## Roadmap
+* More devices
+* Multiround chat
+* Model selection
+* Chat history
+* Chat list
+
+
+## Usage
+
+### macOS
+* Download and put the app anywhere, preferably in `Applications` folder.
+* Open the app by right click then Ctrl-click `Open`, then click `Open`.
+* The app will prompt the intended model file path and fail to load the model. Close the app.
+* Download quantized model from [BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/blob/main/belle-model.bin).
+* Move and rename the model to the path prompted by the app. Defaults to `~/Library/Containers/com.barius.chatbelle/Data/belle-model.bin` .
+* Reopen the app again (double clicking is now OK).
+
+### Windows
+* Stay tuned
+
+### Android
+* Stay tuned
+
+### iOS
+* Stay tuned
+
+
+## Known Issues
+* On macOS devices with 8GB RAM, inference is really slow due to constant swapping. 16GB RAM devices might see the same slowdown if RAM occupation by other applications is high.
+* Inferencing on Macs with Intel chips is slow.
+* The 3GB App RAM constraint on iOS devices won't allow even the smallest model (~4.3G) from loading. [Reference](https://github.com/mikeger/llama-ios)
+
+
+## Disclaimer
+This program is for learning and research purposes only. The devs take no responsibilities in any damage caused by using or distributing this program.
+
+
+## Thanks
+* LLaMa model inferencing code uses [llama.cpp](https://github.com/ggerganov/llama.cpp)
+* Flutter chat UI uses [flyer.chat](https://github.com/flyerhq/flutter_chat_ui)

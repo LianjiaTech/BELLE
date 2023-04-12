@@ -14,14 +14,26 @@
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/quantization_recipe-BELLE%2Fgptq-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/train/">![Docs](https://img.shields.io/badge/train_recipe-BELLE%2Ftrain-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/eval/">![Docs](https://img.shields.io/badge/eval_set-BELLE%2Feval-green)</a>
+<a href="https://github.com/LianjiaTech/BELLE/tree/main/chat/">![Docs](https://img.shields.io/badge/ChatBELLE-BELLE%2Fchat-green)</a>
 
 </div>
 
 The goal of this project is to promote the development of the open-source community for Chinese language large-scale conversational models, and our vision is to help building large language model engine for everyone. This project optimizes Chinese performance based on opensource pretrained large language models. These models finetuning uses only data generated via ChatGPT (without other data). 
 <br/>
 
+## ChatBELLE App
+Try our cross-platform chat app to run 4-bit quantized BELLE-7B model natively on your device.
+The following screencap ran on an M1 Max CPU real-time (no speed adjustment).
+
+**App Downloading**：Releases
+
+[App Companion Model and Usage](chat/README.md)
+
+<img src="./chat/chatbelle-demo.gif"></img>
+
 ## What‘s new:
 
+* [2023/04/12] Released [ChatBELLE App](chat/README.md), a cross-platform BELLE-7B model realtime chat App based on [llama.cpp](https://github.com/ggerganov/llama.cpp) and [Flutter](https://flutter.dev/).
 * [2023/04/08] In [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M), a new dataset named ["Generated Chat"]((https://huggingface.co/datasets/BelleGroup/generated_chat_0.4M)) containing newly generated multi-turn dialogues with given roles, and a new dataset named ["train_2M_CN"](https://huggingface.co/datasets/BelleGroup/train_2M_CN) containing 2 million newly added diverse instruction task data.
 * [2023/04/05] The inference code that can be run on [Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb) is provided
 
@@ -42,6 +54,8 @@ The goal of this project is to promote the development of the open-source commun
 , [BELLE-LLaMA-13B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-13B-2M-enc). Considering [LLaMA's License](https://github.com/facebookresearch/llama/blob/main/LICENSE) constraints, the model is for research and learning only. Please strictly respect LLaMA's usage policy. Users are suggested to finetune the model with open-source scripts and datasets. We are not allowed to publish weights for LLaMA, of course, even finetuned, but there is no problem publishing the difference, a patch that we suggest to apply to the files. The encryption is a simple XOR between files, ensuring that only the people that have access to the original weights (from completely legal sources, of course) can transform them into finetuned weights. You can find the decrypt code on https://github.com/LianjiaTech/BELLE/models.
 * <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/Quantized_models-blue)
   * Details in [BELLE/gptq](https://github.com/LianjiaTech/BELLE/tree/main/gptq)，Referring to the implementation of GPT-Q, the relevant models in this project have been quantized.
+* <a href="https://github.com/LianjiaTech/BELLE/tree/main/chat/">![Docs](https://img.shields.io/badge/ChatBELLE%20App-blue)
+  * Details in [BELLE/chat](chat/README.md), cross-platform LLM chat app with [BELLE](https://github.com/LianjiaTech/BELLE) using quantized on-device offline models and Flutter UI, running on macOS (done), Windows, Android, iOS and more.
 
 
 **More prompts are welcomed via issues!**
