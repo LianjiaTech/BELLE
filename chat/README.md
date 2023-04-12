@@ -6,11 +6,12 @@
 
 
 ## App下载
-请见Releases。
+请见[Releases](https://github.com/LianjiaTech/BELLE/releases)。
 
 
 ## 模型下载
 [BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/blob/main/belle-model.bin)
+
 如果已经登录Huggingface：[直接下载](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/resolve/main/belle-model.bin)
 
 
@@ -72,11 +73,12 @@ A minimal, cross-platform LLM chat app with [BELLE](https://github.com/LianjiaTe
 
 
 ## App Downloading
-Please refer to Releases.
+Please refer to [Releases](https://github.com/LianjiaTech/BELLE/releases).
 
 
 ## Model Downloading
 [BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/blob/main/belle-model.bin)
+
 If already logged into Huggingface：[Direct Download](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/resolve/main/belle-model.bin)
 
 
