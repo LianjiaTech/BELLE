@@ -27,7 +27,7 @@ def write_result_chunk(fp, w_chunk_idx, pending, hasher):
     return w_chunk_idx, []
 
 def main(input_file, key_file, output_dir):
-    worker_count = min(8, max(1, os.cpu_count() - 1))
+    worker_count = min(3, max(1, os.cpu_count() - 1))
     print(f"Decrypting file {input_file} with {worker_count} workers")
 
     task_queue = multiprocessing.JoinableQueue(worker_count * 3)
