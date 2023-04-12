@@ -21,7 +21,7 @@
 
 下图是一个可以使用App在设备端本地运行4bit量化的BELLE-7B模型，在M1 Max CPU上实时运行的效果（未加速）：
 
-**App下载**：请见Releases
+**App下载**：请见Releases，[下载链接](https://github.com/LianjiaTech/BELLE/releases/download/v0.95/chatbelle.dmg)，目前仅提供了mac os版本
 
 [App配套模型下载及使用说明](chat/README.md)
 
