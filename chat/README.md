@@ -22,6 +22,7 @@
 
 如果已经登录Huggingface：[直接下载](https://huggingface.co/BelleGroup/ChatBELLE-int4/resolve/main/belle-model.bin)
 
+移动并重命名模型至app显示的路径。默认为~/Library/Containers/com.barius.chatbelle/Data/belle-model.bin。
 
 ## 模型量化
 使用[llama.cpp的4bit量化](https://github.com/ggerganov/llama.cpp)优化设备端离线推理的速度和内存占用。量化会带来计算精度的损失，影响模型的生成效果。4bit是比较激进的量化方式，目前的4bit模型效果相比fp32和fp16还有明显差距，仅供尝试。随着模型算法的发展和设备端算力的演进，我们相信离线推理的效果会有很大改善，我们也会持续跟进。
