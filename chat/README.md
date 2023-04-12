@@ -4,9 +4,14 @@
 
 基于[BELLE](https://github.com/LianjiaTech/BELLE)模型的跨平台离线大语言模型交谈App。使用量化后的离线端上模型配合Flutter，可在macOS（已支持）、Windows、Android、iOS(参考[Known Issues](#known-issues))等设备上运行。
 
+下图是一个可以使用App在设备端本地运行4bit量化的BELLE-7B模型，在M1 Max CPU上实时运行的效果（未加速）：
+
+<img src="./chatbelle-demo.gif"></img>
+
 
 ## App下载
-请见[Releases](https://github.com/LianjiaTech/BELLE/releases)。
+请见[Releases](https://github.com/LianjiaTech/BELLE/releases/tag/v0.95)。
+各平台对应下载&使用说明请见[使用说明](#使用说明)
 
 
 ## 模型下载
@@ -33,7 +38,10 @@
 ## 使用说明
 
 ### macOS
-* 下载App，建议放在`应用程序`目录中。
+建议使用M1/M2系列芯片配合16G RAM以获得最佳体验。如果推理速度过慢，可能是内存不足，可以尝试关闭其他app以释放内存。8G内存会非常慢。
+Intel芯片理论上也可以跑，但是速度较慢。
+
+* 下载Release中的`Chat.Belle.app.zip`并解压，建议将解压出的App放在`应用程序`目录中以方便打开。
 * 右键App，按住Ctrl并左键单击`打开`，点`打开`。
 * App会显示模型加载失败，并显示模型路径。关闭App。
 * 下载量化后的模型[BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/blob/main/belle-model.bin)。
@@ -73,7 +81,8 @@ A minimal, cross-platform LLM chat app with [BELLE](https://github.com/LianjiaTe
 
 
 ## App Downloading
-Please refer to [Releases](https://github.com/LianjiaTech/BELLE/releases).
+Please refer to [Releases](https://github.com/LianjiaTech/BELLE/releases/tag/v0.95).
+Downloading and usage for different platforms: [Usage](#Usage)
 
 
 ## Model Downloading
@@ -100,7 +109,10 @@ Utilizes [llama.cpp's 4bit quantization](https://github.com/ggerganov/llama.cpp)
 ## Usage
 
 ### macOS
-* Download and put the app anywhere, preferably in `Applications` folder.
+Recommend using M1/M2 series CPU with 16GB RAM to have the best experience. If you encounter slow inference, try closing other apps to release more memory. Inference on 8G RAM will be very slow.
+Intel CPUs could possibly run as well (not tested) but could be very slow.
+
+* Download `Chat.Belle.app.zip` from Releases page and put the app anywhere, preferably in `Applications` folder for easier access.
 * Open the app by right click then Ctrl-click `Open`, then click `Open`.
 * The app will prompt the intended model file path and fail to load the model. Close the app.
 * Download quantized model from [BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/blob/main/belle-model.bin).
