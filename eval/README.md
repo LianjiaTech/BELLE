@@ -7,7 +7,7 @@
 ## 核心测试集 eval_set.json
 
 其中包含1k+测试集，其中涵盖多个类别。需要说明的是，该测试集是本项目中的相关论文中的测试集的一个子集。
-请注意，有一些类型的问题，例如generation，不需要标准答案，这些时候std_answer为空。
+请注意，有一些类型的问题，例如generation，rewrite，brainstorming，不需要标准答案，所以std_answer为空。
 
 
 测试集使用统一的字段：
