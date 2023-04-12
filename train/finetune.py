@@ -11,10 +11,10 @@ from datasets import load_dataset, Dataset
 import transformers
 import json
 
-# assert (
-#     "LlamaTokenizer" in transformers._import_structure["models.llama"]
-# ), "LLaMA is now in HuggingFace's main branch.\nPlease reinstall it: pip uninstall transformers && pip install git+https://github.com/huggingface/transformers.git"
-# from transformers import LlamaForCausalLM, LlamaTokenizer
+assert (
+    "LlamaTokenizer" in transformers._import_structure["models.llama"]
+), "LLaMA is now in HuggingFace's main branch.\nPlease reinstall it: pip uninstall transformers && pip install git+https://github.com/huggingface/transformers.git"
+from transformers import LlamaForCausalLM, LlamaTokenizer
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from peft import (
     prepare_model_for_int8_training,
@@ -67,16 +67,16 @@ def train(args):
     gradient_accumulation_steps = model_config['batch_size'] // model_config['per_device_train_batch_size'] if "gradient_accumulation_steps" not in model_config else model_config['gradient_accumulation_steps']
 
     logger.info("per_device_train_batch_size = {}, gradient_accumulation_steps = {}".format(model_config["per_device_train_batch_size"], gradient_accumulation_steps))
-    # device_map = "auto" # 使用cpu时 不能用auto
+    device_map = "auto" # 使用cpu时 不能用auto
 
     # Offload between cpu and gpu
-    device_map = {
-        "transformer.word_embeddings": 0,
-        "transformer.word_embeddings_layernorm": 0,
-        "lm_head": "cpu",
-        "transformer.h": 0,
-        "transformer.ln_f": 0,
-    }
+    # device_map = {
+    #     "transformer.word_embeddings": 0,
+    #     "transformer.word_embeddings_layernorm": 0,
+    #     "lm_head": "cpu",
+    #     "transformer.h": 0,
+    #     "transformer.ln_f": 0,
+    # }
 
     world_size = int(os.environ.get("WORLD_SIZE", 1)) # 进程数目。一般一个进程用一个GPU
     ddp = world_size != 1
