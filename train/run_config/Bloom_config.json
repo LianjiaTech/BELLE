@@ -1,8 +1,8 @@
 {
     "model_type": "bloom",
-    "model_name_or_path": "pretrain_model/bloomz-7b1-mt",
-    "data_path": "data_dir/Belle_open_source_1M.dev.json",
-    "output_dir": "output_models/bloom",
+    "model_name_or_path": "/apdcephfs_cq3/share_2973545/curvasong/pretrain_model/bloomz-7b1-mt",
+    "data_path": "/apdcephfs_cq3/share_2973545/curvasong/test/data/Belle_open_source_1M.dev.json",
+    "output_dir": "/apdcephfs_cq3/share_2973545/curvasong/test/output_models/bloom",
     "batch_size": 16,
     "per_device_train_batch_size": 16,
     "num_epochs": 2,
