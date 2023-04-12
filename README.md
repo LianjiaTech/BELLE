@@ -19,9 +19,7 @@
 
 本项目目标是促进中文对话大模型开源社区的发展，愿景做能帮到每一个人的LLM Engine。现阶段本项目基于一些开源预训练大语言模型（如BLOOM），针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
 
-下图是一个可以使用App在设备端本地运行4bit量化的BELLE-7B模型，在M1 Max CPU上实时运行的效果（未加速）：
-
-**App下载**：请见Releases，App[下载链接](https://github.com/LianjiaTech/BELLE/releases/download/v0.95/chatbelle.dmg)，目前仅提供了mac os版本。模型需要单独下载，详见[App配套模型下载及使用说明](chat/README.md)
+下图是一个可以使用App在设备端本地运行4bit量化的BELLE-7B模型，在M1 Max CPU上实时运行的效果（未加速）。App下载详见[App配套模型下载及使用说明](chat/README.md)，App[下载链接](https://github.com/LianjiaTech/BELLE/releases/download/v0.95/chatbelle.dmg)，目前仅提供了mac os版本。模型需要单独下载。
 
 <img src="./chat/chatbelle-demo.gif"></img>
 
