@@ -45,13 +45,18 @@ BELLE项目目标是促进中文对话大模型开源社区的发展，愿景做
 * [BELLE-LLaMA-13B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-13B-2M-enc)
 
 ### 使用说明
-1. 从[LLaMA](https://github.com/facebookresearch/llama)官方获取7B/13B模型的pth文件，放到`original`目录
-2. 从[Huggingface Belle Group](https://huggingface.co/BelleGroup/) 下载发布的LLaMA模型diff，放到`encrypted`目录
+1. 从[LLaMA](https://github.com/facebookresearch/llama)官方获取7B/13B模型的pth文件，放到`/path/to_original_llama_7B`目录
+2. 从[Huggingface Belle Group](https://huggingface.co/BelleGroup/) 下载发布的LLaMA模型diff，放到`/path/to_encrypted`目录
 3. 运行下面的命令
+```bash
+mkdir /path/to_finetuned_model
+for f in "/path/to_encrypted"/*; \
+    do if [ -f "$f" ]; then \
+       python3 decrypt.py "$f" "/path/to_original_llama_7B/consolidated.00.pth" "/path/to_finetuned_model/"; \
+    fi; \
+done
 ```
-for f in "encrypted"/*; do if [ -f "$f" ]; then python3 decrypt.py "$f" "original/7B/consolidated.00.pth" "result/"; fi; done
-```
-4. 参照Huggingface的README，检查`result`目录文件的md5值
+4. 参照Huggingface的README，检查`/path/to_finetuned_model/`目录文件的md5值
 5. GPTQ量化模型推理代码参照[GPTQ推理代码](https://github.com/LianjiaTech/BELLE/tree/main/gptq)；非量化模型代码参照[基于transformers推理代码](https://github.com/LianjiaTech/BELLE/tree/main/train)
 
 ***
@@ -107,11 +112,16 @@ Considering LLaMA's license constraints, the model is for research and learning 
 * [BELLE-LLaMA-7B-2M-gptq-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-gptq-enc)
 * [BELLE-LLaMA-13B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-13B-2M-enc)
 ### Usage
-1. From [LLaMA](https://github.com/facebookresearch/llama) download 7B/13B model's pth file，put it to `original` directory
-2. From [Huggingface Belle Group](https://huggingface.co/BelleGroup/) download finetuned LLaMA model diff，put it to `encrypted` directory
+1. From [LLaMA](https://github.com/facebookresearch/llama) download 7B/13B model's pth file，put it to `/path/to_original_llama_7B/` directory
+2. From [Huggingface Belle Group](https://huggingface.co/BelleGroup/) download finetuned LLaMA model diff，put it to `/path/to_encrypted` directory
 3. Run 
+```bash
+mkdir /path/to_finetuned_model
+for f in "/path/to_encrypted"/*; \
+    do if [ -f "$f" ]; then \
+       python3 decrypt.py "$f" "/path/to_original_llama_7B/consolidated.00.pth" "/path/to_finetuned_model/"; \
+    fi; \
+done
 ```
-for f in "encrypted"/*; do if [ -f "$f" ]; then python3 decrypt.py "$f" "original/7B/consolidated.00.pth" "result/"; fi; done
-```
-4. Check the md5 value of `result` directory
+4. Check the md5 value of `/path/to_finetuned_model/` directory
 5. [GPTQ infer code](https://github.com/LianjiaTech/BELLE/tree/main/gptq)；[transformers infer code](https://github.com/LianjiaTech/BELLE/tree/main/train)
