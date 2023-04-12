@@ -11,7 +11,10 @@
 
 ## App下载
 请见[Releases](https://github.com/LianjiaTech/BELLE/releases/tag/v0.95)。
-各平台对应下载&使用说明请见[使用说明](#使用说明)
+
+各平台对应下载&使用说明请见[使用说明](#使用说明)。
+
+目前仅支持macOS。更多平台即将发布！
 
 
 ## 模型下载
@@ -41,8 +44,8 @@
 建议使用M1/M2系列芯片配合16G RAM以获得最佳体验。如果推理速度过慢，可能是内存不足，可以尝试关闭其他app以释放内存。8G内存会非常慢。
 Intel芯片理论上也可以跑，但是速度较慢。
 
-* 下载Release中的`Chat.Belle.app.zip`并解压，建议将解压出的App放在`应用程序`目录中以方便打开。
-* 右键App，按住Ctrl并左键单击`打开`，点`打开`。
+* 下载[Releases](https://github.com/LianjiaTech/BELLE/releases/tag/v0.95)中的[chatbelle.dmg](https://github.com/LianjiaTech/BELLE/releases/download/v0.95/chatbelle.dmg)，双击打开，把`Chat Belle.dmg`左键拖进`应用程序`文件夹中。
+* 右键`应用程序`文件夹中的`Chat Belle`App，按住Ctrl并左键单击`打开`，点`打开`。
 * App会显示模型加载失败，并显示模型路径。关闭App。
 * 下载量化后的模型[BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/blob/main/belle-model.bin)。
 * 移动并重命名模型至app显示的路径。默认为`~/Library/Containers/com.barius.chatbelle/Data/belle-model.bin`。
@@ -82,7 +85,10 @@ A minimal, cross-platform LLM chat app with [BELLE](https://github.com/LianjiaTe
 
 ## App Downloading
 Please refer to [Releases](https://github.com/LianjiaTech/BELLE/releases/tag/v0.95).
-Downloading and usage for different platforms: [Usage](#Usage)
+
+Downloading and usage for different platforms: [Usage](#Usage).
+
+Only macOS supported by now. More platforms coming soon!
 
 
 ## Model Downloading
@@ -112,8 +118,8 @@ Utilizes [llama.cpp's 4bit quantization](https://github.com/ggerganov/llama.cpp)
 Recommend using M1/M2 series CPU with 16GB RAM to have the best experience. If you encounter slow inference, try closing other apps to release more memory. Inference on 8G RAM will be very slow.
 Intel CPUs could possibly run as well (not tested) but could be very slow.
 
-* Download `Chat.Belle.app.zip` from Releases page and put the app anywhere, preferably in `Applications` folder for easier access.
-* Open the app by right click then Ctrl-click `Open`, then click `Open`.
+* Download [chatbelle.dmg](https://github.com/LianjiaTech/BELLE/releases/download/v0.95/chatbelle.dmg) from [Releases](https://github.com/LianjiaTech/BELLE/releases/tag/v0.95) page, double click to open it, then drag `Chat Belle.dmg` into `Applications` folder.
+* Open the `Chat Belle` app in `Applications` folder by right click then Ctrl-click `Open`, then click `Open`.
 * The app will prompt the intended model file path and fail to load the model. Close the app.
 * Download quantized model from [BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/blob/main/belle-model.bin).
 * Move and rename the model to the path prompted by the app. Defaults to `~/Library/Containers/com.barius.chatbelle/Data/belle-model.bin` .
