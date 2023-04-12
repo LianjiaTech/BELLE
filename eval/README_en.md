@@ -9,7 +9,7 @@ The Chinese test set contains test sets of different instruction types and domai
 
 The test set includes over 1,000 test cases covering multiple categories. It should be noted that this test set is a subset of the test set mentioned in the related paper of this project.
 
-Please note that for some types of questions, such as generation, there is no need for a standard answer, and in these cases, the std_answer field is empty.
+Please note that for some types of questions, such as generation,rewrite,brainstorming, there is no need for a standard answer, and in these cases, the std_answer field is empty.
 
 The test set uses unified fields:
 ```
