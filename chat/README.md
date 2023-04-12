@@ -10,7 +10,8 @@
 
 
 ## 模型下载
-[BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/resolve/main/belle-model.bin)
+[BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/blob/main/belle-model.bin)
+如果已经登录Huggingface：[直接下载](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/resolve/main/belle-model.bin)
 
 
 ## 模型量化
@@ -75,7 +76,8 @@ Please refer to Releases.
 
 
 ## Model Downloading
-[BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/resolve/main/belle-model.bin)
+[BELLE-LLaMA-7B-2M-q4](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/blob/main/belle-model.bin)
+If already logged into Huggingface：[Direct Download](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-q4/resolve/main/belle-model.bin)
 
 
 ## Model Quantization
