@@ -25,13 +25,15 @@ limitations under the License.
 
 | Notebook     |      Description      |  Colab |
 |:----------|:-------------|:-------------|
-| [BELLE-GPTQ Colab推理](https://github.com/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)  | 提供了BELLE 4 bit量化的LLAMA7B模型在Colab运行的示例代码 ，该代码运行时内存只需要7G，GPU显存只需要6G即可运行，所以Colab普通账号即可完成BELLE模型推理。当然你本地机器如果满足上述硬件条件，也可以将Notebook下载到本地运行。|[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)|
+| [BELLE-GPTQ Colab推理](https://github.com/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)  | 提供了BELLE 8bit量化的BLOOM模型在Colab运行的示例代码 ，该代码运行时内存只需要13G，GPU显存只需要10G即可运行，当然你本地机器如果满足上述硬件条件，也可以将Notebook下载到本地运行。|[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)|
+
 
 ### The hardware requirements 
 BELLE不同模型运行时，需要满足的最低硬件配置条件
 
 | Model     |       Description      |     RAM      |  GPU |
 |:----------|:-------------|:-------------|:-------------|
+|bloom7b-2m-8bit-128g.pt | BELLE BLOOM 7B 200万训练数据版8bit量化后权重  |13G| 11G|
 |llama7b-2m-4bit-128g.pt | BELLE llama7B 200万训练数据版4bit量化后权重  |7G| 6G|
 |llama7b-2m-8bit-128g.pt | BELLE llama7B 200万训练数据版8bit量化后权重  |16G| 11G|
 |BELLE-LLAMA-7B-2M | BELLE llama7B 200万训练数据版  |32G| 28G|
