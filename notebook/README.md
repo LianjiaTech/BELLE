@@ -25,7 +25,7 @@ limitations under the License.
 
 | Notebook     |      Description      |  Colab |
 |:----------|:-------------|:-------------|
-| [BELLE-GPTQ Colab推理](https://github.com/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)  | 提供了BELLE 4 bit量化的BLOOM模型在Colab运行的示例代码 ，该代码运行时内存只需要13G，GPU显存只需要10G即可运行，当然你本地机器如果满足上述硬件条件，也可以将Notebook下载到本地运行。|[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)|
+| [BELLE-GPTQ Colab推理](https://github.com/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)  | 提供了BELLE 8bit量化的BLOOM模型在Colab运行的示例代码 ，该代码运行时内存只需要13G，GPU显存只需要10G即可运行，当然你本地机器如果满足上述硬件条件，也可以将Notebook下载到本地运行。|[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)|
 
 
 ### The hardware requirements 
