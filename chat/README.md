@@ -19,9 +19,7 @@
 
 ## 模型下载
 
-[ChatBELLE-int4](https://huggingface.co/BelleGroup/ChatBELLE-int4/blob/main/belle-model.bin)
-
-如果已经登录Huggingface：[直接下载](https://huggingface.co/BelleGroup/ChatBELLE-int4/resolve/main/belle-model.bin)
+[ChatBELLE-int4] [正在更新中，第一时间同步]
 
 **需要先首先执行ChatBELLE app，会建好一个文件夹```~/Library/Containers/com.barius.chatbelle```。然后将下载好的模型重命名并移动至app显示的路径。默认为~/Library/Containers/com.barius.chatbelle/Data/belle-model.bin。**
 
@@ -49,7 +47,7 @@ Intel芯片理论上也可以跑，但是速度较慢。
 * 下载[Releases](https://github.com/LianjiaTech/BELLE/releases/tag/v0.95)中的[chatbelle.dmg](https://github.com/LianjiaTech/BELLE/releases/download/v0.95/chatbelle.dmg)，双击打开，把`Chat Belle.dmg`左键拖进`应用程序`文件夹中。
 * 右键`应用程序`文件夹中的`Chat Belle`App，按住Ctrl并左键单击`打开`，点`打开`。
 * App会显示模型加载失败，并显示模型路径。关闭App。
-* 下载量化后的模型[ChatBELLE-int4](https://huggingface.co/BelleGroup/ChatBELLE-int4/blob/main/belle-model.bin)。
+* 下载量化后的模型[ChatBELLE-int4][正在更新中，第一时间同步]。
 * 移动并重命名模型至app显示的路径。默认为`~/Library/Containers/com.barius.chatbelle/Data/belle-model.bin`。
 * 重新打开App（直接双击）。
 
@@ -94,9 +92,7 @@ Only macOS supported by now. More platforms coming soon!
 
 
 ## Model Downloading
-[ChatBELLE-int4](https://huggingface.co/BelleGroup/ChatBELLE-int4/blob/main/belle-model.bin)
-
-If already logged into Huggingface：[Direct Download](https://huggingface.co/BelleGroup/ChatBELLE-int4/resolve/main/belle-model.bin)
+[ChatBELLE-int4][please waiting, we will release asap]
 
 
 ## Model Quantization
