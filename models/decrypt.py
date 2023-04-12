@@ -27,10 +27,10 @@ def write_result_chunk(fp, w_chunk_idx, pending, hasher):
     return w_chunk_idx, []
 
 def main(input_file, key_file, output_dir):
-    worker_count = 1
+    worker_count = 2
     print(f"Decrypting file {input_file} with {worker_count} workers")
 
-    task_queue = multiprocessing.JoinableQueue(worker_count * 3)
+    task_queue = multiprocessing.JoinableQueue(worker_count * 1)
     result_queue = multiprocessing.Queue()
     processes = [
         multiprocessing.Process(target=xor_worker, args=(task_queue, result_queue))
