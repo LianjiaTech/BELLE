@@ -10,19 +10,20 @@
 
 
 ## App下载
+
 请见[Releases](https://github.com/LianjiaTech/BELLE/releases/tag/v0.95)。
 
 各平台对应下载&使用说明请见[使用说明](#使用说明)。
 
 目前仅支持macOS。更多平台即将发布！
 
-
 ## 模型下载
+
 [ChatBELLE-int4](https://huggingface.co/BelleGroup/ChatBELLE-int4/blob/main/belle-model.bin)
 
 如果已经登录Huggingface：[直接下载](https://huggingface.co/BelleGroup/ChatBELLE-int4/resolve/main/belle-model.bin)
 
-移动并重命名模型至app显示的路径。默认为~/Library/Containers/com.barius.chatbelle/Data/belle-model.bin。
+**需要先首先执行ChatBELLE app，会建好一个文件夹```~/Library/Containers/com.barius.chatbelle```。然后将下载好的模型重命名并移动至app显示的路径。默认为~/Library/Containers/com.barius.chatbelle/Data/belle-model.bin。**
 
 ## 模型量化
 使用[llama.cpp的4bit量化](https://github.com/ggerganov/llama.cpp)优化设备端离线推理的速度和内存占用。量化会带来计算精度的损失，影响模型的生成效果。4bit是比较激进的量化方式，目前的4bit模型效果相比fp32和fp16还有明显差距，仅供尝试。随着模型算法的发展和设备端算力的演进，我们相信离线推理的效果会有很大改善，我们也会持续跟进。
