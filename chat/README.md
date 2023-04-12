@@ -1,6 +1,6 @@
 # ChatBELLE 跨平台应用
 
-[English Version](#ChatBelle-Cross-platform-Native-App)
+[English Version](README_en.md)
 
 基于[BELLE](https://github.com/LianjiaTech/BELLE)模型的跨平台离线大语言模型交谈App。使用量化后的离线端上模型配合Flutter，可在macOS（已支持）、Windows、Android、iOS(参考[Known Issues](#known-issues))等设备上运行。
 
