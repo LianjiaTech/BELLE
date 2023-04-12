@@ -5,5 +5,5 @@
     "host_num": 1,
     "host_gpu_num": 1,
     "cuda_version": "11.0",
-    "image_full_name": "mirrors.tencent.com/curvasong_demo/py3.8.12-cuda11.3.1-cudnn8.2.0-nccl2.10.3-1-tf2.4.3-torch1.10.0-pytextclassifier:latest"
+    "image_full_name": "mirrors.tencent.com/curvasong_demo/py3.8.12-cuda11.3.1-cudnn8.2.0-nccl2.10.3-1-tf2.4.3-torch2.0-peft-bitsandbytes-deepspeed:latest"
 }
