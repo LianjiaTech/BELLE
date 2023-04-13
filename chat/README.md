@@ -19,7 +19,7 @@
 
 ## 模型下载
 
-[ChatBELLE-int4] [正在更新中，第一时间同步]
+可以去huggingface下载，[ChatBELLE-int4](https://huggingface.co/BelleGroup/ChatBELLE-int4)
 
 **需要先首先执行ChatBELLE app，会建好一个文件夹```~/Library/Containers/com.barius.chatbelle```。然后将下载好的模型重命名并移动至app显示的路径。默认为~/Library/Containers/com.barius.chatbelle/Data/belle-model.bin。**
 
