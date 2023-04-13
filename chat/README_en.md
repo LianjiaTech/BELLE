@@ -16,7 +16,9 @@ Only macOS supported by now. More platforms coming soon!
 
 
 ## Model Downloading
-[ChatBELLE-int4][please waiting, we will release asap]
+You can download from huggingface repo, [ChatBELLE-int4](https://huggingface.co/BelleGroup/ChatBELLE-int4)
+
+You need to first execute the ChatBELLE app, which will create a folder~/Library/Containers/com.barius.chatbelle. Then rename the downloaded model and move it to the path displayed on the app. The default is ~/Library/Containers/com.barius.chatbell/Data/belle-model.bin.
 
 
 ## Model Quantization
