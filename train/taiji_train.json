@@ -1,7 +1,7 @@
 {
     "Token":"MIJH9LstRcE4mCwGC_F--g",
     "business_flag": "ptp_search_ad",
-    "model_local_file_path": "/root/QueryUnderstanding/CRMClassify/bert_adrn/pytorch",
+    "model_local_file_path": "/data/BELLE/train",
     "host_num": 1,
     "host_gpu_num": 2,
     "cuda_version": "11.0",
