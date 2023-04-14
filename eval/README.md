@@ -28,7 +28,9 @@ std_answer: 标准答案
 
 ## 测试指令 eval_prompt.json
 
-其中包含针对每一个类别的测试数据所对应的prompt，通过该类prompt整合eval_set.json中的测试用例，调用ChatGPT或者GPT-4得到评分结果。
+其中包含针对每一个类别的测试数据所对应的prompt，通过该类prompt整合eval_set.json中的测试用例，调用ChatGPT或者GPT-4得到评分结果。考虑到code和math类别的最后的结果通常是唯一的，所以这两个类别的prompt中都有提示chagpt “模型回答的最终结果一定要和标准答案中的最终结果一致”。其余类别除了rewrite、generation、brainstorming这些没有标准答案的类别，Prompt中提示都让其参考标柱答案进行打分。rewrite、generation、brainstorming 三个类别中prompt设计的时候则是给出一套评价的标准,让ChatGPT研究评价标准来对模型回答给出分数。
+
+
 
 字段如下：
 ```
