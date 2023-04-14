@@ -27,18 +27,18 @@ def write_result_chunk(fp, w_chunk_idx, pending, hasher):
     return w_chunk_idx, []
 
 def main(input_file, key_file, output_dir):
-    worker_count = 2
-    print(f"Decrypting file {input_file} with {worker_count} workers")
+    # worker_count = 2 
+    print(f"Decrypting file {input_file}")
 
-    task_queue = multiprocessing.JoinableQueue(worker_count * 1)
-    result_queue = multiprocessing.Queue()
-    processes = [
-        multiprocessing.Process(target=xor_worker, args=(task_queue, result_queue))
-        for _ in range(worker_count)
-    ]
-    for p in processes:
-        p.daemon = True
-        p.start()
+    # task_queue = multiprocessing.JoinableQueue(worker_count * 1)
+    # result_queue = multiprocessing.Queue()
+    # processes = [
+    #    multiprocessing.Process(target=xor_worker, args=(task_queue, result_queue))
+    #    for _ in range(worker_count)
+    # ]
+    # for p in processes:
+    #    p.daemon = True
+    #    p.start()
 
     chunk_size = 10 * 1024 * 1024
     key_chunk_size = 10 * 1024 * 1024
@@ -80,10 +80,11 @@ def main(input_file, key_file, output_dir):
                     key_file.seek(0)
                     key_chunk = key_file.read(key_chunk_size)
                 
-                task_queue.put((r_chunk_idx, chunk, key_chunk))
+                # task_queue.put((r_chunk_idx, chunk, key_chunk))
+                write_pending.append((r_chunk_idx, xor_bytes(chunk, key_chunk)))
                 # read available results
-                while not result_queue.empty():
-                    write_pending.append(result_queue.get())
+                # while not result_queue.empty():
+                #    write_pending.append(result_queue.get())
                     
                 w_chunk_idx_new, write_pending = write_result_chunk(out_file, w_chunk_idx, write_pending, hasher)
 
@@ -98,9 +99,9 @@ def main(input_file, key_file, output_dir):
             # wait for xor workers
             sys.stdout.write('\rWaiting for workers...')
             sys.stdout.flush()
-            task_queue.join()
-            while not result_queue.empty():
-                write_pending.append(result_queue.get())
+            # task_queue.join()
+            # while not result_queue.empty():
+            #    write_pending.append(result_queue.get())
             sys.stdout.write('\rWriting final chunks...')
             sys.stdout.flush()
             write_result_chunk(out_file, w_chunk_idx, write_pending, hasher)
@@ -117,3 +118,5 @@ if __name__ == "__main__":
     if len(sys.argv) != 4:
         print("Usage: decrypt.py input_file key_file output_dir")
         sys.exit(1)
+
+    main(sys.argv[1], sys.argv[2], sys.argv[3])
