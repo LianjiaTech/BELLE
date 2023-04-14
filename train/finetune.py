@@ -66,16 +66,16 @@ def train(args):
     gradient_accumulation_steps = model_config['batch_size'] // model_config['per_device_train_batch_size'] if "gradient_accumulation_steps" not in model_config else model_config['gradient_accumulation_steps']
 
     logger.info("per_device_train_batch_size = {}, gradient_accumulation_steps = {}".format(model_config["per_device_train_batch_size"], gradient_accumulation_steps))
-    # device_map = "auto" # 使用cpu时 不能用auto
+    device_map = "auto" # 使用cpu时 不能用auto
 
-    # Offload between cpu and gpu
-    device_map = {
-        "transformer.word_embeddings": 0,
-        "transformer.word_embeddings_layernorm": 0,
-        "lm_head": "cpu",
-        "transformer.h": 0,
-        "transformer.ln_f": 0,
-    }
+    # # Offload between cpu and gpu
+    # device_map = {
+    #     "transformer.word_embeddings": 0,
+    #     "transformer.word_embeddings_layernorm": 0,
+    #     "lm_head": "cpu",
+    #     "transformer.h": 0,
+    #     "transformer.ln_f": 0,
+    # }
 
     world_size = int(os.environ.get("WORLD_SIZE", 1)) # 进程数目。一般一个进程用一个GPU
     ddp = world_size != 1
@@ -96,7 +96,7 @@ def train(args):
             model_name_or_path,
             load_in_8bit = load_in_8bit,
             device_map=device_map,
-            quantization_config=quantization_config,
+            # quantization_config=quantization_config,
         )
         tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
 
