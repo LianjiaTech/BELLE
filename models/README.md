@@ -46,7 +46,7 @@ BELLE项目目标是促进中文对话大模型开源社区的发展，愿景做
 * [BELLE-LLaMA-13B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-13B-2M-enc)
 
 ### 使用说明
-1. 从[LLaMA](https://github.com/facebookresearch/llama)官方获取7B/13B模型的pth文件，放到`/path/to_original_llama_7B`目录
+1. 从[LLaMA](https://github.com/facebookresearch/llama)官方获取7B/13B模型的consolidated.00.pth文件，放到`/path/to_original_llama_7B`目录
 2. 从[Huggingface Belle Group](https://huggingface.co/BelleGroup/) 下载发布的LLaMA模型diff，放到`/path/to_encrypted`目录
 3. 运行下面的命令
 ```bash
