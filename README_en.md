@@ -14,37 +14,75 @@
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/quantization_recipe-BELLE%2Fgptq-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/train/">![Docs](https://img.shields.io/badge/train_recipe-BELLE%2Ftrain-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/eval/">![Docs](https://img.shields.io/badge/eval_set-BELLE%2Feval-green)</a>
+<a href="https://github.com/LianjiaTech/BELLE/tree/main/chat/">![Docs](https://img.shields.io/badge/ChatBELLE-BELLE%2Fchat-green)</a>
 
 </div>
 
 The goal of this project is to promote the development of the open-source community for Chinese language large-scale conversational models, and our vision is to help building large language model engine for everyone. This project optimizes Chinese performance based on opensource pretrained large language models. These models finetuning uses only data generated via ChatGPT (without other data). 
 <br/>
 
-## What‘s new:
+## ChatBELLE App
 
+Try our cross-platform chat app to run 4-bit quantized BELLE-7B model natively on your device.
+The following screencap ran on an M1 Max CPU real-time (no speed adjustment).
+
+**App Downloading**：Releases
+
+[App Companion Model and Usage](chat/README.md)
+
+<img src="./chat/chatbelle-demo.gif"></img>
+
+## 🔄 What‘s new
+
+* [2023/04/12] Released [ChatBELLE App](chat/README.md), a cross-platform BELLE-7B model realtime chat App based on [llama.cpp](https://github.com/ggerganov/llama.cpp) and [Flutter](https://flutter.dev/).
 * [2023/04/08] In [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M), a new dataset named ["Generated Chat"]((https://huggingface.co/datasets/BelleGroup/generated_chat_0.4M)) containing newly generated multi-turn dialogues with given roles, and a new dataset named ["train_2M_CN"](https://huggingface.co/datasets/BelleGroup/train_2M_CN) containing 2 million newly added diverse instruction task data.
 * [2023/04/05] The inference code that can be run on [Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb) is provided
 
-## This repo contains:
+## 📝 This repo contains
 
-* <a href="https://github.com/LianjiaTech/BELLE/tree/main/train/">![Docs](https://img.shields.io/badge/Traning_recipe-blue)
-  * Details in [BELLE/train](https://github.com/LianjiaTech/BELLE/tree/main/train), A simplified implementation of training code with support for finetune, LORA, and DeepSpeed as much as possible.
-* <a href="https://github.com/LianjiaTech/BELLE/tree/main/1.5M/">![Docs](https://img.shields.io/badge/DataRelease1.5M-blue)</a> <a href="https://github.com/LianjiaTech/BELLE/tree/main/10M/">![Docs](https://img.shields.io/badge/DataRelease10M-blue)</a>
-  * Details in [BELLE/1.5M](https://github.com/LianjiaTech/BELLE/tree/main/1.5M)，The Chinese dataset generated [1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN), using [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) as reference
-  * 10M more data will be released gradually，details in [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M). Currently, we have 0.8M multiturn data, and 0.25 math data.
-* <a href="https://github.com/LianjiaTech/BELLE/tree/main/eval/">![Docs](https://img.shields.io/badge/验证集合&验证方法-blue)
-  * Details in [BELLE/eval](https://github.com/LianjiaTech/BELLE/tree/main/eval). A test set with over 1k samples and corresponding scoring prompts. It includes multiple categories and is evaluated using either GPT-4 or ChatGPT.
-* <a href="https://github.com/LianjiaTech/BELLE/tree/main/models/">![Docs](https://img.shields.io/badge/Models-blue)</a>
-  * The model optimized based on BLOOMZ-7B1-mt：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
-  * The finetuned models based on [Huggingface's LLaMA implementation](https://huggingface.co/decapoda-research). Please note that this project cannot guarantee that it is the original LLaMA model, nor can it guarantee the relationship between the fine-tuned model and the original LLaMA model. Considering [LLaMA's License](https://github.com/facebookresearch/llama/blob/main/LICENSE) and [Haggingface's LLaMA License](https://huggingface.co/decapoda-research/llama-7b-hf/blob/main/LICENSE) constraints, the model is for research and learning only. Please strictly respect LLaMA's usage policy. Users are suggested to finetune the model with open-source scripts and datasets.
-* <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/Quantized_models-blue)
-  * Details in [BELLE/gptq](https://github.com/LianjiaTech/BELLE/tree/main/gptq)，Referring to the implementation of GPT-Q, the relevant models in this project have been quantized.
+###  🚀 Traning recipe
 
+  Details in [BELLE/train](train/), A simplified implementation of training code with support for finetune, LORA, and DeepSpeed as much as possible.
+
+### 📊 Data Release
+  
+  Details in [BELLE/1.5M](1.5M/)，The Chinese dataset generated [1M](https://huggingface.co/datasets/BelleGroup/generated_train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN), using [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) as reference
+  
+  10M more data will be released gradually，details in [BELLE/10M](10M/). Currently, we have 0.8M multiturn data, and 0.25 math data.
+
+### 🧐 Evaluation set & evaluation method
+  
+  Details in [BELLE/eval](eval/). A test set with over 1k samples and corresponding scoring prompts. It includes multiple categories and is evaluated using either GPT-4 or ChatGPT.
+
+### 🤖 Models
+
+  Details in [BELLE/models](models/)
+  
+* The model optimized based on BLOOMZ-7B1-mt：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
+  
+* The finetuned models based on [Meta LLaMA](https://github.com/facebookresearch/llama): [BELLE-LLaMA-7B-0.6M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-0.6M-enc)
+, [BELLE-LLaMA-7B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc)
+, [BELLE-LLaMA-7B-2M-gptq-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-gptq-enc)
+, [BELLE-LLaMA-13B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-13B-2M-enc). Considering [LLaMA's License](https://github.com/facebookresearch/llama/blob/main/LICENSE) constraints, the model is for research and learning only. Please strictly respect LLaMA's usage policy. Users are suggested to finetune the model with open-source scripts and datasets. We are not allowed to publish weights for LLaMA, of course, even finetuned, but there is no problem publishing the difference, a patch that we suggest to apply to the files. The encryption is a simple XOR between files, ensuring that only the people that have access to the original weights (from completely legal sources, of course) can transform them into finetuned weights. You can find the decrypt code on [BELLE/models](models/).
+
+### ⚖️ Quantized_models
+
+  Details in [BELLE/gptq](gptq/)，Referring to the implementation of GPT-Q, the relevant models in this project have been quantized.
+
+### 🌐 Colab
+  
+  [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb) provides the colab in [BELLE/notebook](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)
+
+### 💬 ChatBELLE App
+
+  Details in [BELLE/chat](chat/README.md), cross-platform LLM chat app with [BELLE](https://github.com/LianjiaTech/BELLE) using quantized on-device offline models and Flutter UI, running on macOS (done), Windows, Android, iOS and more.
 
 **More prompts are welcomed via issues!**
+
 <br/>
 
-## Limitation and Usage Limits
+## ⚠️ Limitation and Usage Limits
+
 There still exists a few issues in the model trained on current base model and data:
 
 1. The model might generate factual errors when asked to follow instructions related to facts.
@@ -54,9 +92,10 @@ There still exists a few issues in the model trained on current base model and d
 3. Needs improvements on reasoning and coding.
 
 Since the model still has its limitations, we require developers only use the open-sourced code, data, model and any other artifacts generated via this project for research purposes. Commercial use and other potential harmful use cases are not allowed.
+
 <br/>
 
-## Citation
+## 📌 Citation
 
 Please cite us when using our code, data or model.
 
@@ -80,8 +119,9 @@ Please cite us when using our code, data or model.
 
 Cite the original BLOOM, LLaMA, Stanford Alpaca and Self-Instruct papers as well!
 
+</br>
 
-## Use case
+## 📚 Use case
 | Human | Assitant |
 | ----- | ------ |
 | 写一篇英文散文诗，主题是春雨，想象自己是春雨，和英国古代诗人莎士比亚交流 | I am the spring rain,<br/>Dancing on your face and body.<br/>My dew-drenched petals dance with you,<br/>Bringing life to every plant.<br/><br/>Shakespeare, I am here to meet you.<br/>Your works have filled my heart with joy.<br/>The beauty of nature in its fullness<br/>Makes me feel like a partaker.<br/><br/>As the leaves sway and rustle by,<br/>My dew-filled hand reaches out for them.<br/>The sweet scent of flowers fill the air,<br/>And bring me peace from all around.<br/><br/>Butterflies flit about as well,<br/>Glistening in the sun's rays.<br/>Their wings are made of dew,<br/>A beautiful sight to behold.<br/><br/>You see, Shakespeare, I too am one with nature.<br/>My dew-drenched hair is a symbol of hope.<br/>For when we can connect back to our roots,<br/>We will be able to make it through this season. |
