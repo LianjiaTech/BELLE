@@ -1,4 +1,4 @@
-## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: Be Everyone's Large Language model Engine 
+## <img src="assets/belle_logo.png" style="vertical-align: middle; width: 35px;"> BELLE: Be Everyone's Large Language model Engine
 
 *Read this in [English](README_en.md).*
 
@@ -13,36 +13,204 @@
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/quantization_recipe-BELLE%2Fgptq-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/train/">![Docs](https://img.shields.io/badge/train_recipe-BELLE%2Ftrain-green)</a>
 <a href="https://github.com/LianjiaTech/BELLE/tree/main/eval/">![Docs](https://img.shields.io/badge/eval_set-BELLE%2Feval-green)</a>
+<a href="https://github.com/LianjiaTech/BELLE/tree/main/chat/">![Docs](https://img.shields.io/badge/ChatBELLE-BELLE%2Fchat-green)</a>
 
 </div>
 
-本项目目标是促进中文对话大模型开源社区的发展，愿景做能帮到每一个人的LLM Engine。现阶段本项目基于一些开源预训练大语言模型（如BLOOM），针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
+本项目目标是促进中文对话大模型开源社区的发展，愿景做能帮到每一个人的LLM Engine。本项目不会做大语言模型的预训练，会重点关注在开源预训练大语言模型的基础上，如何帮助每一个人都能够得到一个尽可能效果好的具有指令表现能力的语言模型，降低大家研究此方面工作的门槛，其中重点在中文大语言模型。为此，本项目会持续开放指令训练数据、相关模型、训练代码等，也会关注不同训练数据和训练算法对模型表现的影响。针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
 
-## 最近更新
+下图是一个可以使用App在设备端本地运行4bit量化的BELLE-7B模型，在M1 Max CPU上实时运行的效果（未加速）。App下载详见[App配套模型下载及使用说明](chat/README.md)，App[下载链接](https://github.com/LianjiaTech/BELLE/releases/download/v0.95/chatbelle.dmg)，目前仅提供了mac os版本。模型需要单独下载。**模型经过量化后，效果损失明显，我们将持续研究如何提升。**
+
+<img src="./chat/chatbelle-demo.gif"></img>
+
+</br>
+
+## 🔄 最近更新
+
+* [2023/04/17] [更新了两篇论文最新工作](#📑-研究报告)，对比了不同方式产生的训练数据、不同训练方法（LoRA, finetune)对效果的影响
+* [2023/04/12] 发布了[ChatBELLE App](chat/README.md)，基于[llama.cpp](https://github.com/ggerganov/llama.cpp)和[Flutter](https://flutter.dev/)，实现跨平台的BELLE-7B离线模型实时交互。
+* [2023/04/11] 更新了一个人工精校的eval集合，大约一千多条
 * [2023/04/08] [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)中，新加40万条生成的给定角色的多轮对话[Generated Chat](https://huggingface.co/datasets/BelleGroup/generated_chat_0.4M)，新加200万条生成多样化指令任务数据[train_2M_CN](https://huggingface.co/datasets/BelleGroup/train_2M_CN)。
+* [2023/04/05] 提供了colab上面可运行的推理代码(默认加载4Bit量化的BELLE模型，模型效果会有所损失)[Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)
 
-* [2023/04/05] 提供了colab上面可运行的推理代码[Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)
+</br>
 
-## 项目包含以下内容:
-* <a href="https://github.com/LianjiaTech/BELLE/tree/main/train/">![Docs](https://img.shields.io/badge/训练代码train-blue)
-  * 详见[BELLE/train](https://github.com/LianjiaTech/BELLE/tree/main/train)，尽可能简化的一个训练代码实现，支持finetune，lora，deepspeed
-* <a href="https://github.com/LianjiaTech/BELLE/tree/main/1.5M/">![Docs](https://img.shields.io/badge/数据开放1.5M-blue)</a> <a href="https://github.com/LianjiaTech/BELLE/tree/main/10M/">![Docs](https://img.shields.io/badge/数据开放10M-blue)</a>
-  * 详见[BELLE/1.5M](https://github.com/LianjiaTech/BELLE/tree/main/1.5M)，参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) 生成的中文数据集[1M](https://huggingface.co/datasets/BelleGroup/train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN)；
-  * 持续开放的数据集，详见[BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)
-* <a href="https://github.com/LianjiaTech/BELLE/tree/main/eval/">![Docs](https://img.shields.io/badge/验证集合&验证方法-blue)
-  * 详见[BELLE/eval](https://github.com/LianjiaTech/BELLE/tree/main/eval)，一个1k+的测试集合，和对应打分prompt。包含多个类别，采用GPT-4或者ChatGPT打分。同时提供了一个打分的网页，方便针对单个case使用。欢迎大家通过PR提供更多的测试用例。
-* <a href="https://github.com/LianjiaTech/BELLE/tree/main/models/">![Docs](https://img.shields.io/badge/模型-blue)</a>
-  * 基于BLOOMZ-7B1-mt优化后的模型：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
-  * 基于[huggingface的LLaMA实例](https://huggingface.co/decapoda-research)实现调优的模型：[BELLE-LLAMA-7B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-7B-2M)，[BELLE-LLAMA-13B-2M](https://huggingface.co/BelleGroup/BELLE-LLAMA-13B-2M)。请注意，本项目不能保证其是原版的LLaMA模型，也不能保证调优后的模型和LLaMA原版模型之间的关系。请参考[Meta LLaMA的License](https://github.com/facebookresearch/llama/blob/main/LICENSE)，目前仅供学习交流。请严遵守LLaMA的使用限制。强烈建议大家基于训练脚本和开放数据调优模型。
-* <a href="https://github.com/LianjiaTech/BELLE/tree/main/gptq/">![Docs](https://img.shields.io/badge/模型量化gptq-blue)
-  * 详见[BELLE/gptq](https://github.com/LianjiaTech/BELLE/tree/main/gptq)，参考gptq的实现，对本项目中相关模型进行了量化
+## 📝 项目主要内容
 
-  * [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb) 提供了colab上面可运行的推理代码[Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)
+### 🚀 训练代码
 
-**欢迎大家通过issue贡献更多的prompts！** 
+详见[BELLE/train](https://github.com/LianjiaTech/BELLE/tree/main/train)，尽可能简化的一个训练代码实现，支持finetune，lora，deepspeed
+
+### 📊 数据开放
+  
+* 详见[BELLE/1.5M](https://github.com/LianjiaTech/BELLE/tree/main/1.5M)，参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) 生成的中文数据集[1M](https://huggingface.co/datasets/BelleGroup/train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN)；
+  
+* 持续开放的数据集，详见[BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)
+
+### 🧐 验证集合&验证方法
+
+详见[BELLE/eval](https://github.com/LianjiaTech/BELLE/tree/main/eval)，一个1k+的测试集合，和对应打分prompt。包含多个类别，采用GPT-4或者ChatGPT打分。同时提供了一个打分的网页，方便针对单个case使用。欢迎大家通过PR提供更多的测试用例。
+
+### 🤖 模型
+
+详见[BELLE/models](models/)
+
+* 基于BLOOMZ-7B1-mt优化后的模型：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
+
+* 基于[Meta LLaMA](https://github.com/facebookresearch/llama)实现调优的模型：[BELLE-LLaMA-7B-0.6M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-0.6M-enc)
+, [BELLE-LLaMA-7B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc)
+, [BELLE-LLaMA-7B-2M-gptq-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-gptq-enc)
+, [BELLE-LLaMA-13B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-13B-2M-enc)。请参考[Meta LLaMA的License](https://github.com/facebookresearch/llama/blob/main/LICENSE)，目前仅供学习交流。请严遵守LLaMA的使用限制。LaMA模型不允许发布调优后的完整模型权重，但是可以发布原始的模型的diff。因此，我们使用文件间的XOR，保证拥有LLaMA原始模型授权的人才可以将本项目发布的模型转化成可以使用的格式。格式转化代码参考[BELLE/models](https://github.com/LianjiaTech/BELLE/tree/main/models)
+
+### ⚖️ 模型量化gptq
+
+详见[BELLE/gptq](https://github.com/LianjiaTech/BELLE/tree/main/gptq)，参考gptq的实现，对本项目中相关模型进行了量化
+
+### 🌐 Colab
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb) 提供了colab上面可运行的推理代码[Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)
+
+### 💬 ChatBELLE App
+
+详见[BELLE/chat](chat/README.md)，基于[BELLE](https://github.com/LianjiaTech/BELLE)模型的跨平台离线大语言模型交谈App。使用量化后的离线端上模型配合Flutter，可在macOS（已支持）、Windows、Android、iOS等设备上运行。
+
+### 📑 研究报告
+
+详见[BELLE/docs](docs/)，其中会定期更新本项目相关的研究报告工作
+
+**欢迎大家通过issue贡献更多的prompts！**
+
 <br/>
 
-## 局限性和使用限制
+## 📑 研究报告
+
+### [Towards Better Instruction Following Language Models for Chinese: Investigating the Impact of Training Data and Evaluation](https://github.com/LianjiaTech/BELLE/blob/main/docs/Towards%20Better%20Instruction%20Following%20Language%20Models%20for%20Chinese.pdf)
+
+为了推动开源大语言模型的发展，大家投入了大量精力开发能够类似于ChatGPT的低成本模型。
+首先，为了提高模型在中文领域的性能和训练/推理效率，我们进一步扩展了LLaMA的词汇表，并在34亿个中文词汇上进行了二次预训练。
+
+此外，目前可以看到基于ChatGPT产生的指令训练数据方式有：1）参考Alpaca基于GPT3.5得到的self-instruct数据；
+2）参考Alpaca基于GPT4得到的self-instruct数据；3）用户使用ChatGPT分享的数据ShareGPT。
+在这里，我们着眼于探究训练数据类别对模型性能的影响。具体而言，我们考察了训练数据的数量、质量和语言分布等因素，以及我们自己采集的中文多轮对话数据，以及一些公开可访问的高质量指导数据集。
+
+为了更好的评估效果，我们使用了一个包含一千个样本和九个真实场景的评估集来测试各种模型，同时通过量化分析来提供有价值的见解，以便更好地促进开源聊天模型的发展。
+
+这项研究的目标是填补开源聊天模型综合评估的空白，以便为这一领域的持续进步提供有力支持。
+
+实验结果如下：
+
+<table>
+  <tr>
+    <td> Factor </td>
+    <td> Base model </td>
+    <td> Training data </td>
+    <td> Score_w/o_others </td>
+  <tr>
+    <td rowspan="2">词表扩充</td>
+    <td>LLaMA-EXT</td>
+    <td>zh(alpaca-3.5&4) + sharegpt</td>
+    <td>0.670</td>
+  </tr>
+  <tr>
+    <td>LLaMA</td>
+    <td>zh(alpaca-3.5&4) + sharegpt</td>
+    <td>0.652</td>
+  </tr>
+  <tr>
+    <td rowspan="2">数据质量</td>
+    <td>LLaMA-EXT</td>
+    <td>zh(alpaca-3.5)</td>
+    <td>0.642</td>
+  </tr>
+  <tr>
+    <td>LLaMA-EXT</td>
+    <td>zh(alpaca-4)</td>
+    <td>0.693</td>
+  </tr>
+  <tr>
+    <td rowspan="4">数据语言分布</td>
+    <td>LLaMA-EXT</td>
+    <td>cn(alpaca-3.5&4)</td>
+    <td>0.679</td>
+  </tr>
+  <tr>
+    <td>LLaMA-EXT</td>
+    <td>en(alpaca-3.5&4) </td>
+    <td>0.659</td>
+  </tr>
+  <tr>
+    <td>LLaMA-EXT</td>
+    <td>zh(alpaca-3.5&4) + sharegpt</td>
+    <td>0.670</td>
+  </tr>
+  <tr>
+    <td>LLaMA-EXT</td>
+    <td>en(alpaca-3.5&4) + sharegpt</td>
+    <td>0.668</td>
+  </tr>
+  <tr>
+    <td rowspan="2">数据规模</td>
+    <td>LLaMA-EXT</td>
+    <td>zh(alpaca-3.5&4) + sharegpt</td>
+    <td>0.670</td>
+  </tr>
+  <tr>
+    <td>LLaMA-EXT</td>
+    <td>zh(alpaca-3.5&4) + sharegpt <br>+ BELLE-0.5M-CLEAN</td>
+    <td>0.762</td>
+  </tr>
+  <tr>
+    <td>-</td>
+    <td>ChatGPT</td>
+    <td>-</td>
+    <td>0.824</td>
+</table>
+
+其中**BELLE-0.5M-CLEAN**是从230万指令数据中清洗得到0.5M数据，其中包含单轮和多轮对话数据，和之前开放的0.5M数据不是同一批数据。
+
+**需要强调指出的是**：通过案例分析，我们发现我们的评估集在全面性方面存在局限性，这导致了模型分数的改善与实际用户体验之间的不一致。构建一个高质量的评估集是一个巨大的挑战，因为它需要在保持平衡难易程度的同时，包含尽可能多样的使用场景。如果评估样本主要都过于困难，那么所有模型的表现将会很差，使得辨别各种训练策略的效果变得具有挑战性。相反，如果评估样本都相对容易，评估将失去其比较价值。此外，必须确保评估数据与训练数据保持独立。
+
+基于这些观察，我们谨慎地提醒不要假设模型仅通过在有限数量的测试样本上获得良好结果就已经达到了与ChatGPT相当的性能水平。我们认为，优先发展全面评估集的持续发展具有重要意义。
+
+这篇工作中的相关数据和模型将会在4月19日前在本项目中开源。
+
+### [A Comparative Study between Full-Parameter and LoRA-based Fine-Tuning on Chinese Instruction Data for Instruction Following Large Language Model](https://github.com/LianjiaTech/BELLE/blob/main/docs/A%20Comparative%20Study%20between%20Full-Parameter%20and%20LoRA-based.pdf)
+
+为了实现对大语言模型的指令调优，受限于资源和成本，许多研究者开始使用参数高效的调优技术，例如LoRA，来进行指令调优，这也取得了一些令人鼓舞的成果。
+相较于全参数微调，基于LoRA的调优在训练成本方面展现出明显的优势。
+在这个研究报告中，我们选用LLaMA作为基础模型，对全参数微调和基于LoRA的调优方法进行了实验性的比较。
+
+实验结果揭示，选择合适的基础模型、训练数据集的规模、可学习参数的数量以及模型训练成本均为重要因素。
+
+我们希望本文的实验结论能对大型语言模型的训练提供有益的启示，特别是在中文领域，协助研究者在训练成本与模型性能之间找到更佳的权衡策略。
+实验结果如下：
+
+| Model | Average Score | Additional Param. | Training Time (Hour/epoch) |
+| ----- | ------ | ----- | ------ |
+| LLaMA-13B + LoRA(2M) | 0.648 | 28M | 8 |
+| LLaMA-7B + LoRA(4M) | 0.624 | 17.9M | 11 |
+| LLaMA-7B + LoRA(2M) | 0.609 | 17.9M | 7 |
+| LLaMA-7B + LoRA(0.6M) | 0.589 | 17.9M | 5 |
+| LLaMA-7B + FT(2M) | 0.710 | - | 31 |
+| LLaMA-7B + LoRA(4M) | 0.686 | - | 17 |
+| LLaMA-7B + FT(2M) <br>+ LoRA(math_0.25M) | 0.729 | 17.9M | 3 |
+| LLaMA-7B + FT(2M) <br>+ FT(math_0.25M) | 0.738 | - | 6 |
+
+其中的score是基于本项目集目前开放的1000条评估集合得到。
+
+其中LLaMA-13B + LoRA(2M) 代表了一个使用LLaMA-13B作为基础模型和LoRA训练方法，在2M指令数据上进行训练的模型。而LLaMA-7B + FT(2M) 代表了一个使用全参数微调进行训练的模型。
+
+LLaMA-7B + FT(2M) + LoRA(math_0.25M) 代表了一个在0.25M数学指令数据上，以LLaMA-7B + FT(2M)作为基础模型并使用LoRA训练方法进行训练的模型。LLaMA-7B + FT(2M) + FT(math_0.25M) 代表了一个使用增量全参数微调进行训练的模型。关于训练时间，所有这些实验都是在8块NVIDIA A100-40GB GPU上进行的。
+
+其中的math_0.25M是开放的0.25M数学数据库。在实验过程中，根据我们的评估（详见论文），我们的模型在数学任务上表现不佳，得分大多低于0.5。为了验证 LoRA 在特定任务上的适应能力，我们使用增量0.25M数学数据集（math_0.25M）来调整指令遵循的大型语言模型（我们选择LLaMA-7B+FT（2M）作为基础模型）。作为对比，我们使用了学习速率为5e-7的增量微调方法，并进行了2个时期的训练。因此，我们得到了两个模型，一个是LLaMA-7B+FT（2M）+LoRA（math_0.25M），另一个是LLaMA-7B+FT（2M）+FT（math_0.25M）。
+从实验结果可以看出，增量微调仍然表现更好，但需要更长的训练时间。LoRA和增量微调都提高了模型的整体性能。从附录中的详细数据可以看出，LoRA和增量微调都在数学任务中显示出显著的改进，而只会导致其他任务的轻微性能下降。具体而言，数学任务的表现分别提高到了0.586和0.559。
+
+可以看到：1) 选择基础模型对于 LoRA 调整的有效性具有显著影响；2）增加训练数据量可以持续提高LoRA模型的有效性；3）LoRA 调整受益于模型参数的数量。对于LoRA方案的使用，我们建议可以在已经完成了指令学习的模型的基础上针对特定任务做loRA的自适应训练。
+
+同样地，该论文中的相关模型也会尽快开放在本项目中。
+
+## ⚠️ 局限性和使用限制
+
 基于当前数据和基础模型训练得到的SFT模型，在效果上仍存在以下问题：
 
 1. 在涉及事实性的指令上可能会产生违背事实的错误回答。
@@ -52,9 +220,10 @@
 3. 在一些涉及推理、代码、多轮对话等场景下模型的能力仍有待提高。
 
 基于以上模型局限性，我们要求开发者仅将我们开源的代码、数据、模型及后续用此项目生成的衍生物用于研究目的，不得用于商业，以及其他会对社会带来危害的用途。
+
 <br/>
 
-## 引用
+## 📌引用
 
 如果使用本项目的代码、数据或模型，请引用本项目。
 
@@ -76,10 +245,12 @@
 ```
 
 当然，你也需要引用原始的BLOOM论文、LLaMA论文、Stanford Alpaca和Self-Instruct论文。
+
 <br/>
 
+## 📚 模型使用例子
+<details>
 
-## 模型使用例子
 | Human | Assitant |
 | ----- | ------ |
 | 写一篇英文散文诗，主题是春雨，想象自己是春雨，和英国古代诗人莎士比亚交流 | I am the spring rain,<br/>Dancing on your face and body.<br/>My dew-drenched petals dance with you,<br/>Bringing life to every plant.<br/><br/>Shakespeare, I am here to meet you.<br/>Your works have filled my heart with joy.<br/>The beauty of nature in its fullness<br/>Makes me feel like a partaker.<br/><br/>As the leaves sway and rustle by,<br/>My dew-filled hand reaches out for them.<br/>The sweet scent of flowers fill the air,<br/>And bring me peace from all around.<br/><br/>Butterflies flit about as well,<br/>Glistening in the sun's rays.<br/>Their wings are made of dew,<br/>A beautiful sight to behold.<br/><br/>You see, Shakespeare, I too am one with nature.<br/>My dew-drenched hair is a symbol of hope.<br/>For when we can connect back to our roots,<br/>We will be able to make it through this season. |
@@ -93,4 +264,5 @@
 | 父母都姓吴，取一些男宝宝和女宝宝的名字 | - 男宝：吴俊杰、吴雨辰、吴子墨、吴思源、吴泽阳、吴宇航、吴博文、吴哲毅。 <br/>- 女宝：吴美琪、吴佳怡、吴欣瑜、吴香凝、吴雪柔、吴颖诗、吴语嫣。 |
 | 推荐几本金庸的武侠小说 | 以下是三本我最喜欢的金庸武侠小说的推荐： <br/>1. 《射雕英雄传》 - 一部充满智慧和机智的小说，讲述了郭靖、黄蓉夫妇的故事。 <br/>2. 《神雕侠侣》- 这是一部浪漫而感人的故事，讲述了一对情侣小龙女与杨过之间的爱情故事。 <br/>3. 《倚天屠龙记》- 这是一个宏伟而壮观的故事，描绘了明教领袖张无忌如何成为一位出色的英雄。 |
 
+</details>
 <br/>
