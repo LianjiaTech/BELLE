@@ -107,57 +107,57 @@
     <td> Score_w/o_others </td>
   <tr>
     <td rowspan="2">词表扩充</td>
-    <td>LLaMA-EXT</td>
-    <td>zh(alpaca-3.5&4) + sharegpt</td>
-    <td>0.670</td>
+    <td> LLaMA-7B-EXT </td>
+    <td> zh(alpaca-3.5&4) + sharegpt </td>
+    <td> 0.670 </td>
   </tr>
   <tr>
-    <td>LLaMA</td>
-    <td>zh(alpaca-3.5&4) + sharegpt</td>
-    <td>0.652</td>
+    <td> LLaMA-7B </td>
+    <td> zh(alpaca-3.5&4) + sharegpt </td>
+    <td> 0.652</td>
   </tr>
   <tr>
     <td rowspan="2">数据质量</td>
-    <td>LLaMA-EXT</td>
-    <td>zh(alpaca-3.5)</td>
-    <td>0.642</td>
+    <td> LLaMA-7B-EXT </td>
+    <td> zh(alpaca-3.5) </td>
+    <td> 0.642 </td>
   </tr>
   <tr>
-    <td>LLaMA-EXT</td>
-    <td>zh(alpaca-4)</td>
-    <td>0.693</td>
+    <td> LLaMA-7B-EXT </td>
+    <td> zh(alpaca-4) </td>
+    <td> 0.693 </td>
   </tr>
   <tr>
     <td rowspan="4">数据语言分布</td>
-    <td>LLaMA-EXT</td>
-    <td>cn(alpaca-3.5&4)</td>
-    <td>0.679</td>
+    <td> LLaMA-7B-EXT </td>
+    <td> cn(alpaca-3.5&4) </td>
+    <td> 0.679 </td>
   </tr>
   <tr>
-    <td>LLaMA-EXT</td>
-    <td>en(alpaca-3.5&4) </td>
-    <td>0.659</td>
+    <td> LLaMA-7B-EXT </td>
+    <td> en(alpaca-3.5&4) </td>
+    <td> 0.659 </td>
   </tr>
   <tr>
-    <td>LLaMA-EXT</td>
-    <td>zh(alpaca-3.5&4) + sharegpt</td>
-    <td>0.670</td>
+    <td> LLaMA-7B-EXT </td>
+    <td> zh(alpaca-3.5&4) + sharegpt </td>
+    <td> 0.670 </td>
   </tr>
   <tr>
-    <td>LLaMA-EXT</td>
-    <td>en(alpaca-3.5&4) + sharegpt</td>
-    <td>0.668</td>
+    <td> LLaMA-7B-EXT </td>
+    <td> en(alpaca-3.5&4) + sharegpt </td>
+    <td> 0.668 </td>
   </tr>
   <tr>
     <td rowspan="2">数据规模</td>
-    <td>LLaMA-EXT</td>
-    <td>zh(alpaca-3.5&4) + sharegpt</td>
-    <td>0.670</td>
+    <td> LLaMA-7B-EXT </td>
+    <td> zh(alpaca-3.5&4) + sharegpt </td>
+    <td> 0.670 </td>
   </tr>
   <tr>
-    <td>LLaMA-EXT</td>
-    <td>zh(alpaca-3.5&4) + sharegpt <br>+ BELLE-0.5M-CLEAN</td>
-    <td>0.762</td>
+    <td> LLaMA-7B-EXT </td>
+    <td> zh(alpaca-3.5&4) + sharegpt <br>+ BELLE-0.5M-CLEAN</td>
+    <td> 0.762</td>
   </tr>
   <tr>
     <td>-</td>
