@@ -188,8 +188,8 @@
 | LLaMA-7B + LoRA(0.6M) | 0.589 | 17.9M | 5 |
 | LLaMA-7B + FT(2M) | 0.710 | - | 31 |
 | LLaMA-7B + LoRA(4M) | 0.686 | - | 17 |
-| LLaMA-7B + FT(2M) + LoRA(math_0.25M) | 0.729 | 17.9M | 3 |
-| LLaMA-7B + FT(2M) + FT(math_0.25M) | 0.738 | - | 6 |
+| LLaMA-7B + FT(2M) <br>+ LoRA(math_0.25M) | 0.729 | 17.9M | 3 |
+| LLaMA-7B + FT(2M) <br>+ FT(math_0.25M) | 0.738 | - | 6 |
 
 其中的score是基于本项目集目前开放的1000条评估集合得到。
 
