@@ -84,7 +84,7 @@
 
 ## 📑 研究报告
 
-[Towards Better Instruction Following Language Models for Chinese: Investigating the Impact of Training Data and Evaluation](https://github.com/LianjiaTech/BELLE/blob/main/docs/Towards%20Better%20Instruction%20Following%20Language%20Models%20for%20Chinese.pdf)
+### [Towards Better Instruction Following Language Models for Chinese: Investigating the Impact of Training Data and Evaluation](https://github.com/LianjiaTech/BELLE/blob/main/docs/Towards%20Better%20Instruction%20Following%20Language%20Models%20for%20Chinese.pdf)
 
 为了推动开源大语言模型的发展，大家投入了大量精力开发能够类似于ChatGPT的低成本模型。
 首先，为了提高模型在中文领域的性能和训练/推理效率，我们进一步扩展了LLaMA的词汇表，并在34亿个中文词汇上进行了二次预训练。
@@ -154,15 +154,55 @@
     <td>zh(alpaca-3.5&4) + sharegpt <br>+ BELLE-0.5M-CLEAN</td>
     <td>0.762</td>
   </tr>
+  <tr>
+    <td>-</td>
+    <td>ChatGPT</td>
+    <td>-</td>
+    <td>0.824</td>
 </table>
 
-其中**BELLE-0.5M-CLEAN**是从230万指令数据中清洗得到。
+其中**BELLE-0.5M-CLEAN**是从230万指令数据中清洗得到0.5M数据，其中包含单轮和多轮对话数据，和之前开放的0.5M数据不是同一批数据。
 
 **需要强调指出的是**：通过案例分析，我们发现我们的评估集在全面性方面存在局限性，这导致了模型分数的改善与实际用户体验之间的不一致。构建一个高质量的评估集是一个巨大的挑战，因为它需要在保持平衡难易程度的同时，包含尽可能多样的使用场景。如果评估样本主要都过于困难，那么所有模型的表现将会很差，使得辨别各种训练策略的效果变得具有挑战性。相反，如果评估样本都相对容易，评估将失去其比较价值。此外，必须确保评估数据与训练数据保持独立。
 
 基于这些观察，我们谨慎地提醒不要假设模型仅通过在有限数量的测试样本上获得良好结果就已经达到了与ChatGPT相当的性能水平。我们认为，优先发展全面评估集的持续发展具有重要意义。
 
 这篇工作中的相关数据和模型将会在4月19日前在本项目中开源。
+
+### [A Comparative Study between Full-Parameter and LoRA-based Fine-Tuning on Chinese Instruction Data for Instruction Following Large Language Model](https://github.com/LianjiaTech/BELLE/blob/main/docs/A%20Comparative%20Study%20between%20Full-Parameter%20and%20LoRA-based.pdf)
+
+为了实现对大语言模型的指令调优，受限于资源和成本，许多研究者开始使用参数高效的调优技术，例如LoRA，来进行指令调优，这也取得了一些令人鼓舞的成果。
+相较于全参数微调，基于LoRA的调优在训练成本方面展现出明显的优势。
+在这个研究报告中，我们选用LLaMA作为基础模型，对全参数微调和基于LoRA的调优方法进行了实验性的比较。
+
+实验结果揭示，选择合适的基础模型、训练数据集的规模、可学习参数的数量以及模型训练成本均为重要因素。
+
+我们希望本文的实验结论能对大型语言模型的训练提供有益的启示，特别是在中文领域，协助研究者在训练成本与模型性能之间找到更佳的权衡策略。
+实验结果如下：
+
+| Model | Average Score | Additional Param. | Training Time (Hour/epoch) |
+| ----- | ------ | ----- | ------ |
+| LLaMA-13B + LoRA(2M) | 0.648 | 28M | 8 |
+| LLaMA-7B + LoRA(4M) | 0.624 | 17.9M | 11 |
+| LLaMA-7B + LoRA(2M) | 0.609 | 17.9M | 7 |
+| LLaMA-7B + LoRA(0.6M) | 0.589 | 17.9M | 5 |
+| LLaMA-7B + FT(2M) | 0.710 | - | 31 |
+| LLaMA-7B + LoRA(4M) | 0.686 | - | 17 |
+| LLaMA-7B + FT(2M) + LoRA(math_0.25M) | 0.729 | 17.9M | 3 |
+| LLaMA-7B + FT(2M) + FT(math_0.25M) | 0.738 | - | 6 |
+
+其中的score是基于本项目集目前开放的1000条评估集合得到。
+
+其中LLaMA-13B + LoRA(2M) 代表了一个使用LLaMA-13B作为基础模型和LoRA训练方法，在2M指令数据上进行训练的模型。而LLaMA-7B + FT(2M) 代表了一个使用全参数微调进行训练的模型。
+
+LLaMA-7B + FT(2M) + LoRA(math_0.25M) 代表了一个在0.25M数学指令数据上，以LLaMA-7B + FT(2M)作为基础模型并使用LoRA训练方法进行训练的模型。LLaMA-7B + FT(2M) + FT(math_0.25M) 代表了一个使用增量全参数微调进行训练的模型。关于训练时间，所有这些实验都是在8块NVIDIA A100-40GB GPU上进行的。
+
+其中的math_0.25M是开放的0.25M数学数据库。在实验过程中，根据我们的评估（详见论文），我们的模型在数学任务上表现不佳，得分大多低于0.5。为了验证 LoRA 在特定任务上的适应能力，我们使用增量0.25M数学数据集（math_0.25M）来调整指令遵循的大型语言模型（我们选择LLaMA-7B+FT（2M）作为基础模型）。作为对比，我们使用了学习速率为5e-7的增量微调方法，并进行了2个时期的训练。因此，我们得到了两个模型，一个是LLaMA-7B+FT（2M）+LoRA（math_0.25M），另一个是LLaMA-7B+FT（2M）+FT（math_0.25M）。
+从实验结果可以看出，增量微调仍然表现更好，但需要更长的训练时间。LoRA和增量微调都提高了模型的整体性能。从附录中的详细数据可以看出，LoRA和增量微调都在数学任务中显示出显著的改进，而只会导致其他任务的轻微性能下降。具体而言，数学任务的表现分别提高到了0.586和0.559。
+
+可以看到：1) 选择基础模型对于 LoRA 调整的有效性具有显著影响；2）增加训练数据量可以持续提高LoRA模型的有效性；3）LoRA 调整受益于模型参数的数量。对于LoRA方案的使用，我们建议可以在已经完成了指令学习的模型的基础上针对特定任务做loRA的自适应训练。
+
+同样地，该论文中的相关模型也会尽快开放在本项目中。
 
 ## ⚠️ 局限性和使用限制
 
@@ -204,6 +244,7 @@
 <br/>
 
 ## 📚 模型使用例子
+<details>
 
 | Human | Assitant |
 | ----- | ------ |
@@ -218,4 +259,5 @@
 | 父母都姓吴，取一些男宝宝和女宝宝的名字 | - 男宝：吴俊杰、吴雨辰、吴子墨、吴思源、吴泽阳、吴宇航、吴博文、吴哲毅。 <br/>- 女宝：吴美琪、吴佳怡、吴欣瑜、吴香凝、吴雪柔、吴颖诗、吴语嫣。 |
 | 推荐几本金庸的武侠小说 | 以下是三本我最喜欢的金庸武侠小说的推荐： <br/>1. 《射雕英雄传》 - 一部充满智慧和机智的小说，讲述了郭靖、黄蓉夫妇的故事。 <br/>2. 《神雕侠侣》- 这是一部浪漫而感人的故事，讲述了一对情侣小龙女与杨过之间的爱情故事。 <br/>3. 《倚天屠龙记》- 这是一个宏伟而壮观的故事，描绘了明教领袖张无忌如何成为一位出色的英雄。 |
 
+</details>
 <br/>
