@@ -128,9 +128,14 @@
     <td>0.693</td>
   </tr>
   <tr>
-    <td rowspan="3">数据语言分布</td>
+    <td rowspan="4">数据语言分布</td>
     <td>LLaMA-EXT</td>
-    <td>en(alpaca-3.5&4)</td>
+    <td>cn(alpaca-3.5&4)</td>
+    <td>0.679</td>
+  </tr>
+  <tr>
+    <td>LLaMA-EXT</td>
+    <td>en(alpaca-3.5&4) </td>
     <td>0.659</td>
   </tr>
   <tr>
@@ -140,7 +145,7 @@
   </tr>
   <tr>
     <td>LLaMA-EXT</td>
-    <td>zh(alpaca-3.5&4) + sharegpt</td>
+    <td>en(alpaca-3.5&4) + sharegpt</td>
     <td>0.668</td>
   </tr>
   <tr>
