@@ -27,7 +27,7 @@
 
 ## 🔄 最近更新
 
-* [2023/04/17] 更新了两篇论文最新工作，对比了不同方式产生的训练数据、不同训练方法（LoRA, finetune)对效果的影响
+* [2023/04/17] [更新了两篇论文最新工作](#📑-研究报告)，对比了不同方式产生的训练数据、不同训练方法（LoRA, finetune)对效果的影响
 * [2023/04/12] 发布了[ChatBELLE App](chat/README.md)，基于[llama.cpp](https://github.com/ggerganov/llama.cpp)和[Flutter](https://flutter.dev/)，实现跨平台的BELLE-7B离线模型实时交互。
 * [2023/04/11] 更新了一个人工精校的eval集合，大约一千多条
 * [2023/04/08] [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)中，新加40万条生成的给定角色的多轮对话[Generated Chat](https://huggingface.co/datasets/BelleGroup/generated_chat_0.4M)，新加200万条生成多样化指令任务数据[train_2M_CN](https://huggingface.co/datasets/BelleGroup/train_2M_CN)。
@@ -74,13 +74,15 @@
 
 详见[BELLE/chat](chat/README.md)，基于[BELLE](https://github.com/LianjiaTech/BELLE)模型的跨平台离线大语言模型交谈App。使用量化后的离线端上模型配合Flutter，可在macOS（已支持）、Windows、Android、iOS等设备上运行。
 
+### 📑 研究报告
+
+详见[BELLE/docs](docs/)，其中会定期更新本项目相关的研究报告工作
+
 **欢迎大家通过issue贡献更多的prompts！**
 
 <br/>
 
-## 最新进展
-
-### 
+## 📑 研究报告
 
 [Towards Better Instruction Following Language Models for Chinese: Investigating the Impact of Training Data and Evaluation](https://github.com/LianjiaTech/BELLE/blob/main/docs/Towards%20Better%20Instruction%20Following%20Language%20Models%20for%20Chinese.pdf)
 
@@ -161,6 +163,7 @@
 基于这些观察，我们谨慎地提醒不要假设模型仅通过在有限数量的测试样本上获得良好结果就已经达到了与ChatGPT相当的性能水平。我们认为，优先发展全面评估集的持续发展具有重要意义。
 
 这篇工作中的相关数据和模型将会在4月19日前在本项目中开源。
+
 ## ⚠️ 局限性和使用限制
 
 基于当前数据和基础模型训练得到的SFT模型，在效果上仍存在以下问题：
