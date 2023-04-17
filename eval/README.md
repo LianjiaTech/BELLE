@@ -2,7 +2,7 @@
 
 *Read this in [English](README_en.md).*
 
-中文测试集包含由BELLE项目产生的不同指令类型、不同领域的测试集，总共有12个指令类型。在我们两篇论文中[Towards Better Instruction Following Language Models for Chinese: Investigating the Impact of Training Data and Evaluation](https://github.com/LianjiaTech/BELLE/blob/main/docs/Towards%20Better%20Instruction%20Following%20Language%20Models%20for%20Chinese.pdf)和 [A Comparative Study between Full-Parameter and LoRA-based Fine-Tuning on Chinese Instruction Data for Instruction Following Large Language Model](https://github.com/LianjiaTech/BELLE/blob/main/docs/A%20Comparative%20Study%20between%20Full-Parameter%20and%20LoRA-based.pdf) 我们将数学和代码任务重新分类为other。主要原因是考虑到数学在某些层面上面可以认为是QA类别，code可以认为是rewrite。但是考虑到这两个类别又需要很强的COT能力与其它类别有明显的区别，我们在论文里将math和code划分成other类别。
+中文测试集包含由BELLE项目产生的不同指令类型、不同领域的测试集，总共有12个指令类型。在我们两篇论文中[Towards Better Instruction Following Language Models for Chinese: Investigating the Impact of Training Data and Evaluation](https://github.com/LianjiaTech/BELLE/blob/main/docs/Towards%20Better%20Instruction%20Following%20Language%20Models%20for%20Chinese.pdf)和 [A Comparative Study between Full-Parameter and LoRA-based Fine-Tuning on Chinese Instruction Data for Instruction Following Large Language Model](https://github.com/LianjiaTech/BELLE/blob/main/docs/A%20Comparative%20Study%20between%20Full-Parameter%20and%20LoRA-based.pdf) 我们将数学和代码任务重新分类为other。主要原因是考虑到数学在某些层面上面可以认为是QA类别，code可以认为是generation。但是考虑到这两个类别又需要很强的COT能力与其它类别有明显的区别，我们在论文里将math和code划分成other类别。
 
 我们对测试集做了相关的数据分析，包括类别分布，每个类别的指令的字数长度，以及指令的词语分布（我们去掉了一些如“问题”“句子”等词）
 
