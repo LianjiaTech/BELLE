@@ -4,7 +4,7 @@
 
 # 项目介绍
 
-本仓库基于Deepspeed-Chat项目，可用于微调大语言模型，包括全量参数微调(fine-tuning)和基于LoRA的参数高效微调。
+本仓库基于[Deepspeed-Chat](https://github.com/microsoft/DeepSpeedExamples)项目，可用于微调大语言模型，包括全量参数微调(fine-tuning)和基于LoRA的参数高效微调。
 
 
 
@@ -125,7 +125,7 @@ FT指的是Fine-Tuning。具体实验细节可参考论文。
 
 
 
-## Reference
+## 致谢
 
 1. [Deepspeed-Chat](https://github.com/microsoft/DeepSpeedExamples)
 
