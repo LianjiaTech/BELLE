@@ -1,94 +1,136 @@
-*Read this in [English](README_en.md).*
 
-# 项目说明
 
-本仓库用于微调Bloom和Llama两个大语言模型，并且支持LoRA训练
+
+
+# 项目介绍
+
+本仓库基于Deepspeed-Chat项目，可用于微调大语言模型，包括全量参数微调(fine-tuning)和基于LoRA的参数高效微调。
+
+
 
 ## 环境安装
+我们提供了一个完整可运行的Docker环境，Dockerfile写在Docker文件夹下
 
 ```bash
-conda env create -f environment.yml
-conda activate Belle
-conda install -c nvidia libcusolver-dev
+docker build -t  Belle:v1.0  -f Docker/Dockerfile  .
+docker run -it Belle:v1.0 /bin/bash
 ```
 
-## 数据下载
+
+
+## Run
+
+### Step1 数据下载
 
 ```bash
-python download_data.py
+wget https://huggingface.co/datasets/BelleGroup/school_math_0.25M/resolve/main/school_math_0.25M.json
+mv school_math_0.25M.json belleMath.json
 ```
 
-创建data_dir文件夹，并且下载我们参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) 生成的中文数据集[1M](https://huggingface.co/datasets/BelleGroup/train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN)，同时随机地划分训练和测试数据
+该数据是数学应用题求解任务，包含解题过程，包含约25万条生成的中文数学题数据。
 
-## 训练模型
+| Instruction                                                  | Answer                                                       |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Human: 一箱鸡蛋有25个，小明爸爸每天给他9个鸡蛋吃，那么一箱鸡蛋能够供小明吃几天？\n Assistant: | 一箱鸡蛋有25个，小明每天吃9个鸡蛋，用除法计算一下即可： 25 ÷ 9 = 2余7 也就是说，小明第1天到第2天共吃2个鸡蛋，第3天吃剩下的7个鸡蛋。 因此，一箱鸡蛋能够供小明吃2天。 |
+| Human: 小明手中有15颗糖果，他想要分给他的朋友小红和小李，每人分得的糖果数是3颗，那么他还剩下几颗糖果？\n Assistant: | 该题可以用减法来解决。小明手中有15颗糖果，每人分得3颗，所以小红和小李一共分得6颗糖果（3+3=6）。 2. 然后再用原来的糖果总数减去分给小红和小李的糖果数，即可得到小明手中剩余的糖果数。 计算过程如下： 15 - 6 = 9 所以，小明还剩下9颗糖果。 |
 
-训练模型的配置文件存放在run_config文件夹中
+我们会在Instruction的开头和结尾给出Human和Assistant
 
-- Bloom_config.json: 配置Bloom模型的超参数
-- Llama_config.json: 配置Llama模型的超参数
-- deepspeed_config.json: 配置Deepspeed策略的参数
-- lora_hyperparams_bloom.json: LoRA训练Bloom模型的参数
-- lora_hyperparams_llama.json: LoRA训练Llama模型的参数
+其他的训练数据见：https://huggingface.co/BelleGroup
+
+### Step2 训练
 
 
-训练Bloom模型的启动命令：
+
+#### 单机多卡
+
+##### Fine-Tuning
 
 ```bash
-deepspeed --num_gpus=8 finetune.py --model_config_file run_config/Bloom_config.json  --deepspeed run_config/deepspeed_config.json 
+bash training_scripts/single_node/run_FT.sh
 ```
 
-训练Llama模型的启动命令：
+训练日志记录在当前目录output/training.log中.
+
+##### LoRA-based Tuning
 
 ```bash
-deepspeed --num_gpus=8 finetune.py --model_config_file run_config/Llama_config.json  --deepspeed run_config/deepspeed_config.json 
+bash training_scripts/single_node/run_LoRA.sh
 ```
 
-### LoRA
+训练日志记录在当前目录output-lora/training.log中.
 
-如果采用LoRA，需要使用torchrun命令启动分布式训练(使用deepspeed启动会出现错误)，同时需要指定use_lora参数并且给出LoRA需要的参数配置文件lora_hyperparams_file
+#### 单卡
 
-采用LoRA训练的启动命令(Bloom模型):
+##### Fine-Tuning
 
 ```bash
-torchrun --nproc_per_node=8 finetune.py --model_config_file run_config/Bloom_config.json --lora_hyperparams_file run_config/lora_hyperparams_bloom.json  --use_lora
+bash training_scripts/single_gpu/run_FT.sh
 ```
 
-采用LoRA训练的启动命令(Llama模型):
+训练日志记录在当前目录output/training.log中.
+
+##### LoRA-based Tuning
 
 ```bash
-torchrun --nproc_per_node=8 finetune.py --model_config_file run_config/Llama_config.json --lora_hyperparams_file run_config/lora_hyperparams_llama.json  --use_lora
+bash training_scripts/single_gpu/run_LoRA.sh
 ```
 
-## 文本生成
+训练日志记录在当前目录output-lora/training.log中.
 
-训练的模型将会保存在trained_models/model_name目录下，其中model_name是模型名，比如Bloom，Llama。假设训练的模型是Bloom，训练数据采用的是Belle_open_source_0.5M，下面的命令将读取模型并生成测试集中每一个样本的生成结果
 
-```bash
-python generate.py --dev_file data_dir/Belle_open_source_0.5M.dev.json --model_name_or_path trained_models/bloom/
-```
 
-如果是LoRA模型，需要给出LoRA权重保存的位置，如：--lora_weights trained_models/lora-llama
+#### 部分参数说明
 
-## 参考
+| Args               | Explanation                                                  |
+| ------------------ | ------------------------------------------------------------ |
+| model_name_or_path | 默认是decapoda-research/llama-7b-hf，如果想训练Bloom模型，可改为bigscience/bloomz-7b1 |
+| sft_only_data_path | 训练数据                                                     |
+| lora_dim           | LoRA的秩                                                     |
+| lora_module_name   | 指定adapt哪些参数，对于LLaMA模型，我们的实验配置是attention和mlp的参数 |
 
-本仓库的代码基于[alpaca-lora](https://github.com/tloen/alpaca-lora)
+其余参数说明以及运行所需的机器配置详见：https://github.com/microsoft/DeepSpeedExamples/blob/master/applications/DeepSpeed-Chat/training/step1_supervised_finetuning/README.md
 
-## 常见问题
-### 1. torchrun --nproc_per_node=1 finetune.py 启动报错
+目前实验验证，在8卡A100 40G上均可完成上述模型的训练
 
-报错信息如下：
-```bash
-ValueError: DistributedDataParallel device_ids and output_device arguments only work with single-device/multiple-device GPU modules or CPU modules, but got device_ids [0], output_device 0, and module parameters {device(type='cuda', index=0), device(type='cuda', index=1), device(type='cuda', index=2)}.
-```
-解决办法：
-如果是单张显卡，建议使用如下命令启动：
-```bash
-CUDA_VISIBLE_DEVICES=0 python finetune.py 
-```
+如果出现显存不足的问题，可参考[Deepspeed-Chat-training_scripts](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat/training/step1_supervised_finetuning/training_scripts) 中各个启动脚本内的参数配置
 
-### 2. RuntimeError: expected scalar type Half but found Float
 
-在跑Bloom模型时，可能会遇到这个问题。经过我们的实验，有如下结论：
 
-- 如果显卡是A100，不会出现expected scalar type Half but found Float的问题，Bloom和Llama都可以跑起来
-- 如果显卡是V100，可以跑起来Llama模型，但是Bloom模型就会出现这个错误，此时需要把代码中fp16改为False，才能跑Bloom模型
+## 部分代码实现细节
+
+本仓库实验代码仅对Deepspeed-Chat项目中training/step1_supervised_finetuning内的部分代码做了简单的修改以适配训练LLaMA模型。具体修改内容如下：
+
+1. 需要在utils/data/raw_datasets.py中实现一个类，比如BelleOpenSoucreDataset，用于读取训练数据
+2. 由于训练的目标是为了让模型学会回复人类指令，所以我们仅对answer文本计算loss。需要在utils/data/data_utils.py的create_dataset_split方法中修改tokenize部分，在instruction文本部分加上-100作为mask
+
+
+
+
+
+## 实验结果
+
+我们对LoRA-based tuning和fine-tuning这两种微调策略的效果进行了实验对比，实验结果如下。
+
+FT指的是Fine-Tuning。具体实验细节可参考论文。
+
+| LLaMA     | 训练策略 | 训练数据 | Score |
+| --------- | -------- | -------- | ----- |
+| LLaMA-7B  | FT       | 2M       | 0.710 |
+| LLaMA-7B  | FT       | 0.6M     | 0.686 |
+| LLaMA-13B | LoRA     | 2M       | 0.648 |
+| LLaMA-7B  | LoRA     | 4M       | 0.624 |
+| LLaMA-7B  | LoRA     | 2M       | 0.609 |
+| LLaMA-7B  | LoRA     | 0.6M     | 0.589 |
+
+
+
+## Reference
+
+1. [Deepspeed-Chat](https://github.com/microsoft/DeepSpeedExamples)
+
+
+
+## 问题反馈
+
+如有问题，请在GitHub Issue中提交。在提交问题前，请先查看 https://github.com/microsoft/DeepSpeedExamples/issues 中是否已出现过解决类似问题的方法。
