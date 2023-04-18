@@ -9,6 +9,7 @@
 
 
 ## 环境安装
+我们提供了一个完整可运行的Docker环境，Dockerfile写在Docker文件夹下
 
 ```bash
 docker build -t  Belle:v1.0  -f Docker/Dockerfile  .
