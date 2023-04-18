@@ -7,9 +7,11 @@
 我们对测试集做了相关的数据分析，包括类别分布，每个类别的指令的字数长度，以及指令的词语分布（我们去掉了一些如“问题”“句子”等词）
 
 <p align="center">
-<img src="../assets/eval_class_distribution.png" width="300" height="auto">
-<img src="../assets/eval_avg_length.png" width="300" height="auto">
-<img src="../assets/eval_word_cloud.png" width="300" height="auto">
+<img src="../assets/eval_cate_distri.png" width="300" height="auto">
+<img src="../assets/eval_word_cloud.png" width="450" height="auto">
+</p>
+<p align="center">
+<img src="../assets/eval_length.png" width="800" height="auto">
 </p>
 
 ## 核心测试集 eval_set.json

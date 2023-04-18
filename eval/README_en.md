@@ -11,9 +11,11 @@ The Chinese test set contains test sets of different instruction types and domai
 We conducted relevant data analysis on the eval set, including category distribution, word length of instructions in each category, and word distribution of instructions (we removed some words such as "问题" and "句子").
 
 <p align="center">
-<img src="../assets/eval_class_distribution.png" width="300" height="auto">
-<img src="../assets/eval_avg_length.png" width="300" height="auto">
-<img src="../assets/eval_word_cloud.png" width="300" height="auto">
+<img src="../assets/eval_cate_distri.png" width="300" height="auto">
+<img src="../assets/eval_word_cloud.png" width="450" height="auto">
+</p>
+<p align="center">
+<img src="../assets/eval_length.png" width="800" height="auto">
 </p>
 
 ## eval_set.json
