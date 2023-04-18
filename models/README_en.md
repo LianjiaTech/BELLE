@@ -2,6 +2,10 @@
 
 ## Models trained
 
+<p align="center">
+  <img src="../assets/belle_toy_blocks.png" alt="Belle Toy Blocks" width="400">
+</p>
+
 The goal of this project is to promote the development of the open-source community for Chinese language large-scale conversational models, and our vision is to help building large language model engine for everyone. This project optimizes Chinese performance based on opensource pretrained large language models. These models finetuning uses only data generated via ChatGPT (without other data).
 
 <br/>
