@@ -20,7 +20,7 @@ output: 输出
 
 
 ## 子集
-1. [zh_seed_tasks.jsonl](https://github.com/LianjiaTech/BELLE/blob/main/zh_seed_tasks.json)：包含175个种子任务。
+1. [zh_seed_tasks.jsonl](https://github.com/LianjiaTech/BELLE/blob/main/1.5M/zh_seed_tasks.json)：包含175个种子任务。
 2. [0.5M生成的数据](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN) ： 为了方便模型训练，huggingface开源数据将原始生成文件中的"instruction"、"input"字段合并成"input"字段，"output"字段修改为"target"字段。
 3. [1M生成的数据](https://huggingface.co/datasets/BelleGroup/train_1M_CN)：生成方式与0.5M数据集相同，在后处理中去掉了一些质量不高的数据，例如自称`GPT模型`的数据、由于input不完善导致模型无法回答的数据，以及指令是中文但input或target是英文的数据。
 
@@ -69,7 +69,7 @@ This dataset does not represent anyone's ground, interest or thought, and is not
 
 
 ## Subsets
-1. [zh_seed_tasks.jsonl](https://github.com/LianjiaTech/BELLE/blob/main/zh_seed_tasks.json) contains 175 seed tasks
+1. [zh_seed_tasks.jsonl](https://github.com/LianjiaTech/BELLE/blob/main/1.5M/zh_seed_tasks.json) contains 175 seed tasks
 2. [0.5M generated data](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN)：To facilitate model training, Hugging Face open-sourced data that merged the "instruction" and "input" fields in the original generation file into a single "input" field, and renamed the "output" field as the "target" field.
 3. [1M generated data](https://huggingface.co/datasets/BelleGroup/train_1M_CN). Same generation pipeline as 0.5M dataset, removed lower-quality items in postprocessing, e.g. items regarding `GPT model`, bad items because of incomplete/invalid input, items with Chinese instructionb but English input or target.
 
