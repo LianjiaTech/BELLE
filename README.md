@@ -211,7 +211,7 @@ LLaMA-7B + FT(2M) + LoRA(math_0.25M) 代表了一个在0.25M数学指令数据�
 
 同样地，该论文中的相关模型也会尽快开放在本项目中。
 
-## ⚠️ 局限性和使用限制
+## ⚠️ 局限性、使用限制与免责声明
 
 基于当前数据和基础模型训练得到的SFT模型，在效果上仍存在以下问题：
 
@@ -223,9 +223,12 @@ LLaMA-7B + FT(2M) + LoRA(math_0.25M) 代表了一个在0.25M数学指令数据�
 
 基于以上模型局限性，我们要求开发者仅将我们开源的代码、数据、模型及后续用此项目生成的衍生物用于研究目的，不得用于商业，以及其他会对社会带来危害的用途。
 
+本项目仅可应用于研究目的，项目开发者不承担任何因使用本项目（包含数据、模型、代码等）导致的危害或损失。详细请参考[免责声明](https://github.com/LianjiaTech/BELLE/blob/main/DISCLAIMER)。
+
+
 <br/>
 
-## 📌引用
+## 📌 引用
 
 如果使用本项目的代码、数据或模型，请引用本项目。
 
@@ -268,3 +271,11 @@ LLaMA-7B + FT(2M) + LoRA(math_0.25M) 代表了一个在0.25M数学指令数据�
 
 </details>
 <br/>
+
+## ⛽️ 如何贡献
+
+如果您想为本项目提交Issue或贡献数据/代码，请参考[如何贡献](https://github.com/LianjiaTech/BELLE/blob/main/HOW_TO_CONTRIBUTE.md)。
+
+## ☎️ 联系我们
+
+欢迎大家来[Discord](https://discord.gg/pMPY53UUGq)与[微信](https://github.com/LianjiaTech/BELLE/blob/main/assets/belle_wechat.jpg)与我们交流。
