@@ -31,7 +31,7 @@
 * [2023/04/12] 发布了[ChatBELLE App](chat/README.md)，基于[llama.cpp](https://github.com/ggerganov/llama.cpp)和[Flutter](https://flutter.dev/)，实现跨平台的BELLE-7B离线模型实时交互。
 * [2023/04/11] 更新了一个人工精校的eval集合，大约一千多条
 * [2023/04/08] [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)中，新加40万条生成的给定角色的多轮对话[Generated Chat](https://huggingface.co/datasets/BelleGroup/generated_chat_0.4M)，新加200万条生成多样化指令任务数据[train_2M_CN](https://huggingface.co/datasets/BelleGroup/train_2M_CN)。
-* [2023/04/05] 提供了colab上面可运行的推理代码(默认加载4Bit量化的BELLE模型，模型效果会有所损失)[Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)
+* [2023/04/05] 提供了colab上面可运行的推理代码(默认加载4Bit量化的BELLE模型，模型效果会有所损失)[Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/models/notebook/BELLE_INFER_COLAB.ipynb)
 
 </br>
 
@@ -68,7 +68,7 @@
 
 ### 🌐 Colab
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb) 提供了colab上面可运行的推理代码[Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/models/notebook/BELLE_INFER_COLAB.ipynb) 提供了colab上面可运行的推理代码[Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/models/notebook/BELLE_INFER_COLAB.ipynb)
 
 ### 💬 ChatBELLE App
 
