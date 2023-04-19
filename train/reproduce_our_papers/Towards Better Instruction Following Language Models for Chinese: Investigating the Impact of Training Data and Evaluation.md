@@ -145,3 +145,5 @@ LLaMA-EXT-7B 是基于 [LLaMA](https://ai.facebook.com/blog/large-language-model
 | Warmup ratio      | 0.03   |
 | LR scheduler type | cosine |
 | Max length        | 2048   |
+
+可以使用我们开源的[代码](../README.md)进行模型训练。
