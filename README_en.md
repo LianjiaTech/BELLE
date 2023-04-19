@@ -38,7 +38,7 @@ The following screencap ran on an M1 Max CPU real-time (no speed adjustment).
 * [2023/04/17] Two new papers have been published that compare the effects of different training data generation methods and different training methods (LoRA, finetune) on model performance.
 * [2023/04/12] Released [ChatBELLE App](chat/README.md), a cross-platform BELLE-7B model realtime chat App based on [llama.cpp](https://github.com/ggerganov/llama.cpp) and [Flutter](https://flutter.dev/).
 * [2023/04/08] In [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M), a new dataset named ["Generated Chat"]((https://huggingface.co/datasets/BelleGroup/generated_chat_0.4M)) containing newly generated multi-turn dialogues with given roles, and a new dataset named ["train_2M_CN"](https://huggingface.co/datasets/BelleGroup/train_2M_CN) containing 2 million newly added diverse instruction task data.
-* [2023/04/05] The inference code that can be run on [Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb) is provided
+* [2023/04/05] The inference code that can be run on [Colab](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/models/notebook/BELLE_INFER_COLAB.ipynb) is provided
 
 ## 📝 This repo contains
 
@@ -73,7 +73,7 @@ The following screencap ran on an M1 Max CPU real-time (no speed adjustment).
 
 ### 🌐 Colab
   
-  [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb) provides the colab in [BELLE/notebook](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/notebook/BELLE_INFER_COLAB.ipynb)
+  [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/models/notebook/BELLE_INFER_COLAB.ipynb) provides the colab in [BELLE/notebook](https://colab.research.google.com/github/LianjiaTech/BELLE/blob/main/models/notebook/BELLE_INFER_COLAB.ipynb)
 
 ### 💬 ChatBELLE App
 
