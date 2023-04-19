@@ -293,6 +293,6 @@ Cite the original BLOOM, LLaMA, Stanford Alpaca and Self-Instruct papers as well
 You are welcomed to commit issues or contributig data/code.
 Please refer to [How To Contribute](https://github.com/LianjiaTech/BELLE/blob/main/HOW_TO_CONTRIBUTE.md).
 
-## ☎️ 联系我们
+## ☎️ Contact Us
 
 Drop by and join with us at [Discord](https://discord.gg/pMPY53UUGq) or [WeChat](https://github.com/LianjiaTech/BELLE/blob/main/assets/belle_wechat.jpg)!
