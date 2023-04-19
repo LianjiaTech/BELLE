@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0 python3 bloom.py /apdcephfs_cq3/share_2973545/curvasong/pretrain_model/Belle/BELLE-7B-2M wikitext2 --wbits 8 --groupsize 128 --save /apdcephfs_cq3/share_2973545/curvasong/test/BELLE-7B-gptq/bloom7b-2m-8bit-128g.pt
