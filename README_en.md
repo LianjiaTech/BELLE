@@ -224,7 +224,7 @@ It can be seen that: 1) the selection of the base model has a significant impact
 Similarly, the relevant models in this paper will be open-sourced in this project as soon as possible.
 
 
-## ⚠️ Limitation and Usage Limits
+## ⚠️ Limitation, Usage Limits and Disclaimer
 
 There still exists a few issues in the model trained on current base model and data:
 
@@ -235,6 +235,8 @@ There still exists a few issues in the model trained on current base model and d
 3. Needs improvements on reasoning and coding.
 
 Since the model still has its limitations, we require developers only use the open-sourced code, data, model and any other artifacts generated via this project for research purposes. Commercial use and other potential harmful use cases are not allowed.
+
+This project is only allowed to be used in research purposes only. The project owners and contributors shall not be held responsible for any damage or loss caused by using this project (including but not limited to data, model or code). Please refert to our [disclaimer](https://github.com/LianjiaTech/BELLE/blob/main/DISCLAIMER) for details.
 
 <br/>
 
@@ -285,3 +287,12 @@ Cite the original BLOOM, LLaMA, Stanford Alpaca and Self-Instruct papers as well
 
 <br/>
 
+
+## ⛽️ Contributing
+
+You are welcomed to commit issues or contributig data/code.
+Please refer to [How To Contribute](https://github.com/LianjiaTech/BELLE/blob/main/HOW_TO_CONTRIBUTE.md).
+
+## ☎️ 联系我们
+
+Drop by and join with us at [Discord](https://discord.gg/pMPY53UUGq) or [WeChat](https://github.com/LianjiaTech/BELLE/blob/main/assets/belle_wechat.jpg)!
