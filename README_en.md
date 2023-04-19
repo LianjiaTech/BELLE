@@ -18,7 +18,10 @@
 
 </div>
 
-The goal of this project is to promote the development of the Chinese conversational large-scale model open source community, with the vision of creating an LLM Engine that can help everyone. This project will not perform pre-training of large language models, but will focus on how to help everyone obtain a language model with the best possible instruction following performance based on open source pre-trained large language models, and reduce the research threshold for this area, with a focus on Chinese large language models. To achieve this, the project will continue to release open instruction training data, relevant models, training code, etc., and also focus on the impact of different training data and training algorithms on model performance.
+The goal of this project is to promote the development of an open-source community for Chinese conversational large language models, with the vision of becoming an LLM Engine that can help everyone.
+
+Rather than focusing on how to effectively pre-train large language models, BELLE is more concerned with how to build on the foundation of open-source pre-trained large language models to help everyone obtain their own high-performing, instruction-driven language model, thereby lowering the barriers to research and application of large language models, especially Chinese ones. To this end, the BELLE project will continuously provide access to instruction training data, related models, training code, application scenarios, and more, while also evaluating the impact of different training data and training algorithms on model performance. BELLE is optimized for Chinese and the model fine-tuning uses only data produced by ChatGPT (without incorporating any other data).
+
 <br/>
 
 ## ChatBELLE App
@@ -224,7 +227,7 @@ It can be seen that: 1) the selection of the base model has a significant impact
 Similarly, the relevant models in this paper will be open-sourced in this project as soon as possible.
 
 
-## ⚠️ Limitation and Usage Limits
+## ⚠️ Limitation, Usage Limits and Disclaimer
 
 There still exists a few issues in the model trained on current base model and data:
 
@@ -235,6 +238,8 @@ There still exists a few issues in the model trained on current base model and d
 3. Needs improvements on reasoning and coding.
 
 Since the model still has its limitations, we require developers only use the open-sourced code, data, model and any other artifacts generated via this project for research purposes. Commercial use and other potential harmful use cases are not allowed.
+
+This project is only allowed to be used in research purposes only. The project owners and contributors shall not be held responsible for any damage or loss caused by using this project (including but not limited to data, model or code). Please refert to our [disclaimer](https://github.com/LianjiaTech/BELLE/blob/main/DISCLAIMER) for details.
 
 <br/>
 
@@ -285,3 +290,12 @@ Cite the original BLOOM, LLaMA, Stanford Alpaca and Self-Instruct papers as well
 
 <br/>
 
+
+## ⛽️ Contributing
+
+You are welcomed to commit issues or contributig data/code.
+Please refer to [How To Contribute](https://github.com/LianjiaTech/BELLE/blob/main/HOW_TO_CONTRIBUTE.md).
+
+## ☎️ Contact Us
+
+Drop by and join with us at [Discord](https://discord.gg/pMPY53UUGq) or [WeChat](https://github.com/LianjiaTech/BELLE/blob/main/assets/belle_wechat.jpg)!
