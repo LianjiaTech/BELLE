@@ -12,6 +12,8 @@ import torch.nn.functional as F
 from datasets import load_dataset
 import numpy as np
 import os
+from collections import defaultdict, Counter
+from tqdm import tqdm
 from itertools import chain
 from . import raw_datasets
 
@@ -104,7 +106,9 @@ def get_raw_dataset_split_index(local_rank, output_path, dataset_name, seed,
                     allow_pickle=True)
     torch.distributed.barrier()
     index = np.load(index_file_name, allow_pickle=True)
+    # index = shuffle_idx_split
     return index.tolist()
+    # return list(range(data_size))
 
 
 class PromptDataset(Dataset):
@@ -147,7 +151,7 @@ def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
     reject_dataset = []
     assert tokenizer.padding_side == "left"
     if train_phase == 1:
-        for i, tmp_data in enumerate(current_dataset):
+        for i, tmp_data in tqdm(enumerate(current_dataset), total=len(current_dataset), unit="example"):
             # tokenize the text
             prompt_text = raw_dataset.get_prompt(tmp_data)
             tokenized_prompt_text = tokenizer(prompt_text, truncation=True,max_length=max_seq_len,padding=False,return_tensors=None)
@@ -155,7 +159,6 @@ def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
 
             chosen_sentence = raw_dataset.get_prompt_and_chosen(tmp_data)  # the accept response
 
-            chosen_sentence += end_of_conversation_token
             chosen_token = tokenizer(chosen_sentence,
                                         max_length=max_seq_len,
                                         padding="max_length",
@@ -164,8 +167,9 @@ def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
             if chosen_token["input_ids"][-1] != tokenizer.eos_token_id:#Make sure tokenizer.padding_side is left
                 chosen_token["input_ids"].append(tokenizer.eos_token_id)
                 chosen_token["attention_mask"].append(1)
+            pad_token_num = sum(np.equal(chosen_token["input_ids"], tokenizer.pad_token_id))
 
-            chosen_token["labels"] = torch.LongTensor([-100] * user_prompt_len + chosen_token["input_ids"][user_prompt_len:])
+            chosen_token["labels"] = torch.LongTensor([-100] * (pad_token_num+user_prompt_len) + chosen_token["input_ids"][pad_token_num+user_prompt_len:])
 
             chosen_token["input_ids"] = torch.LongTensor(chosen_token["input_ids"]).squeeze(0)
             chosen_token["attention_mask"] = torch.LongTensor(chosen_token["attention_mask"]).squeeze(0)
@@ -230,6 +234,7 @@ def create_dataset(local_rank, dataset_name, data_split, output_path,
     print("dataset_name: ", dataset_name)
     raw_dataset = get_raw_dataset(dataset_name, output_path, seed, local_rank)
     train_dataset = raw_dataset.get_train_data()
+    print("length of train_dataset(after get_train_data): ", len(train_dataset))
     train_index = get_raw_dataset_split_index(local_rank, output_path,
                                               raw_dataset.dataset_name_clean,
                                               seed, "train", data_split,
@@ -240,7 +245,7 @@ def create_dataset(local_rank, dataset_name, data_split, output_path,
                                          train_phase, tokenizer,
                                          end_of_conversation_token,
                                          max_seq_len)
-
+    print("lenght of train_dataset", len(train_dataset))
     eval_dataset = raw_dataset.get_eval_data()
     eval_index = get_raw_dataset_split_index(local_rank, output_path,
                                              raw_dataset.dataset_name_clean,

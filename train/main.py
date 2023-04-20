@@ -39,13 +39,13 @@ def parse_args():
         "Finetune a transformers model on a causal language modeling task")
     parser.add_argument('--data_path',
                         nargs='*',
-                        default=['Dahoas/rm-static'],
+                        default=[],
                         help='Path to the training dataset. Accepted format:'
                         '1) a single data path, 2) multiple datasets in the'
                         'form: dataset1-path dataset2-path ...')
     parser.add_argument('--data_split',
                         type=str,
-                        default='6,2,2',
+                        default='10,0,0',
                         help='Comma-separated list of proportions for training'
                         'phase 1, 2, and 3 data. For example the split `2,4,4`'
                         'will use 60% of data for phase 1, 20% for phase 2'
@@ -58,7 +58,7 @@ def parse_args():
     parser.add_argument(
         '--data_output_path',
         type=str,
-        default='/tmp/data_files/',
+        default='output/data_files/',
         help=
         'Where to store the data-related files such as shuffle index. This needs to be on a local storage of a node (not on a shared storage)'
     )
@@ -160,6 +160,9 @@ def parse_args():
     parser.add_argument('--only_optimize_lora',
                         action='store_true',
                         help='Only optimize the LoRA parameters.')
+    parser.add_argument("--show_loss_step", default=100, type=int, help = "Show the loss step")
+    parser.add_argument("--max_new_tokens", default=1024, type=int, help = "Max number of output tokens")
+
     parser = deepspeed.add_config_arguments(parser)
     args = parser.parse_args()
 
@@ -203,9 +206,6 @@ def main():
 
     print("model_name_or_path : ", args.model_name_or_path)
     if "llama" in args.model_name_or_path:
-        tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)
-        assert tokenizer.eos_token_id == 2
-        assert tokenizer.bos_token_id == 1
         args.lora_module_name = [
                         "q_proj",
                         "k_proj",
@@ -214,6 +214,7 @@ def main():
                         "gate_proj",
                         "up_proj"
                     ]
+        tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)
     else:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
@@ -259,14 +260,23 @@ def main():
                                   collate_fn=default_data_collator,
                                   sampler=train_sampler,
                                   batch_size=args.per_device_train_batch_size)
+    print("len(train_dataloader) = ", len(train_dataloader))
+    print("len(train_dataset) = ", len(train_dataset))
+    print("args.per_device_train_batch_size = ", args.per_device_train_batch_size)
+
     eval_dataloader = DataLoader(eval_dataset,
                                  collate_fn=default_data_collator,
                                  sampler=eval_sampler,
                                  batch_size=args.per_device_eval_batch_size)
+    print("len(eval_dataloader) = ", len(eval_dataloader))
+    print("len(eval_dataset) = ", len(eval_dataset))
+    print("args.per_device_eval_batch_size = ", args.per_device_eval_batch_size)
+
 
     def evaluation(model, eval_dataloader):
         model.eval()
         losses = 0
+        # output_texts = []
         for step, batch in tqdm(enumerate(eval_dataloader), total=len(eval_dataloader), unit="batch"):
             batch = to_device(batch, device)
             with torch.no_grad():
@@ -274,6 +284,21 @@ def main():
 
             loss = outputs.loss
             losses += loss.float()
+            # batch_outputs = model.generate(
+            #                 input_ids = batch['input_ids'],
+            #                 attention_mask = batch['attention_mask'],
+            #                 num_beams=1,
+            #                 top_p=0.85,
+            #                 top_k=30,
+            #                 repetition_penalty=1.2,
+            #                 num_beam_groups=1,
+            #                 do_sample=True,
+            #                 temperature=0.001,
+            #                 num_return_sequences=1,
+            #                 max_new_tokens=args.max_new_tokens)
+            # batch_output_texts = tokenizer.batch_decode(batch_outputs, skip_special_tokens = True)
+            # output_texts.extend(batch_output_texts)
+
         losses = losses / (step + 1)
         model.train()
         try:
@@ -284,6 +309,10 @@ def main():
             perplexity = get_all_reduce_mean(perplexity).item()
         except:
             pass
+        # with open("./predictions.txt", "w") as f:
+        #     for pred_text in output_texts:
+        #         f.write(pred_text+"\n")
+
         return perplexity
 
     # Split weights in two groups, one with weight decay and the other not.
@@ -320,9 +349,9 @@ def main():
     print_rank_0(
         f"***** Evaluating perplexity, Epoch {0}/{args.num_train_epochs} *****",
         args.global_rank)
-    perplexity = evaluation(model, eval_dataloader)
-    print_rank_0(f"ppl: {perplexity}", args.global_rank)
-
+    # perplexity = evaluation(model, eval_dataloader)
+    # print_rank_0(f"ppl: {perplexity}", args.global_rank)
+    training_step_losses = []
     for epoch in range(args.num_train_epochs):
         print_rank_0(
             f"Beginning of Epoch {epoch+1}/{args.num_train_epochs}, Total Micro Batches {len(train_dataloader)}",
@@ -334,8 +363,10 @@ def main():
             loss = outputs.loss
             model.backward(loss)
             model.step()
-            print("Epoch: {}, step: {}, loss: {}".format(epoch, step, loss.item()))
-
+            training_step_losses.append(loss.item())
+            if (step+1)%args.show_loss_step == 0:
+                print("Epoch: {}, step: {}, loss: {}".format(epoch, step, sum(training_step_losses)/len(training_step_losses)))
+                training_step_losses = []
         # Evaluate perplexity on the validation set.
         perplexity = evaluation(model, eval_dataloader)
         print_rank_0(f"ppl: {perplexity}", args.global_rank)

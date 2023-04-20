@@ -5,10 +5,9 @@
 # DeepSpeed Team
 #facebook/opt-1.3b
 # Note that usually LoRA needs to use larger learning rate
-#/nfs/v100-022/jiyunjie/anaconda3/envs/llamalora/
-#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/nfs/v100-022/jiyunjie/anaconda3/envs/llamalora/lib/
 
 OUTPUT_PATH=output-lora
+rm -rf $OUTPUT
 mkdir -p $OUTPUT_PATH
 
 
