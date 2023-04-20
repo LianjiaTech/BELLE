@@ -179,7 +179,7 @@
   <img src="./assets/eval-set-distribution.jpg" alt="LLM eval" width="400">
 </p>
 
-基于这些观察，我们谨慎地提醒不要假设模型仅通过在有限数量的测试样本上获得良好结果就已经达到了与ChatGPT相当的性能水平。我们认为，优先发展全面评估集的持续发展具有重要意义。
+基于这些观察，我们谨慎地提醒不要假设模型仅通过在有限数量的测试样本上获得良好结果就已经达到了与ChatGPT相当的性能水平。我们认为，优先发展全面评估集具有重要意义。
 
 ### [A Comparative Study between Full-Parameter and LoRA-based Fine-Tuning on Chinese Instruction Data for Instruction Following Large Language Model](https://github.com/LianjiaTech/BELLE/blob/main/docs/A%20Comparative%20Study%20between%20Full-Parameter%20and%20LoRA-based.pdf)
 
