@@ -77,7 +77,7 @@ class DahoasRmstaticDataset(PromptRawDataset):
 class BelleOpenSoucreDataset(PromptRawDataset):
 
     def __init__(self, output_path, seed, local_rank, data_file):
-        eval_data_file = "utils/data/dev5K.json"
+        eval_data_file = "utils/data/dev1K.json"
         super().__init__(output_path, seed, local_rank)
         self.dataset_name = "BelleOpenSoucre"
         self.dataset_name_clean = "BelleOpenSoucre"

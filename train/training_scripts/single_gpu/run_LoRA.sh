@@ -9,15 +9,16 @@
 #export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/nfs/v100-022/jiyunjie/anaconda3/envs/llamalora/lib/
 
 OUTPUT_PATH=output-lora
+rm -rf $OUTPUT
 mkdir -p $OUTPUT_PATH
 
 
-deepspeed --num_gpus 1 main.py \
+CUDA_VISIBLE_DEVICES=7 deepspeed --num_gpus 1 main.py \
    --sft_only_data_path belleMath.json \
    --data_split 10,0,0 \
    --model_name_or_path facebook/opt-6.7b \
-   --per_device_train_batch_size 8 \
-   --per_device_eval_batch_size 8 \
+   --per_device_train_batch_size 1 \
+   --per_device_eval_batch_size 2 \
    --max_seq_len 512 \
    --learning_rate 1e-3 \
    --weight_decay 0.1 \

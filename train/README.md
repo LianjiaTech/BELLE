@@ -7,13 +7,11 @@
 本仓库基于[Deepspeed-Chat](https://github.com/microsoft/DeepSpeedExamples)项目，可用于微调大语言模型，包括全量参数微调(fine-tuning)和基于LoRA的参数高效微调。
 
 
-
 ## 环境安装
 我们提供了一个完整可运行的Docker环境，Dockerfile写在Docker文件夹下
-
 ```bash
-docker build -t  Belle:v1.0  -f train/docker/Dockerfile  .
-docker run -it Belle:v1.0 /bin/bash
+docker build -t  belle:v1.0 --shm-size="10g" -f Docker/Dockerfile  .
+docker run -it belle:v1.0 /bin/bash
 ```
 
 
@@ -24,10 +22,13 @@ docker run -it Belle:v1.0 /bin/bash
 
 ```bash
 wget https://huggingface.co/datasets/BelleGroup/school_math_0.25M/resolve/main/school_math_0.25M.json
-mv school_math_0.25M.json belleMath.json
+head -n 1000 school_math_0.25M.json > utils/data/dev1K.json
+tail -n +1001 school_math_0.25M.json > belleMath.json
 ```
 
 该数据是数学应用题求解任务，包含解题过程，包含约25万条生成的中文数学题数据。
+
+我们选取前1000条作为验证集，其余数据作为训练集
 
 | Instruction                                                  | Answer                                                       |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -91,8 +92,6 @@ bash training_scripts/single_gpu/run_LoRA.sh
 
 其余参数说明以及运行所需的机器配置详见：https://github.com/microsoft/DeepSpeedExamples/blob/master/applications/DeepSpeed-Chat/training/step1_supervised_finetuning/README.md
 
-目前实验验证，在8卡A100 40G上均可完成上述模型的训练
-
 如果出现显存不足的问题，可参考[Deepspeed-Chat-training_scripts](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat/training/step1_supervised_finetuning/training_scripts) 中各个启动脚本内的参数配置
 
 
@@ -131,6 +130,18 @@ FT指的是Fine-Tuning。具体实验细节可参考论文。
 
 
 
+
 ## 问题反馈
 
 如有问题，请在GitHub Issue中提交。在提交问题前，请先查看 https://github.com/microsoft/DeepSpeedExamples/issues 中是否已出现过解决类似问题的方法。
+
+## FAQ
+
+### transformers
+
+1. transformers的版本是4.28.1
+
+### 机器配置
+
+所有实验均在8卡A100 40G运行
+

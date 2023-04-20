@@ -11,8 +11,12 @@ fi
 if [ "$ZERO_STAGE" == "" ]; then
     ZERO_STAGE=3
 fi
+rm -rf $OUTPUT
 mkdir -p $OUTPUT
+
 #bigscience/bloomz-1b7
+#decapoda-research/llama-7b-hf
+#facebook/opt-1.3b
 
 deepspeed main.py \
    --sft_only_data_path belleMath.json \
