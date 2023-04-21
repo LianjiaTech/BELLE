@@ -8,13 +8,17 @@
 
 
 ## 环境安装
-我们提供了一个完整可运行的Docker环境，Dockerfile写在Docker文件夹下
+我们提供了一个完整可运行的Docker环境，Dockerfile写在Docker文件夹下. 
 ```bash
 docker build -t  belle:v1.0 --shm-size="10g" -f Docker/Dockerfile  .
 docker run -it belle:v1.0 /bin/bash
 ```
+考虑到build存在一定的困难，我们提供了镜像下载，你可以使用下面命令从dockerhub拉取我们的镜像。
+```shell
 
+docker pull belleagi/belle:v1.0
 
+```
 
 ## Run
 
