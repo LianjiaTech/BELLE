@@ -41,13 +41,13 @@
 
 ### 🚀 训练代码
 
-详见[BELLE/train](https://github.com/LianjiaTech/BELLE/tree/main/train)，尽可能简化的一个训练代码实现，集成了Deepspeed-Chat，支持finetune，lora，并提供了相关的docker
+详见[BELLE/train](train)，尽可能简化的一个训练代码实现，集成了Deepspeed-Chat，支持finetune，lora，并提供了相关的docker
 
 ### 📊 数据开放
   
-* 详见[BELLE/1.5M](https://github.com/LianjiaTech/BELLE/tree/main/1.5M)，参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) 生成的中文数据集[1M](https://huggingface.co/datasets/BelleGroup/train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN)；
+* 详见[BELLE/data/1.5M](data/1.5M)，参考[Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) 生成的中文数据集[1M](https://huggingface.co/datasets/BelleGroup/train_1M_CN) + [0.5M](https://huggingface.co/datasets/BelleGroup/train_0.5M_CN)；
   
-* 持续开放的数据集，详见[BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M)
+* 持续开放的数据集，详见[BELLE/data/10M](data/10M)
 
 ### 🧐 验证集合&验证方法
 
