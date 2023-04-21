@@ -14,7 +14,7 @@ mkdir -p $OUTPUT_PATH
 deepspeed main.py \
    --sft_only_data_path belleMath.json \
    --data_split 10,0,0 \
-   --model_name_or_path decapoda-research/llama-7b-hf \
+   --model_name_or_path facebook/opt-1.3b \
    --per_device_train_batch_size 1 \
    --per_device_eval_batch_size 1 \
    --max_seq_len 1024 \

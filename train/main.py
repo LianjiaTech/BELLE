@@ -5,6 +5,9 @@
 # DeepSpeed Team
 import argparse
 import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+from datasets import disable_caching
+disable_caching()
 import math
 import sys
 from tqdm import tqdm
@@ -12,13 +15,14 @@ import torch
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from torch.utils.data.distributed import DistributedSampler
 import transformers
+print("transformers.__version__ : ", transformers.__version__)#4.29.0.dev0
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
     SchedulerType,
     default_data_collator,
     get_scheduler,
-    LlamaTokenizer
+    LlamaTokenizer,
 )
 
 import deepspeed
@@ -214,7 +218,7 @@ def main():
                         "gate_proj",
                         "up_proj"
                     ]
-        tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)
+        tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)#May occur RecursionError: maximum recursion depth exceeded if used AutoTokenizer
     else:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
@@ -349,8 +353,8 @@ def main():
     print_rank_0(
         f"***** Evaluating perplexity, Epoch {0}/{args.num_train_epochs} *****",
         args.global_rank)
-    # perplexity = evaluation(model, eval_dataloader)
-    # print_rank_0(f"ppl: {perplexity}", args.global_rank)
+    perplexity = evaluation(model, eval_dataloader)
+    print_rank_0(f"ppl: {perplexity}", args.global_rank)
     training_step_losses = []
     for epoch in range(args.num_train_epochs):
         print_rank_0(
