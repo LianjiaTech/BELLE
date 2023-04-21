@@ -17,13 +17,12 @@ echo $OUTPUT
 echo $ZERO_STAGE
 data_output_path=$OUTPUT/data_files
 
-#/nfs/v100-022/pretrained_ckpt/hf_llama_7b
 #BelleGroup/BELLE-7B-2M
-#/nfs/a100-80G-19/jiyunjie/BELLE-7B-2M
+#LlamaModel
 
 deepspeed main.py \
    --sft_only_data_path belleMath.json \
-   --model_name_or_path /nfs/a100-80G-19/jiyunjie/BELLE-7B-2M \
+   --model_name_or_path BelleGroup/BELLE-7B-2M \
    --per_device_train_batch_size 1 \
    --per_device_eval_batch_size 1 \
    --max_seq_len 1024 \
