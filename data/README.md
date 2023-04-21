@@ -6,7 +6,7 @@
   
 ### 2. 持续开放的数据集，详见[BELLE/data/10M](data/10M)
 
-### 3. [Awesome Open Instruct Data for Chinese](data/awesome_open_instruct_data_for_chinese.md) 记录一些开源中文指令数据库
+### 3. [Awesome Open Instruct Data for Chinese](awesome_open_instruct_data_for_chinese.md) 记录一些开源中文指令数据库
  
 #### [(JosephusCheung/GuanacoDataset)|534K|MT](https://huggingface.co/datasets/JosephusCheung/GuanacoDataset)
 
