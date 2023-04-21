@@ -4,21 +4,18 @@
 
 # 项目介绍
 
-本仓库基于[Deepspeed-Chat](https://github.com/microsoft/DeepSpeedExamples)项目，可用于微调大语言模型，包括全量参数微调(fine-tuning)和基于LoRA的参数高效微调。
+本仓库基于Deepspeed-Chat项目，可用于微调大语言模型，包括全量参数微调(fine-tuning)和基于LoRA的参数高效微调。
+
 
 
 ## 环境安装
-我们提供了一个完整可运行的Docker环境，Dockerfile写在Docker文件夹下. 
+
 ```bash
 docker build -t  belle:v1.0 --shm-size="10g" -f Docker/Dockerfile  .
 docker run -it belle:v1.0 /bin/bash
 ```
-考虑到build存在一定的困难，我们提供了镜像下载，你可以使用下面命令从dockerhub拉取我们的镜像。
-```shell
 
-docker pull belleagi/belle:v1.0
 
-```
 
 ## Run
 
@@ -128,9 +125,10 @@ FT指的是Fine-Tuning。具体实验细节可参考论文。
 
 
 
-## 致谢
+## Reference
 
 1. [Deepspeed-Chat](https://github.com/microsoft/DeepSpeedExamples)
+
 
 
 

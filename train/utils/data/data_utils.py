@@ -169,7 +169,7 @@ def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
                 chosen_token["attention_mask"].append(1)
             pad_token_num = sum(np.equal(chosen_token["input_ids"], tokenizer.pad_token_id))
 
-            chosen_token["labels"] = torch.LongTensor([-100] * (pad_token_num+user_prompt_len) + chosen_token["input_ids"][pad_token_num+user_prompt_len:])
+            chosen_token["labels"] = [-100] * (pad_token_num+user_prompt_len) + chosen_token["input_ids"][pad_token_num+user_prompt_len:]
 
             chosen_token["input_ids"] = torch.LongTensor(chosen_token["input_ids"]).squeeze(0)
             chosen_token["attention_mask"] = torch.LongTensor(chosen_token["attention_mask"]).squeeze(0)
@@ -277,7 +277,7 @@ def create_prompt_dataset(local_rank,
     Creates the prompt dataset
     """
     os.makedirs(output_path, exist_ok=True)
-    print("data_path: ", data_path)#['/nfs/a100-80G-18/xunxianghui/gitrepositories/training_datasets/belle/belle_extra_5k.dev.json']
+    print("data_path: ", data_path)
 
     fname = "_".join(data_path)
     sft_cache_key = "_".join(sft_only_data_path)
@@ -302,74 +302,6 @@ def create_prompt_dataset(local_rank,
         torch.save(eval_dataset, eval_fname)
     return train_dataset, eval_dataset
     
-
-    # # Skip creating cache if we found it on all the nodes.
-    # if buf_create_cache.item() == 0:
-    #     return torch.load(train_fname), torch.load(eval_fname)
-    # else:
-    #     if len(data_path) == 1:  # Single dataset.
-    #         train_dataset, eval_dataset = create_dataset(
-    #             local_rank, data_path[0], data_split, output_path, train_phase,
-    #             seed, tokenizer, end_of_conversation_token, max_seq_len)
-    #     else:  # Blending datasets.
-    #         train_datasets = []
-    #         eval_datasets = []
-    #         train_size = 0
-    #         eval_size = 0
-    #         for d_path in data_path:
-    #             train_dataset, eval_dataset = create_dataset(
-    #                 local_rank, d_path, data_split, output_path, train_phase,
-    #                 seed, tokenizer, end_of_conversation_token, max_seq_len)
-    #             train_datasets.append(train_dataset)
-    #             eval_datasets.append(eval_dataset)
-    #             train_size += len(train_dataset)
-    #             eval_size += len(eval_dataset)
-    #         train_dataset = ConcatDataset(train_datasets)
-    #         shuffle_idx = get_shuffle_idx(seed, train_size)
-    #         train_dataset = Subset(train_dataset, shuffle_idx.tolist())
-    #         eval_dataset = ConcatDataset(eval_datasets)
-    #         shuffle_idx = get_shuffle_idx(seed, eval_size)
-    #         eval_dataset = Subset(eval_dataset, shuffle_idx.tolist())
-
-    #     # Append the SFT-only dataset if it exists, and current phase is 1(SFT).
-    #     if train_phase == 1 and sft_only_data_path:
-    #         sft_train_datasets = []
-    #         sft_eval_datasets = []
-    #         sft_train_size = 0
-    #         sft_eval_size = 0
-    #         for sft_path in sft_only_data_path:
-    #             sft_train_dataset, sft_eval_dataset = create_dataset(
-    #                 local_rank,
-    #                 sft_path,
-    #                 "10,0,0",
-    #                 output_path,
-    #                 train_phase,
-    #                 seed,
-    #                 tokenizer,
-    #                 end_of_conversation_token,
-    #                 max_seq_len,
-    #             )
-    #             sft_train_datasets.append(sft_train_dataset)
-    #             sft_eval_datasets.append(sft_eval_dataset)
-    #             sft_train_size += len(sft_train_dataset)
-    #             sft_eval_size += len(sft_eval_dataset)
-    #         if sft_train_datasets:  # Check if sft_train_datasets is not empty
-    #             sft_train_dataset = ConcatDataset(sft_train_datasets)
-    #             train_dataset = ConcatDataset(
-    #                 [train_dataset, sft_train_dataset])
-    #             shuffle_idx = get_shuffle_idx(seed, len(train_dataset))
-    #             train_dataset = Subset(train_dataset, shuffle_idx.tolist())
-    #         if sft_eval_datasets:  # Check if sft_eval_datasets is not empty
-    #             sft_eval_dataset = ConcatDataset(sft_eval_datasets)
-    #             eval_dataset = ConcatDataset([eval_dataset, sft_eval_dataset])
-    #             shuffle_idx = get_shuffle_idx(seed, len(eval_dataset))
-    #             eval_dataset = Subset(eval_dataset, shuffle_idx.tolist())
-
-    #     if local_rank <= 0:
-    #         torch.save(train_dataset, train_fname)
-    #         torch.save(eval_dataset, eval_fname)
-    #     return train_dataset, eval_dataset
-
 
 class DataCollatorReward:
 
