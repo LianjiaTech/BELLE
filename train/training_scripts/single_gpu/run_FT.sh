@@ -22,7 +22,7 @@ data_output_path=$OUTPUT/data_files
 
 deepspeed --num_gpus 1 main.py \
    --sft_only_data_path belleMath.json \
-   --model_name_or_path /nfs/v100-022/pretrained_ckpt/bloomz-560m \
+   --model_name_or_path bigscience/bloomz-560m \
    --per_device_train_batch_size 8 \
    --per_device_eval_batch_size 2 \
    --max_seq_len 1024 \
