@@ -8,10 +8,11 @@
 
 ### 3. [Awesome Open Instruct Data for Chinese](awesome_open_instruct_data_for_chinese.md) 记录一些开源中文指令数据库
  
-#### [(JosephusCheung/GuanacoDataset)|534K|MT](https://huggingface.co/datasets/JosephusCheung/GuanacoDataset)
+#### [(JosephusCheung/GuanacoDataset)|534K](https://huggingface.co/datasets/JosephusCheung/GuanacoDataset)
 
  - The dataset for the Guanaco model is designed to enhance the multilingual capabilities and address various linguistic tasks. It builds upon the 175 tasks from the Alpaca model by providing rewrites of seed tasks in different languages and adding new tasks specifically designed for English grammar analysis, natural language understanding, cross-lingual self-awareness, and explicit content recognition. The dataset comprises a total of 534,530 entries. 
- - Data generation model: `text-davinci-003`
- - License: [`GPL-3.0`](https://www.gnu.org/licenses/gpl-3.0.en.html)
- - [Guanaco Dataset](https://huggingface.co/datasets/JosephusCheung/GuanacoDataset)
+
+#### [(CSIG)|191K](https://huggingface.co/datasets/BAAI/COIG/tree/main)
+
+ - COIG project provides diverse Chinese instruction corpora. Researchers can contribute to the corpus set and collaborate. COIG releases first chip to aid Chinese LLMs' development and encourages more researchers to join. Includes translated, exam, human value alignment, counterfactual correction, and leetcode instruction corpora.
 
