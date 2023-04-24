@@ -106,9 +106,7 @@ def get_raw_dataset_split_index(local_rank, output_path, dataset_name, seed,
                     allow_pickle=True)
     torch.distributed.barrier()
     index = np.load(index_file_name, allow_pickle=True)
-    # index = shuffle_idx_split
     return index.tolist()
-    # return list(range(data_size))
 
 
 class PromptDataset(Dataset):
@@ -149,7 +147,8 @@ def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
     prompt_dataset = []
     chosen_dataset = []
     reject_dataset = []
-    assert tokenizer.padding_side == "left"
+    filter_nums = 0
+    assert tokenizer.padding_side == "left"#We need add eos_token_id at the last position of input_ids
     if train_phase == 1:
         for i, tmp_data in tqdm(enumerate(current_dataset), total=len(current_dataset), unit="example"):
             # tokenize the text
@@ -167,15 +166,25 @@ def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
             if chosen_token["input_ids"][-1] != tokenizer.eos_token_id:#Make sure tokenizer.padding_side is left
                 chosen_token["input_ids"].append(tokenizer.eos_token_id)
                 chosen_token["attention_mask"].append(1)
+
+
             pad_token_num = sum(np.equal(chosen_token["input_ids"], tokenizer.pad_token_id))
 
             chosen_token["labels"] = [-100] * (pad_token_num+user_prompt_len) + chosen_token["input_ids"][pad_token_num+user_prompt_len:]
 
-            chosen_token["input_ids"] = torch.LongTensor(chosen_token["input_ids"]).squeeze(0)
-            chosen_token["attention_mask"] = torch.LongTensor(chosen_token["attention_mask"]).squeeze(0)
-            chosen_token["labels"] = torch.LongTensor(chosen_token["labels"]).squeeze(0)
+            chosen_token["input_ids"] = torch.LongTensor(chosen_token["input_ids"])
+            chosen_token["attention_mask"] = torch.LongTensor(chosen_token["attention_mask"])
+            chosen_token["labels"] = torch.LongTensor(chosen_token["labels"])
+            if chosen_token["input_ids"].shape != chosen_token["labels"].shape:
+                print("input_ids.shape == {}, attention_mask.shape == {}, labels.shape == {}".format(chosen_token['input_ids'].shape, chosen_token['attention_mask'].shape, chosen_token['labels'].shape))
+                filter_nums +=1 
+                print("Filter sample: ", chosen_sentence)
+                continue
 
             chosen_dataset.append(chosen_token)
+
+        print("{} samples were filtered".format(filter_nums))
+        print("The total number of samples: {}".format(len(chosen_dataset)))
 
     elif train_phase == 2:
         for i, tmp_data in enumerate(current_dataset):

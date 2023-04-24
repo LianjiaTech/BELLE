@@ -18,17 +18,17 @@ echo $ZERO_STAGE
 data_output_path=$OUTPUT/data_files
 
 #BelleGroup/BELLE-7B-2M
-#LlamaModel
+#/workspace/model_name_or_path/hf_llama_7b
 
 deepspeed main.py \
    --sft_only_data_path belleMath.json \
-   --model_name_or_path BelleGroup/BELLE-7B-2M \
-   --per_device_train_batch_size 1 \
+   --model_name_or_path /workspace/model_name_or_path/bloomz-7b1-mt \
+   --per_device_train_batch_size 2 \
    --per_device_eval_batch_size 1 \
-   --max_seq_len 1024 \
-   --learning_rate 5e-7 \
+   --max_seq_len 512 \
+   --learning_rate 5e-6 \
    --weight_decay 0.0001 \
-   --num_train_epochs 1  \
+   --num_train_epochs 3  \
    --gradient_accumulation_steps 4 \
    --lr_scheduler_type cosine \
    --num_warmup_steps 100 \

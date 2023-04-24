@@ -16,8 +16,8 @@ class LinearLayer_LoRA(nn.Module):
     def __init__(self,
                  weight,
                  lora_dim=0,
-                 lora_scaling=1,
-                 lora_droppout=0,
+                 lora_alpha=16,
+                 lora_droppout=0.05,
                  bias=None):
         super(LinearLayer_LoRA, self).__init__()
         self.weight = weight
@@ -37,7 +37,7 @@ class LinearLayer_LoRA(nn.Module):
             columns,
             lora_dim))  # apply transpose so in forward we do not need to
         self.lora_left_weight = nn.Parameter(torch.zeros(lora_dim, rows))
-        self.lora_scaling = lora_scaling / lora_dim
+        self.lora_scaling = lora_alpha / lora_dim #alpha/rank
 
         if lora_droppout > 0:
             self.lora_dropout = nn.Dropout(lora_droppout)
@@ -85,11 +85,28 @@ class LinearLayer_LoRA(nn.Module):
                               @ self.lora_left_weight) * self.lora_scaling
 
 
+'''
+LLaMA model named_modules:
+model.layers.29.mlp
+model.layers.29.mlp.gate_proj
+model.layers.29.mlp.down_proj
+model.layers.29.mlp.up_proj
+model.layers.29.mlp.act_fn
+model.layers.29.input_layernorm
+model.layers.29.post_attention_layernorm
+model.layers.30
+model.layers.30.self_attn
+model.layers.30.self_attn.q_proj
+model.layers.30.self_attn.k_proj
+model.layers.30.self_attn.v_proj
+model.layers.30.self_attn.o_proj
+model.layers.30.self_attn.rotary_emb
+'''
 # convert the linear layer to LoRA
 def convert_linear_layer_to_lora(model,
-                                 part_module_name,
+                                 lora_module_name,
                                  lora_dim=0,
-                                 lora_scaling=1,
+                                 lora_alpha=1,
                                  lora_droppout=0):
     def set_params(param_modules, name):
         for each_ in param_modules:
@@ -97,72 +114,20 @@ def convert_linear_layer_to_lora(model,
                 return True
         return False
 
-    if type(part_module_name)==str:
-        part_module_name = [part_module_name]
-
     repalce_name = []
     for name, module in model.named_modules():
-        if isinstance(module, nn.Linear) and set_params(part_module_name, name):
+        if isinstance(module, nn.Linear) and set_params(lora_module_name, name):
             repalce_name.append(name)
             
     print("repalce_name : ", repalce_name)
     for name in repalce_name:
         module = recursive_getattr(model, name)
         tmp = LinearLayer_LoRA(
-            module.weight, lora_dim, lora_scaling, lora_droppout,
+            module.weight, lora_dim, lora_alpha, lora_droppout,
             module.bias).to(module.weight.device).to(module.weight.dtype)
         recursive_setattr(model, name, tmp)
     return model
 
-
-def convert_LLaMA_to_lora(model,
-                        part_module_name,
-                        lora_dim=8,
-                        lora_scaling=16,
-                        lora_droppout=0.05):
-    '''
-    model.layers.29.mlp
-    model.layers.29.mlp.gate_proj
-    model.layers.29.mlp.down_proj
-    model.layers.29.mlp.up_proj
-    model.layers.29.mlp.act_fn
-    model.layers.29.input_layernorm
-    model.layers.29.post_attention_layernorm
-    model.layers.30
-    model.layers.30.self_attn
-    model.layers.30.self_attn.q_proj
-    model.layers.30.self_attn.k_proj
-    model.layers.30.self_attn.v_proj
-    model.layers.30.self_attn.o_proj
-    model.layers.30.self_attn.rotary_emb
-    '''
-    def set_params(param_modules, name):
-        for each_ in param_modules:
-            if each_ in name:
-                return True
-        return False
-
-    part_module_name = [
-        "q_proj",
-        "k_proj",
-        "v_proj",
-        "down_proj",
-        "gate_proj",
-        "up_proj"
-    ]
-    repalce_name = []
-    for name, module in model.named_modules():
-        if isinstance(module, nn.Linear) and set_params(part_module_name, name):
-            repalce_name.append(name)
-
-    print("repalce_name : ", repalce_name)
-    for name in repalce_name:
-        module = recursive_getattr(model, name)
-        tmp = LinearLayer_LoRA(
-            module.weight, lora_dim, lora_scaling, lora_droppout,
-            module.bias).to(module.weight.device).to(module.weight.dtype)
-        recursive_setattr(model, name, tmp)
-    return model
 
 
 def _z3_params_to_fetch(param_list):
