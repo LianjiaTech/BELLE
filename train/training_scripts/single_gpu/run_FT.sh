@@ -5,10 +5,10 @@
 # DeepSpeed Team
 OUTPUT=$1
 ZERO_STAGE=$2
-if [ "$OUTPUT" == "" ]; then
+if [ "$OUTPUT" = "" ]; then
     OUTPUT=./output
 fi
-if [ "$ZERO_STAGE" == "" ]; then
+if [ "$ZERO_STAGE" = "" ]; then
     ZERO_STAGE=0
 fi
 rm -rf $OUTPUT
@@ -21,9 +21,9 @@ data_output_path=$OUTPUT/data_files
 #bigscience/bloomz-560m
 
 deepspeed --num_gpus 1 main.py \
-   --sft_only_data_path belleMath.json \
-   --model_name_or_path bigscience/bloomz-560m \
-   --per_device_train_batch_size 8 \
+   --sft_only_data_path  /root/data/school_math_0.25M/school_math_0.25M.json \
+   --model_name_or_path /root/model/bloomz-1b1 \
+   --per_device_train_batch_size 4 \
    --per_device_eval_batch_size 2 \
    --max_seq_len 1024 \
    --learning_rate 5e-5 \

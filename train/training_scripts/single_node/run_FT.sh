@@ -5,11 +5,11 @@
 # DeepSpeed Team
 OUTPUT=$1
 ZERO_STAGE=$2
-if [ "$OUTPUT" == "" ]; then
+if [ "$OUTPUT" = "" ]; then
     OUTPUT=./output
 fi
-if [ "$ZERO_STAGE" == "" ]; then
-    ZERO_STAGE=3
+if [ "$ZERO_STAGE" = "" ]; then
+    ZERO_STAGE=0
 fi
 rm -rf $OUTPUT
 mkdir -p $OUTPUT
@@ -22,11 +22,11 @@ data_output_path=$OUTPUT/data_files
 
 deepspeed main.py \
    --sft_only_data_path belleMath.json \
-   --model_name_or_path BelleGroup/BELLE-7B-2M \
-   --per_device_train_batch_size 1 \
+   --model_name_or_path /root/model/bloomz-1b1 \
+   --per_device_train_batch_size 16 \
    --per_device_eval_batch_size 1 \
    --max_seq_len 1024 \
-   --learning_rate 5e-7 \
+   --learning_rate 1e-5 \
    --weight_decay 0.0001 \
    --num_train_epochs 1  \
    --gradient_accumulation_steps 4 \
