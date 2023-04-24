@@ -37,12 +37,9 @@ def create_hf_model(model_class,
             from_tf=bool(".ckpt" in model_name_or_path),
             config=model_config)
 
-    model.config.end_token_id = tokenizer.eos_token_id
-    model.config.pad_token_id = model.config.eos_token_id
-    model.resize_token_embeddings(int(
-        8 *
-        math.ceil(len(tokenizer) / 8.0)))  # make the vocab size multiple of 8
-
+    # model.config.end_token_id = tokenizer.eos_token_id
+    # model.config.pad_token_id = model.config.eos_token_id
+    # model.resize_token_embeddings(int(8 *math.ceil(len(tokenizer) / 8.0)))  # make the vocab size multiple of 8
     return model
 
 

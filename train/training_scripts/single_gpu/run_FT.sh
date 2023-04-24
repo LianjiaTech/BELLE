@@ -28,7 +28,7 @@ deepspeed --num_gpus 1 main.py \
    --max_seq_len 1024 \
    --learning_rate 5e-5 \
    --weight_decay 0.0001 \
-   --num_train_epochs 1  \
+   --num_train_epochs 3  \
    --gradient_accumulation_steps 8 \
    --lr_scheduler_type cosine \
    --num_warmup_steps 100 \
