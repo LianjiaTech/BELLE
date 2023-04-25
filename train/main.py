@@ -217,7 +217,7 @@ def main():
     torch.distributed.barrier()
 
     print("model_name_or_path : ", args.model_name_or_path)
-    if "llama" in args.model_name_or_path:
+    if "llama" in args.model_name_or_path.lower():
         tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)#May occur RecursionError: maximum recursion depth exceeded if used AutoTokenizer
     else:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
