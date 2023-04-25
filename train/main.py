@@ -5,6 +5,9 @@
 # DeepSpeed Team
 import argparse
 import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+from datasets import disable_caching
+disable_caching()
 import math
 import sys
 from tqdm import tqdm
@@ -12,13 +15,14 @@ import torch
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from torch.utils.data.distributed import DistributedSampler
 import transformers
+print("transformers.__version__ : ", transformers.__version__)#4.29.0.dev0
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
     SchedulerType,
     default_data_collator,
     get_scheduler,
-    LlamaTokenizer
+    LlamaTokenizer,
 )
 
 import deepspeed
@@ -29,7 +33,7 @@ sys.path.append(
 from utils.data.data_utils import create_prompt_dataset
 from utils.utils import print_rank_0, to_device, save_hf_format, set_random_seed, get_all_reduce_mean, get_optimizer_grouped_parameters, save_zero_three_model
 from utils.ds_utils import get_train_ds_config
-from utils.module.lora import convert_linear_layer_to_lora, convert_lora_to_linear_layer, only_optimize_lora_parameters, convert_LLaMA_to_lora
+from utils.module.lora import convert_linear_layer_to_lora, convert_lora_to_linear_layer, only_optimize_lora_parameters
 from utils.model.model_utils import create_hf_model
 
 
@@ -50,11 +54,9 @@ def parse_args():
                         'phase 1, 2, and 3 data. For example the split `2,4,4`'
                         'will use 60% of data for phase 1, 20% for phase 2'
                         'and 20% for phase 3.')
-    parser.add_argument(
-        '--sft_only_data_path',
-        nargs='*',
-        default=[],
-        help='Path to the dataset for only using in SFT phase.')
+    parser.add_argument('--sft_only_data_path', nargs='*', default=[], help='Path to the dataset for only using in SFT phase.')
+    parser.add_argument('--eval_data_file', type=str, default=None)
+
     parser.add_argument(
         '--data_output_path',
         type=str,
@@ -153,6 +155,14 @@ def parse_args():
                         type=int,
                         default=0,
                         help="If > 0, use LoRA for efficient training.")
+    parser.add_argument("--lora_alpha",
+                        type=int,
+                        default=0,
+                        help="lora alpha")
+    parser.add_argument("--lora_droppout",
+                        type=float,
+                        default=0.,
+                        help="lora_droppout")
     parser.add_argument("--lora_module_name",
                         type=str,
                         default="decoder.layers.",
@@ -206,31 +216,31 @@ def main():
 
     print("model_name_or_path : ", args.model_name_or_path)
     if "llama" in args.model_name_or_path:
-        args.lora_module_name = [
-                        "q_proj",
-                        "k_proj",
-                        "v_proj",
-                        "down_proj",
-                        "gate_proj",
-                        "up_proj"
-                    ]
-        tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)
+        tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)#May occur RecursionError: maximum recursion depth exceeded if used AutoTokenizer
+        tokenizer.pad_token_id = 0 # that is <unk>, initial llama has no <pad>
+        # assert tokenizer.bos_token_id == 1 and tokenizer.eos_token_id == 2, (tokenizer.bos_token_id, tokenizer.eos_token_id)
+        tokenizer.bos_token_id = 1
+        tokenizer.eos_token_id = 2
+        #transformers version has a different influence for LlamaTokenizer
     else:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
-    # tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.pad_token_id = 0
+    tokenizer.pad_token_id = 0# For Bloom, we also set zero to tokenizer.pad_token_id
     tokenizer.padding_side = "left"
     print("Making tokenizer padding side to left")
-
+    print("tokenizer.bos_token_id: ", tokenizer.bos_token_id)
+    print("tokenizer.eos_token_id: ", tokenizer.eos_token_id)
 
     model = create_hf_model(AutoModelForCausalLM, args.model_name_or_path,
                             tokenizer, ds_config)
 
     if args.lora_dim > 0:
-        model = convert_linear_layer_to_lora(model, args.lora_module_name,
-                                            args.lora_dim)  
-            # model = convert_LLaMA_to_lora(model, args.lora_module_name)
+        lora_module_name = args.lora_module_name.split(",")
+        print("lora_module_name: ", lora_module_name)
+        print("lora_dim: {}, lora_alpha: {}, lora_scaling: {}, lora_dropout: {}".format(args.lora_dim, args.lora_alpha, args.lora_alpha/args.lora_dim, args.lora_droppout))
+
+        model = convert_linear_layer_to_lora(model, lora_module_name = lora_module_name, lora_dim = args.lora_dim, lora_alpha = args.lora_alpha, lora_droppout=args.lora_droppout)  
+
         if args.only_optimize_lora:
             model = only_optimize_lora_parameters(model)
 
@@ -238,16 +248,16 @@ def main():
     train_phase = 1
     print("sft_only_data_path : ", args.sft_only_data_path)
     train_dataset, eval_dataset = create_prompt_dataset(
-        args.local_rank,
-        args.data_path,
-        args.data_split,
-        args.data_output_path,
-        train_phase,
-        args.seed,
-        tokenizer,
-        args.max_seq_len,
-        sft_only_data_path=args.sft_only_data_path)
-
+        local_rank = args.local_rank,
+        sft_only_data_path = args.sft_only_data_path,
+        eval_data_file = args.eval_data_file,
+        data_split = args.data_split,
+        output_path = args.data_output_path,
+        train_phase = train_phase,
+        seed = args.seed,
+        tokenizer = tokenizer,
+        max_seq_len = args.max_seq_len
+    )
 
     # DataLoaders creation:
     if args.local_rank == -1:
@@ -349,8 +359,8 @@ def main():
     print_rank_0(
         f"***** Evaluating perplexity, Epoch {0}/{args.num_train_epochs} *****",
         args.global_rank)
-    # perplexity = evaluation(model, eval_dataloader)
-    # print_rank_0(f"ppl: {perplexity}", args.global_rank)
+    perplexity = evaluation(model, eval_dataloader)
+    print_rank_0(f"ppl: {perplexity}", args.global_rank)
     training_step_losses = []
     for epoch in range(args.num_train_epochs):
         print_rank_0(
@@ -376,19 +386,19 @@ def main():
 
         model.tput_timer.update_epoch_count()
 
-    if args.output_dir is not None:
-        print_rank_0('saving the final model ...', args.global_rank)
-        model = convert_lora_to_linear_layer(model)
+        if args.output_dir is not None:
+            print_rank_0('saving the final model ...', args.global_rank)#It will overwrite the last epoch model
+            model = convert_lora_to_linear_layer(model)
 
-        if args.global_rank == 0:
-            save_hf_format(model, tokenizer, args)
+            if args.global_rank == 0:
+                save_hf_format(model, tokenizer, args)
 
-        if args.zero_stage == 3:
-            # For zero stage 3, each gpu only has a part of the model, so we need a special save function
-            save_zero_three_model(model,
-                                  args.global_rank,
-                                  args.output_dir,
-                                  zero_stage=args.zero_stage)
+            if args.zero_stage == 3:
+                # For zero stage 3, each gpu only has a part of the model, so we need a special save function
+                save_zero_three_model(model,
+                                    args.global_rank,
+                                    args.output_dir,
+                                    zero_stage=args.zero_stage)
 
 
 if __name__ == "__main__":
