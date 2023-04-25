@@ -10,7 +10,7 @@
 ```shell
 docker pull belleagi/belle:v1.0
 git clone https://github.com/LianjiaTech/BELLE.git
-docker run -it --runtime=nvidia --shm-size="40g" -v BELLE/train:/workspace/BELLE-train -v huggingface_models/:/workspace/model_name_or_path belleagi/belle:v1.0 /bin/bash
+docker run -it --runtime=nvidia --shm-size="40g" -v /path/BELLE/train:/workspace/BELLE-train -v /path/huggingface_models/:/workspace/model_name_or_path belleagi/belle:v1.0 /bin/bash
 ```
 
 上述命令实现了以下几点：
@@ -19,8 +19,7 @@ docker run -it --runtime=nvidia --shm-size="40g" -v BELLE/train:/workspace/BELLE
 2. clone BELLE仓库
 3. 将BELLE/train目录与Docker环境中/workspace/BELLE-train目录挂载
 4. 将huggingface_models目录与Docker环境中/workspace/model_name_or_path目录挂载。其中huggingface_models代表预训练模型的保存路径，该目录下存放所有需要的预训练语言模型，如llama-7b, bloomz-7b1-mt等
-
-
+5. 注意：上述挂载的目录必须是绝对路径
 
 
 
@@ -30,27 +29,53 @@ docker run -it --runtime=nvidia --shm-size="40g" -v BELLE/train:/workspace/BELLE
 
 ```bash
 wget https://huggingface.co/datasets/BelleGroup/school_math_0.25M/resolve/main/school_math_0.25M.json
-head -n 1000 school_math_0.25M.json > utils/data/dev1K.json
-tail -n +1001 school_math_0.25M.json > belleMath.json
 ```
 
-该数据是数学应用题求解任务，包含解题过程，包含约25万条生成的中文数学题数据。
-
-我们选取前1000条作为验证集，其余数据作为训练集
+该数据是数学应用题求解任务，包含解题过程，共计约25万条。示例：
 
 | Instruction                                                  | Answer                                                       |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | 一箱鸡蛋有25个，小明爸爸每天给他9个鸡蛋吃，那么一箱鸡蛋能够供小明吃几天？ | 一箱鸡蛋有25个，小明每天吃9个鸡蛋，用除法计算一下即可： 25 ÷ 9 = 2余7 也就是说，小明第1天到第2天共吃2个鸡蛋，第3天吃剩下的7个鸡蛋。 因此，一箱鸡蛋能够供小明吃2天。 |
 | 小明手中有15颗糖果，他想要分给他的朋友小红和小李，每人分得的糖果数是3颗，那么他还剩下几颗糖果？ | 该题可以用减法来解决。小明手中有15颗糖果，每人分得3颗，所以小红和小李一共分得6颗糖果（3+3=6）。 2. 然后再用原来的糖果总数减去分给小红和小李的糖果数，即可得到小明手中剩余的糖果数。 计算过程如下： 15 - 6 = 9 所以，小明还剩下9颗糖果。 |
 
+#### 2.1.1 Prepare data
+
+```bash
+python training_scripts/convert_to_conv_data.py --orig_data school_math_0.25M.json --write_data school_math_0.25M_conv.json --dataset_name bellemath
+head -n 1000 school_math_0.25M_conv.json > belleMath-dev1K.json
+tail -n +1001 school_math_0.25M_conv.json > belleMath.json
+```
+
+我们选取前1000条作为验证集，其余数据作为训练集
+
 我们会在Instruction的开头和结尾加上Human和Assistant作为模型的输入，形如：
 
 | Instruction                                                  |
 | ------------------------------------------------------------ |
-| Human: 一箱鸡蛋有25个，小明爸爸每天给他9个鸡蛋吃，那么一箱鸡蛋能够供小明吃几天？\nAssistant: |
-| Human: 小明手中有15颗糖果，他想要分给他的朋友小红和小李，每人分得的糖果数是3颗，那么他还剩下几颗糖果？\nAssistant: |
+| Human: 一箱鸡蛋有25个，小明爸爸每天给他9个鸡蛋吃，那么一箱鸡蛋能够供小明吃几天？\n\nAssistant: |
+| Human: 小明手中有15颗糖果，他想要分给他的朋友小红和小李，每人分得的糖果数是3颗，那么他还剩下几颗糖果？\n\nAssistant: |
 
-其他的训练数据见：https://huggingface.co/BelleGroup
+**注：**目前仓库的代码要兼容单轮和多轮数据，因此对于之前的开源数据(格式为(instruction,output)或者(input,target)。目前绝大部分开源的单轮的instruction数据均为这种格式)，需要用convert_to_conv_data.py脚本转换为如下的统一格式:
+
+```bash
+{"id": "bellemath42", "conversations": [{"from": "human", "value": " 一箱鸡蛋有25个，小明爸爸每天给他9个鸡蛋吃，那么一箱鸡蛋能够供小明吃几天？"}, {"from": "assistant", "value": "\n一箱鸡蛋有25个，小明每天吃9个鸡蛋，用除法计算一下即可：\n25 ÷ 9 = 2余7\n也就是说，小明第1天到第2天共吃2个鸡蛋，第3天吃剩下的7个鸡蛋。\n因此，一箱鸡蛋能够供小明吃2天。"}]}
+{"id": "bellemath80", "conversations": [{"from": "human", "value": "小明手中有15颗糖果，他想要分给他的朋友小红和小李，每人分得的糖果数是3颗，那么他还剩下几颗糖果？"}, {"from": "assistant", "value": " \n1. 该题可以用减法来解决。小明手中有15颗糖果，每人分得3颗，所以小红和小李一共分得6颗糖果（3+3=6）。\n2. 然后再用原来的糖果总数减去分给小红和小李的糖果数，即可得到小明手中剩余的糖果数。 \n计算过程如下：\n15 - 6 = 9\n所以，小明还剩下9颗糖果。"}]}
+```
+
+其他的训练数据见：https://huggingface.co/BelleGroup  按照上述流程转换格式即可。
+
+#### 2.1.2 Multi-turn data
+
+[shareGPT](https://huggingface.co/datasets/anon8231489123/ShareGPT_Vicuna_unfiltered/tree/main) 是一个开源的大规模的多轮对话数据，具体效果可参考我们的工作：[Towards Better Instruction Following Language Models for Chinese: Investigating the Impact of Training Data and Evaluation](https://arxiv.org/pdf/2304.07854.pdf)
+
+当前代码已支持训练这种多轮对话数据。数据下载：
+
+```bash
+wget https://huggingface.co/datasets/anon8231489123/ShareGPT_Vicuna_unfiltered/resolve/main/ShareGPT_V3_unfiltered_cleaned_split.json
+mv ShareGPT_V3_unfiltered_cleaned_split.json shareGPT.json
+```
+
+
 
 ### 2.2 Train
 
@@ -75,6 +100,7 @@ bash training_scripts/single_node/run_FT.sh output 2
 ```bash
 deepspeed main.py \
    --sft_only_data_path belleMath.json \
+   --eval_data_file belleMath-dev1K.json \
    --model_name_or_path /workspace/model_name_or_path/hf_llama_7b \
    --per_device_train_batch_size 1 \
    --per_device_eval_batch_size 1 \
@@ -93,6 +119,8 @@ deepspeed main.py \
    --data_output_path $data_output_path \
 ```
 
+- sft_only_data_path 就是训练集数据。如果想换成shareGPT，仅需替换为shareGPT.json
+- eval_data_file 代表验证集数据，如果没有预先划分出训练和验证数据，可以不指定该参数，此时将会从训练数据中随机抽取1000条作为验证数据
 - model_name_or_path就是基础模型。我们建议基于我们开源的模型(如：[BelleGroup/BELLE-LLaMA-EXT-7B](https://huggingface.co/BelleGroup/BELLE-LLaMA-EXT-7B)) 作为基础模型进行进一步微调，这样仅需要少量训练数据和训练轮次即可微调一个效果不错的模型。
 - zero_stage。可优先设置为1或者2，如果显存不足，设置为3。关于zero-stage的详细介绍可参考： https://www.deepspeed.ai/tutorials/zero/ 
 
@@ -116,6 +144,7 @@ echo ${lora_module_name}
 
 deepspeed main.py \
    --sft_only_data_path belleMath.json \
+   --eval_data_file belleMath-dev1K.json \
    --data_split 10,0,0 \
    --model_name_or_path ${model_name_or_path} \
    --per_device_train_batch_size 16 \
@@ -169,9 +198,16 @@ bash training_scripts/single_gpu/run_LoRA.sh output-lora 3
 
 如果出现显存不足的情况，需要调整per_device_train_batch_size、max_seq_len、zero_stage三个参数。另外可参考[Deepspeed-Chat-training_scripts](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat/training/step1_supervised_finetuning/training_scripts) 中各个启动脚本内的参数配置
 
-此外，对于Bloom模型，建议max_seq_len设置为512-1024之间。而对于LLaMA模型，max_seq_len尽可能不要低于1024。避免切割出太多不完整的句子，不利于模型学习。
-
 其余参数说明详见：https://github.com/microsoft/DeepSpeedExamples/blob/master/applications/DeepSpeed-Chat/training/step1_supervised_finetuning/README.md
+
+**注：**
+
+- 如果是单轮instruction数据，比如 [BELLE-2M](https://huggingface.co/datasets/BelleGroup/train_2M_CN) 等。对于Bloom模型，建议max_seq_len设置为512-1024之间。而对于LLaMA模型，max_seq_len尽可能不要低于1024。避免切割出太多不完整的句子，不利于模型学习。
+- 如果是多轮对话数据，比如 [shareGPT](https://huggingface.co/datasets/anon8231489123/ShareGPT_Vicuna_unfiltered/tree/main)，max_seq_len建议设置为2048
+- 运行脚本中各个参数的设置需要按实际情况进行调整，下面给出一些参数值供参考：
+  - 对于learning_rate，FT训练时设置为5e-6量级，LoRA训练时设置为3e-4量级
+  - 对于epoch，FT训练时设置为2或3，LoRA训练时设置为4或5
+
 
 
 
@@ -183,7 +219,7 @@ bash training_scripts/single_gpu/run_LoRA.sh output-lora 3
 CUDA_VISIBLE_DEVICES=0 python prompt_eval.py \
     --model_name_or_path model_name_or_path \
     --finetuned_model_name_or_path finetuned_model_name_or_path \
-    --test_file utils/data/dev1K.json
+    --test_file test_file_name_or_path
 ```
 
 参数说明：
@@ -191,7 +227,7 @@ CUDA_VISIBLE_DEVICES=0 python prompt_eval.py \
 - model_name_or_path 是原生预训练模型的路径
 - finetuned_model_name_or_path 是训练后保存的模型
 
-- test_file就是验证集数据，默认路径是utils/data/dev1K.json
+- test_file就是验证集数据，默认路径是belleMath-dev1K.json
 
 举例：
 
@@ -199,7 +235,7 @@ CUDA_VISIBLE_DEVICES=0 python prompt_eval.py \
 CUDA_VISIBLE_DEVICES=0 python prompt_eval.py \
     --model_name_or_path /workspace/model_name_or_path/hf_llama_7b \
     --finetuned_model_name_or_path output-lora \
-    --test_file utils/data/dev1K.json
+    --test_file belleMath-dev1K.json
 ```
 
 
@@ -275,9 +311,10 @@ python training_scripts/convert_llama_weights_to_hf.py --input_dir download_offi
 - [2. 单机多卡可以训练多大参数量的模型](FAQ.md#2)
 - [3. 单机单卡采用LoRA可以训练多大参数量的模型](FAQ.md#3)
 - [4. 单机多卡采用LoRA可以训练多大参数量的模型](FAQ.md#4)
+- [5. 加载Llama tokenizer时存在的问题](FAQ.md#5)
+- [6. 加载2M的数据量需要多大的内存和多长时间](FAQ.md#6)
+- [7. 训练模型的生成结果非常糟糕](FAQ.md#7)
 - [Others](FAQ.md#Others)
-
-
 
 
 
@@ -286,4 +323,4 @@ python training_scripts/convert_llama_weights_to_hf.py --input_dir download_offi
 本仓库实验代码仅对Deepspeed-Chat项目中training/step1_supervised_finetuning内的部分代码做了简单的修改。具体修改内容如下：
 
 1. 需要在utils/data/raw_datasets.py中实现一个类，比如BelleOpenSoucreDataset，用于读取训练数据
-2. 由于训练的目标是为了让模型学会回复人类指令，所以我们仅对answer文本计算loss。需要在utils/data/data_utils.py的create_dataset_split方法中修改tokenize部分，在instruction文本部分加上-100作为mask
+2. 由于训练的目标是为了让模型学会回复人类指令，所以我们仅对answer文本计算loss。需要在utils/data/data_utils.py的create_dataset_split方法中修改tokenize部分，在human instruction文本部分对应的label加上-100作为mask。如果是多轮对话数据，每一轮的human instruction对应的label都会加上-100

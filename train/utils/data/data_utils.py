@@ -12,61 +12,20 @@ import torch.nn.functional as F
 from datasets import load_dataset
 import numpy as np
 import os
+import copy
 from collections import defaultdict, Counter
 from tqdm import tqdm
 from itertools import chain
 from . import raw_datasets
 
+IGNORE_INDEX = -100
 
-def get_raw_dataset(dataset_name, output_path, seed, local_rank):
+def get_raw_dataset(dataset_name, eval_data_file, output_path, seed, local_rank):
     if type(dataset_name)==list:
         dataset_name = dataset_name[0]
     print("dataset_name : ", dataset_name)
-    if "belle" in dataset_name.lower():
-        return raw_datasets.BelleOpenSoucreDataset(output_path, seed, local_rank, data_file=dataset_name)
+    return raw_datasets.BelleOpenSoucreDataset(output_path, seed, local_rank, data_file=dataset_name, eval_data_file=eval_data_file)
 
-    elif dataset_name == "Dahoas/rm-static":
-        return raw_datasets.DahoasRmstaticDataset(output_path, seed,
-                                                  local_rank)
-    elif dataset_name == "Dahoas/full-hh-rlhf":
-        return raw_datasets.DahoasFullhhrlhfDataset(output_path, seed,
-                                                    local_rank)
-    elif dataset_name == "Dahoas/synthetic-instruct-gptj-pairwise":
-        return raw_datasets.DahoasSyntheticinstructgptjpairwiseDataset(
-            output_path, seed, local_rank)
-    elif dataset_name == "yitingxie/rlhf-reward-datasets":
-        return raw_datasets.YitingxieRlhfrewarddatasetsDataset(
-            output_path, seed, local_rank)
-    elif dataset_name == "openai/webgpt_comparisons":
-        return raw_datasets.OpenaiWebgptcomparisonsDataset(
-            output_path, seed, local_rank)
-    elif dataset_name == "stanfordnlp/SHP":
-        return raw_datasets.StanfordnlpSHPDataset(output_path, seed,
-                                                  local_rank)
-    elif dataset_name == "wangrui6/Zhihu-KOL":
-        return raw_datasets.Wangrui6ZhihuKOLDataset(output_path, seed,
-                                                    local_rank)
-    elif dataset_name == "Cohere/miracl-zh-queries-22-12":
-        return raw_datasets.CohereMiraclzhqueries2212Dataset(
-            output_path, seed, local_rank)
-    elif dataset_name == "Hello-SimpleAI/HC3-Chinese":
-        return raw_datasets.HelloSimpleAIHC3ChineseDataset(
-            output_path, seed, local_rank)
-    elif dataset_name == "mkqa-Chinese":
-        return raw_datasets.MkqaChineseDataset(output_path, seed, local_rank)
-    elif dataset_name == "mkqa-Japanese":
-        return raw_datasets.MkqaJapaneseDataset(output_path, seed, local_rank)
-    elif dataset_name == "Cohere/miracl-ja-queries-22-12":
-        return raw_datasets.CohereMiracljaqueries2212Dataset(
-            output_path, seed, local_rank)
-    elif dataset_name == "lmqg/qg_jaquad":
-        return raw_datasets.LmqgQgjaquadDataset(output_path, seed, local_rank)
-    elif dataset_name == "lmqg/qag_jaquad":
-        return raw_datasets.LmqgQagjaquadDataset(output_path, seed, local_rank)
-    else:
-        raise RuntimeError(
-            f"We do not have configs for dataset {dataset_name}, but you can add it by yourself in raw_datasets.py."
-        )
 
 
 def get_shuffle_idx(seed, size):
@@ -142,106 +101,155 @@ class PromptDataset(Dataset):
 
 
     
+# def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
+#                          end_of_conversation_token, max_seq_len):
+#     prompt_dataset = []
+#     chosen_dataset = []
+#     reject_dataset = []
+#     filter_nums = 0
+#     assert tokenizer.padding_side == "left"#We need add eos_token_id at the last position of input_ids
+#     if train_phase == 1:
+#         for i, tmp_data in tqdm(enumerate(current_dataset), total=len(current_dataset), unit="example"):
+#             # tokenize the text
+#             prompt_text = raw_dataset.get_prompt(tmp_data)
+#             tokenized_prompt_text = tokenizer(prompt_text, truncation=True,max_length=max_seq_len,padding=False,return_tensors=None)
+#             user_prompt_len = len(tokenized_prompt_text["input_ids"])
+
+#             chosen_sentence = raw_dataset.get_prompt_and_chosen(tmp_data)  # the accept response
+
+#             chosen_token = tokenizer(chosen_sentence,
+#                                         max_length=max_seq_len,
+#                                         padding="max_length",
+#                                         truncation=True)
+
+#             if chosen_token["input_ids"][-1] != tokenizer.eos_token_id:#Make sure tokenizer.padding_side is left
+#                 chosen_token["input_ids"].append(tokenizer.eos_token_id)
+#                 chosen_token["attention_mask"].append(1)
+
+
+#             pad_token_num = sum(np.equal(chosen_token["input_ids"], tokenizer.pad_token_id))
+
+#             chosen_token["labels"] = [-100] * (pad_token_num+user_prompt_len) + chosen_token["input_ids"][pad_token_num+user_prompt_len:]
+
+#             chosen_token["input_ids"] = torch.LongTensor(chosen_token["input_ids"])
+#             chosen_token["attention_mask"] = torch.LongTensor(chosen_token["attention_mask"])
+#             chosen_token["labels"] = torch.LongTensor(chosen_token["labels"])
+#             if chosen_token["input_ids"].shape != chosen_token["labels"].shape:
+#                 print("input_ids.shape == {}, attention_mask.shape == {}, labels.shape == {}".format(chosen_token['input_ids'].shape, chosen_token['attention_mask'].shape, chosen_token['labels'].shape))
+#                 filter_nums +=1 
+#                 print("Filter sample: ", chosen_sentence)
+#                 continue
+
+#             chosen_dataset.append(chosen_token)
+
+#         print("{} samples were filtered".format(filter_nums))
+#         print("The total number of samples: {}".format(len(chosen_dataset)))
+
+#     else:
+#         raise ValueError("Only supported SFT")
+
+#     return PromptDataset(prompt_dataset, chosen_dataset, reject_dataset,
+#                          tokenizer.pad_token_id, train_phase)
+
+
+def pad_tensors_to_max_length(input_tensor, max_length, pad_token_id):
+    padded_tensor = pad_token_id * torch.ones((max_length,), dtype=input_tensor.dtype, device=input_tensor.device)
+    padded_tensor[-input_tensor.shape[0]:] = input_tensor
+    return padded_tensor
+
 def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
                          end_of_conversation_token, max_seq_len):
+
+    def _addrole_masklabel_tokenize(source):
+        '''
+        add speaker and concatenate the sentences
+        {
+            "id": "uniq_sample_id",
+            "conversations": [
+                {"from": "human", "value": "你好"},
+                {"from": "assistant", "value": "你好，有什么可以帮助你的吗？"},
+                {"from": "human", "value": "今天天气怎么样？"},
+                {"from": "assistant", "value": "不好意思，我无法回答你的问题，因为我不知道你的位置信息，同时我目前还无法获取到最新的天气信息。"}
+            ]
+        }
+        tokenizer_bloomz.encode("你好，有什么可以帮助你的吗？") == [41381, 355, 37242, 205599, 7336, 10468]
+        tokenizer_llama.encode("你好，有什么可以帮助你的吗？") == [1, 29871, 30919, 31076, 30214, 30417, 231, 190, 131, 31882, 30682, 30651, 232, 187, 177, 31931, 30919, 30210, 232, 147, 154, 30882]
+        '''
+
+        conversation = ''
+        input_ids = []
+        labels = []
+        for sentence in source:
+            sentence_from = sentence["from"].lower()
+            sentence_value = 'Human: ' + sentence["value"] + '\n\nAssistant: ' if sentence_from == 'human' else sentence["value"]
+            conversation += sentence_value
+            sentence_ids = tokenizer.encode(sentence_value, add_special_tokens=False)#do not add bos_token_id
+            label = copy.deepcopy(sentence_ids) if sentence_from != 'human' else [IGNORE_INDEX] * len(sentence_ids)
+            input_ids += sentence_ids
+            labels += label
+            # add eos at every end of assistant sentence
+            if sentence_from != 'human':
+                input_ids += [tokenizer.eos_token_id]#make sure eos_token_id is correct
+                labels += [tokenizer.eos_token_id]
+        return input_ids, labels, conversation
+
+
     prompt_dataset = []
     chosen_dataset = []
     reject_dataset = []
     filter_nums = 0
     assert tokenizer.padding_side == "left"#We need add eos_token_id at the last position of input_ids
+    print("tokenizer.eos_token_id: ", tokenizer.eos_token_id)
+    print("tokenizer.pad_token_id: ", tokenizer.pad_token_id)
+    total_num = len(current_dataset)
+
     if train_phase == 1:
-        for i, tmp_data in tqdm(enumerate(current_dataset), total=len(current_dataset), unit="example"):
+        for i, tmp_data in tqdm(enumerate(current_dataset), total=total_num, unit="example"):
             # tokenize the text
-            prompt_text = raw_dataset.get_prompt(tmp_data)
-            tokenized_prompt_text = tokenizer(prompt_text, truncation=True,max_length=max_seq_len,padding=False,return_tensors=None)
-            user_prompt_len = len(tokenized_prompt_text["input_ids"])
-
-            chosen_sentence = raw_dataset.get_prompt_and_chosen(tmp_data)  # the accept response
-
-            chosen_token = tokenizer(chosen_sentence,
-                                        max_length=max_seq_len,
-                                        padding="max_length",
-                                        truncation=True)
-
-            if chosen_token["input_ids"][-1] != tokenizer.eos_token_id:#Make sure tokenizer.padding_side is left
-                chosen_token["input_ids"].append(tokenizer.eos_token_id)
-                chosen_token["attention_mask"].append(1)
-
-
-            pad_token_num = sum(np.equal(chosen_token["input_ids"], tokenizer.pad_token_id))
-
-            chosen_token["labels"] = [-100] * (pad_token_num+user_prompt_len) + chosen_token["input_ids"][pad_token_num+user_prompt_len:]
-
-            chosen_token["input_ids"] = torch.LongTensor(chosen_token["input_ids"])
-            chosen_token["attention_mask"] = torch.LongTensor(chosen_token["attention_mask"])
-            chosen_token["labels"] = torch.LongTensor(chosen_token["labels"])
-            if chosen_token["input_ids"].shape != chosen_token["labels"].shape:
-                print("input_ids.shape == {}, attention_mask.shape == {}, labels.shape == {}".format(chosen_token['input_ids'].shape, chosen_token['attention_mask'].shape, chosen_token['labels'].shape))
-                filter_nums +=1 
-                print("Filter sample: ", chosen_sentence)
+            source = raw_dataset.get_conversations(tmp_data)
+            input_ids, labels, conversation = _addrole_masklabel_tokenize(source)
+            input_ids = input_ids[:max_seq_len-1]
+            labels = labels[:max_seq_len-1]
+            if not any(x > -100 for x in labels) or "Human" not in conversation:
+                #All label value is -100, means that no Human inputs
+                #No human instruction in current conversation
+                filter_nums += 1
+                # print("conversation: ", source)
                 continue
 
+            attention_mask = [1] * len(input_ids)
+            input_ids = torch.LongTensor(input_ids)
+            attention_mask = torch.LongTensor(attention_mask)
+            labels = torch.LongTensor(labels)
+
+            chosen_token = {
+                "input_ids": pad_tensors_to_max_length(input_ids, max_seq_len, tokenizer.pad_token_id),
+                "attention_mask": pad_tensors_to_max_length(attention_mask, max_seq_len, tokenizer.pad_token_id),
+                "labels": pad_tensors_to_max_length(labels, max_seq_len, tokenizer.pad_token_id)
+            }
             chosen_dataset.append(chosen_token)
+            if i == 0:
+                # print("conversation: ", conversation)
+                print("input_ids: ", input_ids)
+                print("labels: ", labels)
+                print("-"*100)
 
         print("{} samples were filtered".format(filter_nums))
         print("The total number of samples: {}".format(len(chosen_dataset)))
 
-    elif train_phase == 2:
-        for i, tmp_data in enumerate(current_dataset):
-            # tokenize the text
-            chosen_sentence = raw_dataset.get_prompt_and_chosen(
-                tmp_data)  # the accept response
-            reject_sentence = raw_dataset.get_prompt_and_rejected(
-                tmp_data)  # the accept response
-            if chosen_sentence is not None and reject_sentence is not None:
-                chosen_sentence += end_of_conversation_token  # the accept response
-                reject_sentence += end_of_conversation_token
-                chosen_token = tokenizer(chosen_sentence,
-                                         max_length=max_seq_len,
-                                         padding="max_length",
-                                         truncation=True,
-                                         return_tensors="pt")
-                reject_token = tokenizer(reject_sentence,
-                                         max_length=max_seq_len,
-                                         padding="max_length",
-                                         truncation=True,
-                                         return_tensors="pt")
-                chosen_token["input_ids"] = chosen_token["input_ids"]
-                chosen_token["attention_mask"] = chosen_token["attention_mask"]
-                chosen_dataset.append(chosen_token)
+    else:
+        raise ValueError("Only supported SFT")
 
-                reject_token["input_ids"] = reject_token["input_ids"]
-                reject_token["attention_mask"] = reject_token["attention_mask"]
-                reject_dataset.append(reject_token)
-
-    elif train_phase == 3:
-        for i, tmp_data in enumerate(current_dataset):
-            # tokenize the text
-            prompt = raw_dataset.get_prompt(tmp_data)
-            if prompt is not None:
-                prompt_token = tokenizer(prompt, return_tensors="pt")
-                prompt_token["input_ids"] = prompt_token["input_ids"]
-                prompt_token["attention_mask"] = prompt_token["attention_mask"]
-                for key_word in ["input_ids", "attention_mask"]:
-                    length = prompt_token[key_word].size()[-1]
-                    if length > max_seq_len:
-                        y = prompt_token[key_word].squeeze(0)[length -
-                                                              (max_seq_len -
-                                                               1):].flip(0)
-                    else:
-                        y = prompt_token[key_word].squeeze(0).flip(0)
-                    prompt_token[key_word] = y
-                prompt_dataset.append(prompt_token)
     return PromptDataset(prompt_dataset, chosen_dataset, reject_dataset,
                          tokenizer.pad_token_id, train_phase)
 
 
-def create_dataset(local_rank, dataset_name, data_split, output_path,
+def create_dataset(local_rank, dataset_name, eval_data_file, data_split, output_path,
                    train_phase, seed, tokenizer, end_of_conversation_token,
                    max_seq_len):
     #dataset_name can be the file path
     print("dataset_name: ", dataset_name)
-    raw_dataset = get_raw_dataset(dataset_name, output_path, seed, local_rank)
+    raw_dataset = get_raw_dataset(dataset_name, eval_data_file, output_path, seed, local_rank)
     train_dataset = raw_dataset.get_train_data()
     print("length of train_dataset(after get_train_data): ", len(train_dataset))
     train_index = get_raw_dataset_split_index(local_rank, output_path,
@@ -273,42 +281,43 @@ def create_dataset(local_rank, dataset_name, data_split, output_path,
 
 
 def create_prompt_dataset(local_rank,
-                          data_path,
+                          sft_only_data_path,
+                          eval_data_file,
                           data_split,
                           output_path,
                           train_phase,
                           seed,
                           tokenizer,
                           max_seq_len,
-                          end_of_conversation_token="<|endoftext|>",
-                          sft_only_data_path=[]):
+                          end_of_conversation_token="</s>"):
     """
     Creates the prompt dataset
     """
     os.makedirs(output_path, exist_ok=True)
-    print("data_path: ", data_path)
+    
+    # fname = str(hash(sft_only_data_path[0]))  # hash the file name to avoid too long file name
+    # # train_fname = f"{output_path}/traindata_{fname}.pt"
+    # # eval_fname = f"{output_path}/evaldata_{fname}.pt"
+    # print("fname = " + fname)
 
-    fname = "_".join(data_path)
-    sft_cache_key = "_".join(sft_only_data_path)
-    tokenizer_name = tokenizer.init_kwargs["name_or_path"].replace("/", "_")
-    fname = f"{fname}_split{data_split}_phase{train_phase}_seed{seed}_tokenizer{tokenizer_name}_seqlen{max_seq_len}_sft{sft_cache_key}"
-    fname = "_".join(fname.split("/"))
-    fname = str(hash(fname))  # hash the file name to avoid too long file name
-    train_fname = f"{output_path}/traindata_{fname}.pt"
-    eval_fname = f"{output_path}/evaldata_{fname}.pt"
-    print("fname = " + fname)
-    print("sft_cache_key = " +sft_cache_key)
-    print("tokenizer_name "+tokenizer_name)
-
-    cache_found = os.path.isfile(train_fname) and os.path.isfile(eval_fname)
-    buf_create_cache = torch.ByteTensor([not cache_found]).cuda()
-    torch.distributed.all_reduce(buf_create_cache)
+    # cache_found = os.path.isfile(train_fname) and os.path.isfile(eval_fname)
+    # buf_create_cache = torch.ByteTensor([not cache_found]).cuda()
+    # torch.distributed.all_reduce(buf_create_cache)
     train_dataset, eval_dataset = create_dataset(
-        local_rank, sft_only_data_path, data_split, output_path, train_phase,
-        seed, tokenizer, end_of_conversation_token, max_seq_len)
-    if local_rank <= 0:
-        torch.save(train_dataset, train_fname)
-        torch.save(eval_dataset, eval_fname)
+        local_rank = local_rank, 
+        dataset_name = sft_only_data_path, 
+        eval_data_file = eval_data_file,
+        data_split = data_split, 
+        output_path = output_path, 
+        train_phase = train_phase,
+        seed = seed, 
+        tokenizer = tokenizer, 
+        end_of_conversation_token = end_of_conversation_token, 
+        max_seq_len = max_seq_len
+    )
+    # if local_rank <= 0:
+    #     torch.save(train_dataset, train_fname)
+    #     torch.save(eval_dataset, eval_fname)
     return train_dataset, eval_dataset
     
 

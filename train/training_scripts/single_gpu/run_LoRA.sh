@@ -5,16 +5,13 @@
 # DeepSpeed Team
 #facebook/opt-1.3b
 # Note that usually LoRA needs to use larger learning rate
+#/nfs/v100-022/jiyunjie/anaconda3/envs/llamalora/
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/nfs/v100-022/jiyunjie/anaconda3/envs/llamalora/lib/
 
 OUTPUT_PATH=$1
 ZERO_STAGE=$2
-if [ "$OUTPUT" == "" ]; then
-    OUTPUT_PATH=./output-lora
-fi
-if [ "$ZERO_STAGE" == "" ]; then
-    ZERO_STAGE=0
-fi
-rm -rf $OUTPUT_PATH
+
+rm -rf output/
 mkdir -p $OUTPUT_PATH
 echo $OUTPUT_PATH
 echo $ZERO_STAGE

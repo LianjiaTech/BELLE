@@ -27,7 +27,6 @@ generation_config = dict(
     max_new_tokens=max_new_tokens
     )
 
-dev_batch_size = 4
 
 def read_data(filename):
     res = []
@@ -48,6 +47,45 @@ def write_data(filename, examples):
 
 print("predictions will be written at {}".format(args.predictions_file))
 
+def get_input_text(input_item):
+    conversations = input_item['conversations']
+    conv_turn = len(conversations)
+    for i, sentence in conversations:
+        sentence_from = sentence["from"].lower()
+        sentence_value = 'Human: ' + sentence["value"] + '\n\nAssistant: ' if sentence_from == 'human' else sentence["value"]
+        conversation += sentence_value
+        sentence_ids = tokenizer.encode(sentence_value, add_special_tokens=False)#do not add bos_token_id
+        label = copy.deepcopy(sentence_ids) if sentence_from != 'human' else [IGNORE_INDEX] * len(sentence_ids)
+        input_ids += sentence_ids
+
+def _addrole_masklabel_tokenize(source):
+    '''
+    add speaker and concatenate the sentences
+    {
+        "id": "uniq_sample_id",
+        "conversations": [
+            {"from": "human", "value": "你好"},
+            {"from": "assistant", "value": "你好，有什么可以帮助你的吗？"},
+            {"from": "human", "value": "今天天气怎么样？"},
+            {"from": "assistant", "value": "不好意思，我无法回答你的问题，因为我不知道你的位置信息，同时我目前还无法获取到最新的天气信息。"}
+        ]
+    }
+    tokenizer_bloomz.encode("你好，有什么可以帮助你的吗？") == [41381, 355, 37242, 205599, 7336, 10468]
+    tokenizer_llama.encode("你好，有什么可以帮助你的吗？") == [1, 29871, 30919, 31076, 30214, 30417, 231, 190, 131, 31882, 30682, 30651, 232, 187, 177, 31931, 30919, 30210, 232, 147, 154, 30882]
+    '''
+
+    conversation = ''
+    input_ids = []
+    for sentence in source[:-1]:
+        sentence_from = sentence["from"].lower()
+        sentence_value = 'Human: ' + sentence["value"] + '\n\nAssistant: ' if sentence_from == 'human' else sentence["value"]
+        conversation += sentence_value
+        sentence_ids = tokenizer.encode(sentence_value, add_special_tokens=False)#do not add bos_token_id
+        input_ids += sentence_ids
+        if sentence_from != 'human':
+            input_ids += [tokenizer.eos_token_id]#make sure eos_token_id is correct
+
+    return input_ids, conversation
 
 if __name__ == '__main__':
     load_type = torch.float16
@@ -61,9 +99,9 @@ if __name__ == '__main__':
     else:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
-    model_config = AutoConfig.from_pretrained(args.model_name_or_path)
     tokenizer.pad_token_id = 0
-    tokenizer.padding_side = "left"
+    tokenizer.eos_token_id = 2
+    model_config = AutoConfig.from_pretrained(args.model_name_or_path)
 
     model = AutoModelForCausalLM.from_pretrained(
         args.finetuned_model_name_or_path, 
@@ -77,25 +115,29 @@ if __name__ == '__main__':
 
     index = 0
 
-    for i in tqdm(range(0, len(input_items), dev_batch_size), total=len(input_items)//dev_batch_size, unit="item"):
-        batch_input_items = input_items[i:i+dev_batch_size]
-        batch_input_text = ["Human: "+input_item['instruction']+"\nAssistant: " for input_item in batch_input_items]
+    for i in tqdm(range(len(input_items)), total=len(input_items), unit="item"):
+        batch_input_items = input_items[i]
 
-        batch_inputs = tokenizer(batch_input_text, max_length=max_new_tokens, padding=True, truncation=True,return_tensors="pt")  #add_special_tokens=False ?
-        batch_generation_output = model.generate(
-            input_ids = batch_inputs["input_ids"].to(device), 
-            attention_mask = batch_inputs['attention_mask'].to(device),
-            eos_token_id=tokenizer.eos_token_id,
-            pad_token_id=tokenizer.pad_token_id,
+        input_ids, conversation = _addrole_masklabel_tokenize(source=input_items[i]['conversations'])
+        input_ids = input_ids[:2048]
+        if "Human" not in conversation:
+            continue
+        attention_mask = [1] * len(input_ids)
+        input_ids = torch.LongTensor(input_ids).unsqueeze(0)
+        attention_mask = torch.LongTensor(attention_mask).unsqueeze(0)
+        #(1, max_seq_len)
+        generation_output = model.generate(
+            input_ids = input_ids.to(device), 
+            attention_mask = attention_mask.to(device),
             **generation_config
         )
 
-        batch_generate_text = tokenizer.batch_decode(batch_generation_output,skip_special_tokens=True)
-
-        for generate_text, input_item in zip(batch_generate_text, batch_input_items):
-            output_items.append({"instruction": input_item['instruction'],"generate_text":generate_text})
-            if index%100 == 0:
-                print(generate_text)
-            index += 1
+        generate_text = tokenizer.decode(generation_output[0].cpu().tolist(),skip_special_tokens=True)
+        output_items.append({"generate_text": generate_text})
+        if index%10 == 0:
+            print("conversation: ", conversation)
+            print("generate_text: ", generate_text)
+            print("-"*100)
+        index += 1
         
     write_data(args.predictions_file, output_items)

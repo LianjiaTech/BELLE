@@ -5,12 +5,8 @@
 # DeepSpeed Team
 OUTPUT=$1
 ZERO_STAGE=$2
-if [ "$OUTPUT" == "" ]; then
-    OUTPUT=./output
-fi
-if [ "$ZERO_STAGE" == "" ]; then
-    ZERO_STAGE=0
-fi
+
+rm -rf output/
 rm -rf $OUTPUT
 mkdir -p $OUTPUT
 echo $OUTPUT

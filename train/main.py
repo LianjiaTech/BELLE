@@ -54,11 +54,9 @@ def parse_args():
                         'phase 1, 2, and 3 data. For example the split `2,4,4`'
                         'will use 60% of data for phase 1, 20% for phase 2'
                         'and 20% for phase 3.')
-    parser.add_argument(
-        '--sft_only_data_path',
-        nargs='*',
-        default=[],
-        help='Path to the dataset for only using in SFT phase.')
+    parser.add_argument('--sft_only_data_path', nargs='*', default=[], help='Path to the dataset for only using in SFT phase.')
+    parser.add_argument('--eval_data_file', type=str, default=None)
+
     parser.add_argument(
         '--data_output_path',
         type=str,
@@ -219,14 +217,19 @@ def main():
     print("model_name_or_path : ", args.model_name_or_path)
     if "llama" in args.model_name_or_path.lower():
         tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)#May occur RecursionError: maximum recursion depth exceeded if used AutoTokenizer
+        tokenizer.pad_token_id = 0 # that is <unk>, initial llama has no <pad>
+        # assert tokenizer.bos_token_id == 1 and tokenizer.eos_token_id == 2, (tokenizer.bos_token_id, tokenizer.eos_token_id)
+        tokenizer.bos_token_id = 1
+        tokenizer.eos_token_id = 2
+        #transformers version has a different influence for LlamaTokenizer
     else:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
-    # tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.pad_token_id = 0
+    tokenizer.pad_token_id = 0# For Bloom, we also set zero to tokenizer.pad_token_id
     tokenizer.padding_side = "left"
     print("Making tokenizer padding side to left")
-
+    print("tokenizer.bos_token_id: ", tokenizer.bos_token_id)
+    print("tokenizer.eos_token_id: ", tokenizer.eos_token_id)
 
     model = create_hf_model(AutoModelForCausalLM, args.model_name_or_path,
                             tokenizer, ds_config)
@@ -245,16 +248,16 @@ def main():
     train_phase = 1
     print("sft_only_data_path : ", args.sft_only_data_path)
     train_dataset, eval_dataset = create_prompt_dataset(
-        args.local_rank,
-        args.data_path,
-        args.data_split,
-        args.data_output_path,
-        train_phase,
-        args.seed,
-        tokenizer,
-        args.max_seq_len,
-        sft_only_data_path=args.sft_only_data_path)
-
+        local_rank = args.local_rank,
+        sft_only_data_path = args.sft_only_data_path,
+        eval_data_file = args.eval_data_file,
+        data_split = args.data_split,
+        output_path = args.data_output_path,
+        train_phase = train_phase,
+        seed = args.seed,
+        tokenizer = tokenizer,
+        max_seq_len = args.max_seq_len
+    )
 
     # DataLoaders creation:
     if args.local_rank == -1:
