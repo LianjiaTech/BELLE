@@ -1,21 +1,13 @@
 #!/usr/bin/env python
 # Copyright (c) Microsoft Corporation.
 # SPDX-License-Identifier: Apache-2.0
-
-# DeepSpeed Team
-import argparse
-import os
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-from datasets import disable_caching
-disable_caching()
-import math
-import sys
-from tqdm import tqdm
-import torch
-from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
-from torch.utils.data.distributed import DistributedSampler
-import transformers
-print("transformers.__version__ : ", transformers.__version__)#4.29.0.dev0
+from utils.model.model_utils import create_hf_model
+from utils.module.lora import convert_linear_layer_to_lora, convert_lora_to_linear_layer, only_optimize_lora_parameters, convert_LLaMA_to_lora
+from utils.ds_utils import get_train_ds_config
+from utils.utils import print_rank_0, to_device, save_hf_format, set_random_seed, get_all_reduce_mean, get_optimizer_grouped_parameters, save_zero_three_model
+from utils.data.data_utils import create_prompt_dataset
+from deepspeed.ops.adam import DeepSpeedCPUAdam, FusedAdam
+import deepspeed
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
@@ -24,23 +16,34 @@ from transformers import (
     get_scheduler,
     LlamaTokenizer,
 )
+import transformers
+from torch.utils.data.distributed import DistributedSampler
+from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
+import torch
+from tqdm import tqdm
+import sys
+import math
+from datasets import disable_caching
+from torch.utils.tensorboard import SummaryWriter
 
-import deepspeed
-from deepspeed.ops.adam import DeepSpeedCPUAdam, FusedAdam
+# DeepSpeed Team
+import argparse
+import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+disable_caching()
+print("transformers.__version__ : ", transformers.__version__)  # 4.29.0.dev0
+
 
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
-from utils.data.data_utils import create_prompt_dataset
-from utils.utils import print_rank_0, to_device, save_hf_format, set_random_seed, get_all_reduce_mean, get_optimizer_grouped_parameters, save_zero_three_model
-from utils.ds_utils import get_train_ds_config
-from utils.module.lora import convert_linear_layer_to_lora, convert_lora_to_linear_layer, only_optimize_lora_parameters, convert_LLaMA_to_lora
-from utils.model.model_utils import create_hf_model
+
+
+writer = SummaryWriter(log_dir="/root/tf-logs")
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description=
-        "Finetune a transformers model on a causal language modeling task")
+        description="Finetune a transformers model on a causal language modeling task")
     parser.add_argument('--data_path',
                         nargs='*',
                         default=[],
@@ -63,14 +66,12 @@ def parse_args():
         '--data_output_path',
         type=str,
         default='output/data_files/',
-        help=
-        'Where to store the data-related files such as shuffle index. This needs to be on a local storage of a node (not on a shared storage)'
+        help='Where to store the data-related files such as shuffle index. This needs to be on a local storage of a node (not on a shared storage)'
     )
     parser.add_argument(
         "--model_name_or_path",
         type=str,
-        help=
-        "Path to pretrained model or model identifier from huggingface.co/models.",
+        help="Path to pretrained model or model identifier from huggingface.co/models.",
         required=True,
     )
     parser.add_argument(
@@ -95,8 +96,7 @@ def parse_args():
         "--learning_rate",
         type=float,
         default=1e-3,
-        help=
-        "Initial learning rate (after the potential warmup period) to use.",
+        help="Initial learning rate (after the potential warmup period) to use.",
     )
     parser.add_argument("--weight_decay",
                         type=float,
@@ -110,8 +110,7 @@ def parse_args():
         "--gradient_accumulation_steps",
         type=int,
         default=1,
-        help=
-        "Number of updates steps to accumulate before performing a backward/update pass.",
+        help="Number of updates steps to accumulate before performing a backward/update pass.",
     )
     parser.add_argument(
         "--lr_scheduler_type",
@@ -152,7 +151,7 @@ def parse_args():
         type=int,
         default=0,
         help='ZeRO optimization stage for Actor model (and clones).')
-    ## LoRA for efficient training setting
+    # LoRA for efficient training setting
     parser.add_argument("--lora_dim",
                         type=int,
                         default=0,
@@ -164,8 +163,10 @@ def parse_args():
     parser.add_argument('--only_optimize_lora',
                         action='store_true',
                         help='Only optimize the LoRA parameters.')
-    parser.add_argument("--show_loss_step", default=100, type=int, help = "Show the loss step")
-    parser.add_argument("--max_new_tokens", default=1024, type=int, help = "Max number of output tokens")
+    parser.add_argument("--show_loss_step", default=100,
+                        type=int, help="Show the loss step")
+    parser.add_argument("--max_new_tokens", default=1024,
+                        type=int, help="Max number of output tokens")
 
     parser = deepspeed.add_config_arguments(parser)
     args = parser.parse_args()
@@ -199,7 +200,7 @@ def main():
         'train_micro_batch_size_per_gpu'] = args.per_device_train_batch_size
     ds_config[
         'train_batch_size'] = args.per_device_train_batch_size * torch.distributed.get_world_size(
-        ) * args.gradient_accumulation_steps
+    ) * args.gradient_accumulation_steps
 
     # If passed along, set the training seed now.
     set_random_seed(args.seed)
@@ -211,14 +212,15 @@ def main():
     print("model_name_or_path : ", args.model_name_or_path)
     if "llama" in args.model_name_or_path:
         args.lora_module_name = [
-                        "q_proj",
-                        "k_proj",
-                        "v_proj",
-                        "down_proj",
-                        "gate_proj",
-                        "up_proj"
-                    ]
-        tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)#May occur RecursionError: maximum recursion depth exceeded if used AutoTokenizer
+            "q_proj",
+            "k_proj",
+            "v_proj",
+            "down_proj",
+            "gate_proj",
+            "up_proj"
+        ]
+        # May occur RecursionError: maximum recursion depth exceeded if used AutoTokenizer
+        tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)
     else:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
@@ -227,14 +229,13 @@ def main():
     tokenizer.padding_side = "left"
     print("Making tokenizer padding side to left")
 
-
     model = create_hf_model(AutoModelForCausalLM, args.model_name_or_path,
                             tokenizer, ds_config)
 
     if args.lora_dim > 0:
         model = convert_linear_layer_to_lora(model, args.lora_module_name,
-                                            args.lora_dim)  
-            # model = convert_LLaMA_to_lora(model, args.lora_module_name)
+                                             args.lora_dim)
+        # model = convert_LLaMA_to_lora(model, args.lora_module_name)
         if args.only_optimize_lora:
             model = only_optimize_lora_parameters(model)
 
@@ -252,7 +253,6 @@ def main():
         args.max_seq_len,
         sft_only_data_path=args.sft_only_data_path)
 
-
     # DataLoaders creation:
     if args.local_rank == -1:
         train_sampler = RandomSampler(train_dataset)
@@ -266,7 +266,8 @@ def main():
                                   batch_size=args.per_device_train_batch_size)
     print("len(train_dataloader) = ", len(train_dataloader))
     print("len(train_dataset) = ", len(train_dataset))
-    print("args.per_device_train_batch_size = ", args.per_device_train_batch_size)
+    print("args.per_device_train_batch_size = ",
+          args.per_device_train_batch_size)
 
     eval_dataloader = DataLoader(eval_dataset,
                                  collate_fn=default_data_collator,
@@ -274,8 +275,8 @@ def main():
                                  batch_size=args.per_device_eval_batch_size)
     print("len(eval_dataloader) = ", len(eval_dataloader))
     print("len(eval_dataset) = ", len(eval_dataset))
-    print("args.per_device_eval_batch_size = ", args.per_device_eval_batch_size)
-
+    print("args.per_device_eval_batch_size = ",
+          args.per_device_eval_batch_size)
 
     def evaluation(model, eval_dataloader):
         model.eval()
@@ -368,15 +369,22 @@ def main():
             model.backward(loss)
             model.step()
             training_step_losses.append(loss.item())
-            if (step+1)%args.show_loss_step == 0:
-                print("Epoch: {}, step: {}, loss: {}".format(epoch, step, sum(training_step_losses)/len(training_step_losses)))
+            if (step+1) % args.show_loss_step == 0:
+                print("Epoch: {}, step: {}, loss: {}".format(epoch, step,
+                      sum(training_step_losses)/len(training_step_losses)))
                 training_step_losses = []
-        # Evaluate perplexity on the validation set.
-        perplexity = evaluation(model, eval_dataloader)
-        print_rank_0(f"ppl: {perplexity}", args.global_rank)
-        print_rank_0(
-            f"***** Evaluating perplexity, Epoch {epoch+1}/{args.num_train_epochs} *****",
-            args.global_rank)
+
+                # Evaluate perplexity on the validation set.
+                perplexity = evaluation(model, eval_dataloader)
+                print_rank_0(f"ppl: {perplexity}", args.global_rank)
+                print_rank_0(
+                    f"***** Evaluating perplexity, Epoch {epoch+1}/{args.num_train_epochs} *****",
+                    args.global_rank)
+                if model.local_rank == 0:
+                    writer.add_scalar(
+                        "Loss/train", loss.item(), model.global_steps)
+                    writer.add_scalar("evalPPL", perplexity, model.global_steps)                    
+
 
         model.tput_timer.update_epoch_count()
 

@@ -21,15 +21,15 @@ data_output_path=$OUTPUT/data_files
 #bigscience/bloomz-560m
 
 deepspeed --num_gpus 1 main.py \
-   --sft_only_data_path  /root/data/school_math_0.25M/school_math_0.25M.json \
+   --sft_only_data_path  /root/data/belle/train_1M_CN/Belle_open_source_1M.json \
    --model_name_or_path /root/model/bloomz-1b1 \
-   --per_device_train_batch_size 4 \
+   --per_device_train_batch_size 2 \
    --per_device_eval_batch_size 2 \
    --max_seq_len 1024 \
    --learning_rate 5e-5 \
    --weight_decay 0.0001 \
    --num_train_epochs 1  \
-   --gradient_accumulation_steps 8 \
+   --gradient_accumulation_steps 4 \
    --lr_scheduler_type cosine \
    --num_warmup_steps 100 \
    --seed 1234 \
@@ -38,4 +38,6 @@ deepspeed --num_gpus 1 main.py \
    --deepspeed \
    --output_dir $OUTPUT \
    --data_output_path $data_output_path \
+   --lora_dim 8 \
+   --show_loss_step 5 \
 #    &> $OUTPUT/training.log

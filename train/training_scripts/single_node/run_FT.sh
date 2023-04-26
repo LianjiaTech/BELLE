@@ -23,7 +23,7 @@ data_output_path=$OUTPUT/data_files
 deepspeed main.py \
    --sft_only_data_path belleMath.json \
    --model_name_or_path /root/model/bloomz-1b1 \
-   --per_device_train_batch_size 16 \
+   --per_device_train_batch_size 4 \
    --per_device_eval_batch_size 1 \
    --max_seq_len 1024 \
    --learning_rate 1e-5 \
