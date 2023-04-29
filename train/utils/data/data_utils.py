@@ -100,58 +100,6 @@ class PromptDataset(Dataset):
                 self.pad_token_id
 
 
-    
-# def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
-#                          end_of_conversation_token, max_seq_len):
-#     prompt_dataset = []
-#     chosen_dataset = []
-#     reject_dataset = []
-#     filter_nums = 0
-#     assert tokenizer.padding_side == "left"#We need add eos_token_id at the last position of input_ids
-#     if train_phase == 1:
-#         for i, tmp_data in tqdm(enumerate(current_dataset), total=len(current_dataset), unit="example"):
-#             # tokenize the text
-#             prompt_text = raw_dataset.get_prompt(tmp_data)
-#             tokenized_prompt_text = tokenizer(prompt_text, truncation=True,max_length=max_seq_len,padding=False,return_tensors=None)
-#             user_prompt_len = len(tokenized_prompt_text["input_ids"])
-
-#             chosen_sentence = raw_dataset.get_prompt_and_chosen(tmp_data)  # the accept response
-
-#             chosen_token = tokenizer(chosen_sentence,
-#                                         max_length=max_seq_len,
-#                                         padding="max_length",
-#                                         truncation=True)
-
-#             if chosen_token["input_ids"][-1] != tokenizer.eos_token_id:#Make sure tokenizer.padding_side is left
-#                 chosen_token["input_ids"].append(tokenizer.eos_token_id)
-#                 chosen_token["attention_mask"].append(1)
-
-
-#             pad_token_num = sum(np.equal(chosen_token["input_ids"], tokenizer.pad_token_id))
-
-#             chosen_token["labels"] = [-100] * (pad_token_num+user_prompt_len) + chosen_token["input_ids"][pad_token_num+user_prompt_len:]
-
-#             chosen_token["input_ids"] = torch.LongTensor(chosen_token["input_ids"])
-#             chosen_token["attention_mask"] = torch.LongTensor(chosen_token["attention_mask"])
-#             chosen_token["labels"] = torch.LongTensor(chosen_token["labels"])
-#             if chosen_token["input_ids"].shape != chosen_token["labels"].shape:
-#                 print("input_ids.shape == {}, attention_mask.shape == {}, labels.shape == {}".format(chosen_token['input_ids'].shape, chosen_token['attention_mask'].shape, chosen_token['labels'].shape))
-#                 filter_nums +=1 
-#                 print("Filter sample: ", chosen_sentence)
-#                 continue
-
-#             chosen_dataset.append(chosen_token)
-
-#         print("{} samples were filtered".format(filter_nums))
-#         print("The total number of samples: {}".format(len(chosen_dataset)))
-
-#     else:
-#         raise ValueError("Only supported SFT")
-
-#     return PromptDataset(prompt_dataset, chosen_dataset, reject_dataset,
-#                          tokenizer.pad_token_id, train_phase)
-
-
 def pad_tensors_to_max_length(input_tensor, max_length, pad_token_id):
     padded_tensor = pad_token_id * torch.ones((max_length,), dtype=input_tensor.dtype, device=input_tensor.device)
     padded_tensor[-input_tensor.shape[0]:] = input_tensor
@@ -225,7 +173,7 @@ def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
             chosen_token = {
                 "input_ids": pad_tensors_to_max_length(input_ids, max_seq_len, tokenizer.pad_token_id),
                 "attention_mask": pad_tensors_to_max_length(attention_mask, max_seq_len, tokenizer.pad_token_id),
-                "labels": pad_tensors_to_max_length(labels, max_seq_len, tokenizer.pad_token_id)
+                "labels": pad_tensors_to_max_length(labels, max_seq_len, IGNORE_INDEX)
             }
             chosen_dataset.append(chosen_token)
             if i == 0:
@@ -295,14 +243,6 @@ def create_prompt_dataset(local_rank,
     """
     os.makedirs(output_path, exist_ok=True)
     
-    # fname = str(hash(sft_only_data_path[0]))  # hash the file name to avoid too long file name
-    # # train_fname = f"{output_path}/traindata_{fname}.pt"
-    # # eval_fname = f"{output_path}/evaldata_{fname}.pt"
-    # print("fname = " + fname)
-
-    # cache_found = os.path.isfile(train_fname) and os.path.isfile(eval_fname)
-    # buf_create_cache = torch.ByteTensor([not cache_found]).cuda()
-    # torch.distributed.all_reduce(buf_create_cache)
     train_dataset, eval_dataset = create_dataset(
         local_rank = local_rank, 
         dataset_name = sft_only_data_path, 
