@@ -173,7 +173,7 @@ def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
             chosen_token = {
                 "input_ids": pad_tensors_to_max_length(input_ids, max_seq_len, tokenizer.pad_token_id),
                 "attention_mask": pad_tensors_to_max_length(attention_mask, max_seq_len, tokenizer.pad_token_id),
-                "labels": pad_tensors_to_max_length(labels, max_seq_len, IGNORE_INDEX = -100)
+                "labels": pad_tensors_to_max_length(labels, max_seq_len, IGNORE_INDEX)
             }
             chosen_dataset.append(chosen_token)
             if i == 0:
@@ -243,14 +243,6 @@ def create_prompt_dataset(local_rank,
     """
     os.makedirs(output_path, exist_ok=True)
     
-    # fname = str(hash(sft_only_data_path[0]))  # hash the file name to avoid too long file name
-    # # train_fname = f"{output_path}/traindata_{fname}.pt"
-    # # eval_fname = f"{output_path}/evaldata_{fname}.pt"
-    # print("fname = " + fname)
-
-    # cache_found = os.path.isfile(train_fname) and os.path.isfile(eval_fname)
-    # buf_create_cache = torch.ByteTensor([not cache_found]).cuda()
-    # torch.distributed.all_reduce(buf_create_cache)
     train_dataset, eval_dataset = create_dataset(
         local_rank = local_rank, 
         dataset_name = sft_only_data_path, 
