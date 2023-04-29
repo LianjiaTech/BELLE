@@ -129,7 +129,7 @@
   <tr>
     <td rowspan="4">数据语言分布</td>
     <td> LLaMA-7B-EXT </td>
-    <td> cn(alpaca-3.5&4) </td>
+    <td> zh(alpaca-3.5&4) </td>
     <td> 0.679 </td>
   </tr>
   <tr>
