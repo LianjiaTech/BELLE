@@ -1,0 +1,66 @@
+WARC/1.0
+WARC-Type: warcinfo
+WARC-Date: 2019-03-27T06:10:48Z
+WARC-Filename: CC-MAIN-20190318132220-20190318153634-00064.warc.wet.gz
+WARC-Record-ID: <urn:uuid:d711dd43-8280-457b-9566-530ef6ea5d43>
+Content-Type: application/warc-fields
+Content-Length: 370
+
+Software-Info: ia-web-commons.1.1.9-SNAPSHOT-20190314010907
+Extracted-Date: Wed, 27 Mar 2019 06:10:48 GMT
+robots: checked via crawler-commons 0.11-SNAPSHOT (https://github.com/crawler-commons/crawler-commons)
+isPartOf: CC-MAIN-2019-13
+operator: Common Crawl Admin (info@commoncrawl.org)
+description: Wide crawl of the web for March 2019
+publisher: Common Crawl
+
+WARC/1.0
+WARC-Type: conversion
+WARC-Target-URI: http://sample_english.com
+WARC-Date: 2019-03-18T00:00:00Z
+WARC-Record-ID: <urn:uuid:cd61b0b3-d9b0-466c-9a5e-99c191f8d2e1>
+WARC-Refers-To: <urn:uuid:eb4541d2-5ad0-4ed0-91a6-34380636d506>
+WARC-Block-Digest: sha1:XQZHW7QWIG54HVAV3KPRW6MK5ILDNCER
+Content-Type: text/plain
+Content-Length: 353
+
+Famous Mark Twain Quotes
+Don't part with your illusions. When they are gone you may still exist, but you have ceased to live.
+Education: that which reveals to the wise, and conceals from the stupid, the vast limits of their knowledge.
+
+Facts are stubborn things, but statistics are more pliable.
+Fiction is obliged to stick to possibilities. Truth isn't.
+
+WARC/1.0
+WARC-Type: conversion
+WARC-Target-URI: http://sample_chinese.zh
+WARC-Date: 2019-03-18T00:00:01Z
+WARC-Record-ID: <urn:uuid:cd61b0b3-d9b0-466c-9a5e-99c191f8d2e1>
+WARC-Refers-To: <urn:uuid:eb4541d2-5ad0-4ed0-91a6-34380636d506>
+WARC-Block-Digest: sha1:Y4E6URVYGIAFNVRTPZ5S3J64RTZTP6HJ
+Content-Type: text/plain
+Content-Length: 109
+
+馬克·吐溫名言
+不要放棄你的幻想。 當它們消失後，您可能仍然存在，但您已經不復存在。
+教育：向智者揭示並從愚蠢者中隱藏其知識的巨大局限的教育。
+事實是固執的東西，但統計數字卻比較柔和。
+小說必須堅持可能。 真理不是。
+
+WARC/1.0
+WARC-Type: conversion
+WARC-Target-URI: http://sample_russian.ru
+WARC-Date: 2019-03-18T00:00:02Z
+WARC-Record-ID: <urn:uuid:27dccd48-27b2-4eb0-b10b-a43661cbf0bc>
+WARC-Refers-To: <urn:uuid:5d53cf06-9ccf-4216-917a-89cdc3d50d54>
+WARC-Block-Digest: sha1:RBW57C753IE4CHCOZCMS2BHMHBEGXKXL
+Content-Type: text/plain
+Content-Length: 355
+
+Цитаты знаменитого Марка Твена
+Не расставайся со своими иллюзиями. Когда они исчезнут, вы все еще можете существовать, но вы перестали жить.
+Образование: то, что открывает мудрым и скрывает от глупых обширные границы их знаний.
+Факты - упрямые вещи, но статистика более податлива.
+Художественная литература обязана придерживаться возможностей. Правда нет.
+
+

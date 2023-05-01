@@ -1,0 +1,69 @@
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/python:3.7.2
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-lid-dependencies-{{ checksum "setup.py" }}
+          - v1-dependencies-{{ checksum "setup.py" }}
+          # don't fallback to using the latest cache if no exact match is found (restart from scratch
+      - run:
+          name: Install setup.py
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install --upgrade pip
+            python --version
+            python -c "import platform; print(platform.python_compiler())"
+            pip --version
+            gcc --version
+            pip install --progress-bar off ".[dev, tools]"
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "setup.py" }}
+
+      - run:
+          name: Download Fasttext lang id
+          command: make bin/lid.bin
+      - save_cache:
+          key: v1-lid-dependencies-{{ checksum "setup.py" }}
+          paths:
+            - bin/lid.bin
+            - ./venv
+
+      # Run tests
+      - run:
+          name: Run Tests
+          command: |
+            . venv/bin/activate
+            pytest tests
+      - run:
+          name: Run mypy type checker
+          command: |
+            . venv/bin/activate
+            mypy --ignore-missing-imports .
+      - run:
+          name: Check formatting
+          command: |
+            . venv/bin/activate
+            isort --diff --check cc_net
+            black --diff --check cc_net
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
+

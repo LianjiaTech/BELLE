@@ -1,0 +1,38 @@
+{
+  "2019-09/de_head_0000.json.gz": {
+    "size": 5264993,
+    "checksum": "fc12ba3dc982ef06e7e44a916f298e1c16f9a806"
+  },
+  "2019-09/de_middle_0000.json.gz": {
+    "size": 9195535,
+    "checksum": "2369ff0296ab1d924c81083f17ce41f22a10ad69"
+  },
+  "2019-09/de_tail_0000.json.gz": {
+    "size": 33029074,
+    "checksum": "18865040a7263242d298958f358f7cb5511114d4"
+  },
+  "2019-09/fr_head_0000.json.gz": {
+    "size": 4076580,
+    "checksum": "4eef4017bbbe042fc01c45b5fbcf94de49f5138e"
+  },
+  "2019-09/fr_middle_0000.json.gz": {
+    "size": 8075095,
+    "checksum": "fd251a5b924c4aa66a63c375ca3a8fae23b3273b"
+  },
+  "2019-09/fr_tail_0000.json.gz": {
+    "size": 27248949,
+    "checksum": "4a8aed38abc6b9d04459e8d424bd47426f063638"
+  },
+  "2019-09/it_head_0000.json.gz": {
+    "size": 1760696,
+    "checksum": "e5e50e49b4a5147ea82b385babd5c83f74d2a4ed"
+  },
+  "2019-09/it_middle_0000.json.gz": {
+    "size": 4461832,
+    "checksum": "7daab7b7acb93d81e50534196ada4e94947b8224"
+  },
+  "2019-09/it_tail_0000.json.gz": {
+    "size": 14754298,
+    "checksum": "1adc018519a598ff162261d7e480ea41d3458768"
+  }
+}

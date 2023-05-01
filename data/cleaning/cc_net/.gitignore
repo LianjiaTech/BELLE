@@ -1,0 +1,27 @@
+# Dataset
+/data
+/test_data/
+/test_data2/
+/output/
+
+# Binary files
+/bin/
+
+# Third party code
+/third_party/
+
+# Generic to python
+__pycache__/
+*.pyc
+.mypy_cache/
+
+/scratch/
+/notebooks/
+
+/build/
+/cc_net.egg-info/
+/config/
+/dist/
+/pip-wheel-metadata/
+
+/.DS_Store
