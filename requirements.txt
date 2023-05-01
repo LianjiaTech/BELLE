@@ -8,3 +8,4 @@ peft==0.2.0
 datasets
 bitsandbytes
 deepspeed
+warcio==1.7.4

@@ -4,6 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 #
 
+import os
 import contextlib
 import functools
 import logging
@@ -37,6 +38,16 @@ def cc_segments(dump_id: str, cache_dir: Path = None) -> List[str]:
     wet_paths_cache = cache_dir / f"wet_{dump_id}.paths.gz"
     f = jsonql.open_remote_file(wet_paths, cache=wet_paths_cache)
     return [segment.strip() for segment in f]
+
+
+@functools.lru_cache()
+def cc_segments_in_dir(dump_id: str, cache_dir: Path = None) -> List[str]:
+    files = []
+    for dirpath, dirnames, filenames in os.walk(cache_dir):
+        for filename in filenames:
+            if filename.endswith('.gz'):
+                files.append(filename)
+    return files
 
 
 def list_dumps() -> List[str]:
@@ -240,7 +251,7 @@ class CCShardReader(CCSegmentsReader):
         # Delaying the initialization allows to delay the looking up of the WET files
         if self._segments:
             return self._segments
-        segments = cc_segments(self.dump, self.cache_dir)
+        segments = cc_segments_in_dir(self.dump, self.cache_dir)
         n = len(segments)
         if self.num_shards < 0:
             self.num_shards = n // self.num_segments_per_shard

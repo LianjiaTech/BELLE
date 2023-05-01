@@ -58,6 +58,9 @@ def get_executor(
 
     if ex.cluster == "local":
         # LocalExecutor doesn't respect task_parallelism
+        ex.update_parameters(
+            timeout_min=int(timeout_hour * 60)
+        )
         return functools.partial(custom_map_array, ex, task_parallelism)
     if ex.cluster == "debug":
         return debug_executor
