@@ -129,7 +129,7 @@ def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
         labels = []
         for sentence in source:
             sentence_from = sentence["from"].lower()
-            sentence_value = 'Human: ' + sentence["value"] + '\n\nAssistant: ' if sentence_from == 'human' else sentence["value"]
+            sentence_value = 'Human: \n' + sentence["value"] + '\n\nAssistant: \n' if sentence_from == 'human' else sentence["value"] #https://github.com/LianjiaTech/BELLE/issues/337
             conversation += sentence_value
             sentence_ids = tokenizer.encode(sentence_value, add_special_tokens=False)#do not add bos_token_id
             label = copy.deepcopy(sentence_ids) if sentence_from != 'human' else [IGNORE_INDEX] * len(sentence_ids)
@@ -158,9 +158,8 @@ def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
             input_ids, labels, conversation = _addrole_masklabel_tokenize(source)
             input_ids = input_ids[:max_seq_len-1]
             labels = labels[:max_seq_len-1]
-            if not any(x > -100 for x in labels) or "Human" not in conversation:
+            if not any(x > -100 for x in labels):
                 #All label value is -100, means that no Human inputs
-                #No human instruction in current conversation
                 filter_nums += 1
                 # print("conversation: ", source)
                 continue

@@ -102,7 +102,7 @@ if __name__ == '__main__':
     tokenizer.pad_token_id = 0
     tokenizer.eos_token_id = 2
     model_config = AutoConfig.from_pretrained(args.model_name_or_path)
-
+    print("Loading model")
     model = AutoModelForCausalLM.from_pretrained(
         args.finetuned_model_name_or_path, 
         torch_dtype=load_type,
