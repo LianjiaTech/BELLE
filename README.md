@@ -22,6 +22,7 @@
 </br>
 
 ## 🔄 最近更新
+* [2023/05/11] [BELLE/data/10M](data/10M)中，新加350万条生成多样化指令任务数据，包括单轮和多轮对话[train_3.5M_CN](https://huggingface.co/datasets/BelleGroup/train_3.5M_CN)。
 * [2023/04/19] 开放了其中一篇论文中的的相关模型：包括在LLaMA7B基础上增量预训练扩展中文词表的模（详见[BelleGroup/BELLE-LLaMA-EXT-7B](https://huggingface.co/BelleGroup/BELLE-LLaMA-EXT-7B)），以及基于多样化开源数据训练后的LLaMA-7B模型（详见[BelleGroup/BELLE-on-Open-Datasets](https://huggingface.co/BelleGroup/BELLE-on-Open-Datasets)）。
 * [2023/04/18] 更新了train代码，详见[BELLE/train](https://github.com/LianjiaTech/BELLE/tree/main/train)，集成了Deepspeed-Chat，提供了相关的docker
 * [2023/04/18] 更新了[两篇最新论文工作](#📑-研究报告)，对比了不同方式产生的训练数据、不同训练方法（LoRA, finetune)对效果的影响

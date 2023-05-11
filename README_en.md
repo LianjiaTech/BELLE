@@ -32,6 +32,7 @@ The following screencap ran on an M1 Max CPU real-time (no speed adjustment).
 
 ## 🔄 What‘s new
 
+* [2023/05/11] In [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M), a new dataset named ["train_3.5M_CN"]((https://huggingface.co/datasets/BelleGroup/train_3.5M_CN)) containing 3.5 million newly added diverse instruction task data.
 * [2023/04/18] The train code has been updated and can be found in [BELLE/train](train). Deepspeed-Chat has been integrated, and relevant Docker containers have been provided.
 * [2023/04/17] Two new papers have been published that compare the effects of different training data generation methods and different training methods (LoRA, finetune) on model performance.
 * [2023/04/12] Released [ChatBELLE App](chat/README.md), a cross-platform BELLE-7B model realtime chat App based on [llama.cpp](https://github.com/ggerganov/llama.cpp) and [Flutter](https://flutter.dev/).
