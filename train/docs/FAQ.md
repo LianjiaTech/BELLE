@@ -38,7 +38,7 @@
 这里给出一些实验建议：
 
 1. 不开deepspeed会占用更多显存，建议全量参数finetune模式尽可能采用deepspeed
-2. lora训练采用8bit量化训练，不采用deepspeed
+2. LoRA训练如果采用8bit量化，就不能使用deepspeed；如果使用deepspeed，就不能指定use_int8_training
 
 关于deepspeed的配置可参考：
 
