@@ -10,7 +10,6 @@ disable_caching()
 
 import logging
 import json
-import fire
 import torch
 from transformers.utils import add_start_docstrings
 import transformers
@@ -35,15 +34,17 @@ from transformers import (
     AutoTokenizer,
     HfArgumentParser,
     TrainingArguments,
-    Trainer
+    Trainer,
+    set_seed
 )
 from transformers.trainer_pt_utils import get_model_param_count
+from transformers.trainer_utils import get_last_checkpoint
 from transformers import LlamaForCausalLM, LlamaTokenizer
-# data_collator=transformers.DataCollatorForSeq2Seq(
-#     tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
-# )
+from transformers.utils import add_start_docstrings
+from transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
+from transformers.trainer_callback import TrainerCallback
 
-
+logger = logging.getLogger(__name__)
 IGNORE_INDEX = -100
 
 @dataclass
@@ -143,6 +144,13 @@ class TrainingArguments(TrainingArguments):
         metadata={"help": "gradient_checkpointing"}
     )
 
+# save peft at train end
+class SavePeftModelAtEndCallback(TrainerCallback):
+    def on_train_end(self, args, state, control, **kwargs):
+        peft_model_path = os.path.join(args.output_dir, "adapter_model")
+        kwargs["model"].save_pretrained(peft_model_path)
+        return control
+
 
 def print_rank_0(msg, log_file, rank=0):
     if rank <= 0:
@@ -158,8 +166,50 @@ def main():
     ddp = world_size != 1
     global_rank = torch.distributed.get_rank()
     log_file = os.path.join(training_args.output_dir,'print_log.txt')
-    # logger = get_logger("main", training_args.output_dir)
 
+    # Setup logging
+    logging.basicConfig(
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+        datefmt="%m/%d/%Y %H:%M:%S",
+        handlers=[logging.StreamHandler(sys.stdout)],
+    )
+
+    if training_args.should_log:
+        # The default of training_args.log_level is passive, so we set log level at info here to have that default.
+        transformers.utils.logging.set_verbosity_info()
+
+    log_level = training_args.get_process_log_level()
+    logger.setLevel(log_level)
+    transformers.utils.logging.set_verbosity(log_level)
+    transformers.utils.logging.enable_default_handler()
+    transformers.utils.logging.enable_explicit_format()
+
+    # Log on each process the small summary:
+    logger.warning(
+        f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
+        + f"distributed training: {bool(training_args.local_rank != -1)}, 16-bits training: {training_args.fp16}"
+    )
+    logger.info(f"Training/evaluation parameters {training_args}")
+
+    # Detecting last checkpoint.
+    last_checkpoint = None
+    if os.path.isdir(training_args.output_dir) and training_args.do_train and not training_args.overwrite_output_dir:
+        last_checkpoint = get_last_checkpoint(training_args.output_dir)
+        if last_checkpoint is None and len(os.listdir(training_args.output_dir)) > 0:
+            raise ValueError(
+                f"Output directory ({training_args.output_dir}) already exists and is not empty. "
+                "Use --overwrite_output_dir to overcome."
+            )
+        elif last_checkpoint is not None and training_args.resume_from_checkpoint is None:
+            logger.info(
+                f"Checkpoint detected, resuming training at {last_checkpoint}. To avoid this behavior, change "
+                "the `--output_dir` or add `--overwrite_output_dir` to train from scratch."
+            )
+
+    # Set seed before initializing model.
+    set_seed(training_args.seed)
+
+    
     torch_dtype = (
         model_args.torch_dtype
         if model_args.torch_dtype in ["auto", None]
@@ -239,7 +289,6 @@ def main():
         for sentence in source:
             sentence_from = sentence["from"].lower()
             sentence_value = 'Human: \n' + sentence["value"] + '\n\nAssistant: \n' if sentence_from == 'human' else sentence["value"] #https://github.com/LianjiaTech/BELLE/issues/337
-            # sentence_value = sentence["value"]+"\n\nRewrite:" if sentence_from == 'human' else sentence["value"]
             # conversation += sentence_value
             sentence_ids = tokenizer.encode(sentence_value, add_special_tokens=False)#do not add bos_token_id
             label = copy.deepcopy(sentence_ids) if sentence_from != 'human' else [IGNORE_INDEX] * len(sentence_ids)
@@ -282,9 +331,10 @@ def main():
     training_nums = len(data['train'])
     num_gpus = torch.cuda.device_count()
 
-    batch_size = training_args.per_device_train_batch_size * num_gpus * training_args.gradient_accumulation_steps
+
+    batch_size = training_args.per_device_train_batch_size * training_args.world_size * training_args.gradient_accumulation_steps
     t_total = math.ceil(training_nums/batch_size) * training_args.num_train_epochs
-    training_args.eval_steps = max(t_total // 10, 10)
+    training_args.eval_steps = max(t_total // 5, 5)
     training_args.save_steps = training_args.eval_steps
     training_args.warmup_steps = int(t_total*training_args.warmup_ratio) if training_args.warmup_ratio>0.0 else training_args.warmup_steps
     print_rank_0("num_gpus = {}, training_nums = {}, t_total = {}, warmup_steps = {}, eval_steps = {}, save_steps = {}".format(num_gpus, training_nums, t_total, training_args.warmup_steps, training_args.eval_steps, training_args.save_steps), log_file, global_rank)
@@ -296,7 +346,8 @@ def main():
     #https://github.com/huggingface/transformers/blob/main/src/transformers/trainer.py
     #https://www.deepspeed.ai/docs/config-json/
     #https://huggingface.co/docs/accelerate/usage_guides/deepspeed
-
+    #https://huggingface.co/transformers/v4.10.1/main_classes/deepspeed.html
+    #https://github.com/tatsu-lab/stanford_alpaca/issues/176
     trainer = Trainer(
         model=model,
         args=training_args,
