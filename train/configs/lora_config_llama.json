@@ -1,5 +1,5 @@
 {
-    "lora_r": 16,
+    "r": 16,
     "lora_alpha": 32,
     "lora_dropout": 0.05,
     "lora_target_modules": [
