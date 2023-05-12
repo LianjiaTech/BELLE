@@ -242,6 +242,40 @@ bash scripts/merge_lora.sh
 
 
 
+#### 2.2.4 多机多卡训练
+
+以两台机器为例，每台机器上有8张卡
+
+首先需要在第一台机器(主机器)上运行
+
+```bash
+bash scripts/multinode_run.sh 0
+```
+
+然后在第二台机器上运行
+
+```bash
+bash scripts/multinode_run.sh 1
+```
+
+**参数说明**
+
+```bash
+node_rank=$1
+echo ${node_rank}
+master_addr="10.111.112.223"
+
+# #Multi-node
+torchrun --nproc_per_node 8 --nnodes 2 --master_addr ${master_addr} --master_port 14545 --node_rank ${node_rank} src/train.py 
+```
+
+- node_rank 代表节点的rank，第一台机器（主机器）的rank设置为0，第二台机器的rank设置为1
+- nnodes 代表节点机器的数量
+- master_addr 代表主机器的ip地址
+- master_port 代表与主机器通信的端口号
+
+
+
 ## 3. Inference
 
 ### 3.1 Inference
@@ -301,6 +335,10 @@ python training_scripts/convert_llama_weights_to_hf.py --input_dir download_offi
 #### 4.1.2 BELLE-LLaMA转为hf格式
 
 由于LLaMA模型的使用约束，我们只能开源与原始模型的diff（如：[BELLE-LLaMA-7B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc)）。当您已经从[facebookresearch/llama](https://github.com/facebookresearch/llama)获取LLaMA模型的访问权限后，可参考 https://github.com/LianjiaTech/BELLE/tree/main/models ，转换后的模型即为我们指令调优后的LLaMA模型。
+
+### 4.2 合并词表
+
+如果您想在原版LLaMA的基础上扩充中文词表，可参考scripts/merge_tokenizers.py，后续会开放训练embedding的代码。扩充词表后的效果可参考我们的工作：[Towards Better Instruction Following Language Models for Chinese: Investigating the Impact of Training Data and Evaluation](https://arxiv.org/pdf/2304.07854.pdf)
 
 
 
