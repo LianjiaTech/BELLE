@@ -146,6 +146,11 @@ deepspeed 的参数配置可参考：
 
 1. https://www.deepspeed.ai/docs/config-json/
 2. https://huggingface.co/docs/accelerate/usage_guides/deepspeed
+3. https://github.com/huggingface/transformers/blob/main/tests/deepspeed
+
+**关于deepspeed**
+
+如果显存充足，可优先考虑stage 2，对应的配置文件是configs/deepspeed_config.json。如果显存不足，可采用stage 3，该模式采用模型参数并行，可显著减小显存占用，对应的配置文件是configs/deepspeed_config_stage3.json。（需要注意的是在stage=3 模式下，默认不会保存模型的权重，要指定stage3_gather_16bit_weights_on_model_save 为True）
 
 
 训练日志和模型保存在output_dir目录下，目录下的文件结构应该如下：
