@@ -383,8 +383,9 @@ def main():
         ).__get__(model, type(model))
 
     trainer.train(resume_from_checkpoint=None)
+    if training_args.use_lora:
+        model.save_pretrained(training_args.output_dir)#Save adapter_model.bin and adapter_config.json
 
-#     model.save_pretrained(training_args.output_dir)
     trainer.save_model() # https://github.com/huggingface/transformers/blob/main/src/transformers/trainer.py#L2808
     print_rank_0("\n Training completed!!! If there's a warning about missing keys above, please disregard :)", log_file, global_rank)
 
