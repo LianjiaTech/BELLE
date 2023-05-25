@@ -5,7 +5,9 @@ model_name_or_path=/path_to_llm/hf_llama_7b/ # or bloomz-7b1-mt
 train_file=belleMath.json
 validation_file=belleMath-dev1K.json
 output_dir=saved_models
+output_dir_lora=saved_models_lora
 mkdir -p ${output_dir}
+mkdir -p ${output_dir_lora}
 
 cache_dir=hf_cache_dir
 mkdir -p ${cache_dir}
@@ -65,4 +67,4 @@ torchrun --nproc_per_node 8 src/train.py \
     --seed 1234 \
     --gradient_checkpointing True \
     --cache_dir ${cache_dir} \
-    --output_dir ${output_dir}
+    --output_dir ${output_dir_lora}
