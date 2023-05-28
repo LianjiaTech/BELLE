@@ -1,6 +1,6 @@
 # awesome-open-instruct-data-for-chinese [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
 
-这是一个用于中文指令调整的 AWESOME 数据集合集。
+这是一个用于中文指令精调的 AWESOME 数据集合集。
 
 通过使用指令进行微调，以提高 LLM（大型语言模型）的性能成为了一个趋势。随着以数据为中心的 AI 越来越受欢迎，我们需要更高质量的数据集来训练我们的模型。
 
