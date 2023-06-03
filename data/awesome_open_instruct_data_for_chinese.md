@@ -7,22 +7,26 @@
 在这里，你可以找到一些开源的中文指令数据的AWESOME 列表。
 
 ## 目录
+
 - [(JosephusCheung/GuanacoDataset)|534K](https://huggingface.co/datasets/JosephusCheung/GuanacoDataset)
-- [(CSIG)|191K](https://huggingface.co/datasets/BAAI/COIG/tree/main)
+- [(COIG)|191K](https://huggingface.co/datasets/BAAI/COIG/tree/main)
 - [(Firefly)|1.1M](https://huggingface.co/datasets/YeungNLP/firefly-train-1.1M)
-- [(InstructWild)|52K](https://github.com/XueFuzhao/InstructionWild)
-- [(HC3)|40K](https://huggingface.co/datasets/Hello-SimpleAI/HC3-Chinese)
+- [(HC3-Chinese)|13K](https://huggingface.co/datasets/Hello-SimpleAI/HC3-Chinese)
 - [(alpaca_gpt4_zh)|52K](https://github.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM/blob/main/data/alpaca_gpt4_data_zh.json)
 - [(pCLUE)|1.2M](https://github.com/CLUEbenchmark/pCLUE)
 - [(CSL)|396K](https://github.com/ydli-ai/CSL)
 - [(MOSS)|0.6M](https://github.com/OpenLMLab/MOSS/tree/main/SFT_data)
+- [(Safety-Prompts)|100K](https://github.com/thu-coai/Safety-Prompts)
+- [(oa_leet10k)|10K](https://huggingface.co/datasets/ehartford/oa_leet10k)
+- [(RefGPT-Fact-zh)|50K](https://huggingface.co/datasets/Mutonix/RefGPT-Fact)
+
 ## Datasets
 
  ## [(JosephusCheung/GuanacoDataset)|534K](https://huggingface.co/datasets/JosephusCheung/GuanacoDataset)
 
  - The dataset for the Guanaco model is designed to enhance the multilingual capabilities and address various linguistic tasks. It builds upon the 175 tasks from the Alpaca model by providing rewrites of seed tasks in different languages and adding new tasks specifically designed for English grammar analysis, natural language understanding, cross-lingual self-awareness, and explicit content recognition. The dataset comprises a total of 534,530 entries. 
 
- ## [(CSIG)|191K](https://huggingface.co/datasets/BAAI/COIG/tree/main)
+ ## [(COIG)|191K](https://huggingface.co/datasets/BAAI/COIG/tree/main)
 
  - COIG project provides diverse Chinese instruction corpora. Researchers can contribute to the corpus set and collaborate. COIG releases first chip to aid Chinese LLMs' development and encourages more researchers to join. Includes translated, exam, human value alignment, counterfactual correction, and leetcode instruction corpora.
 
@@ -32,8 +36,6 @@
 - Lincense: [Apache 2.0]
 - [Firefly Dataset](https://huggingface.co/datasets/YeungNLP/firefly-train-1.1M)
 
-
-
  ## [(InstructWild)|52K](https://github.com/XueFuzhao/InstructionWild)
 
  - Summary:  the project aims to establish a more diverse and rich dataset of instructional commands. To do so, they collected 429 commands from ChatGPT screenshots and released English and Chinese versions. Following Alpaca's method, they generated 52,000 commands and their responses. They crawled over 700 noisy commands from Twitter and screened out useless ones. As a result, they selected 429 clean commands to ensure high quality. They collected the commands using a method similar to Alpaca's, but without the need for human intervention. Therefore, the generated prompts are more diverse and cover a wider range of topics. They provide 5 sample prompts to generate new commands using the OpenAI API. After collecting these prompts, they collected their respective instructions from the OpenAI API. The English and Chinese datasets were generated independently and cost a total of $880. The English dataset has 52K commands (about 24 million tokens), and the Chinese dataset has 52K commands as well.
@@ -42,7 +44,7 @@
 
 
 
- ## [(HC3)|40K](https://huggingface.co/datasets/Hello-SimpleAI/HC3-Chinese)
+ ## [(HC3-Chinese)|13K](https://huggingface.co/datasets/Hello-SimpleAI/HC3-Chinese)
 
  - Summary:  In this work, we collected tens of thousands of comparison responses from both human experts and ChatGPT, with questions ranging from open-domain, financial, medical, legal, and psychological areas. The HC3 dataset is a valuable resource to analyze the linguistic and stylist characteristics of both humans and ChatGPT, which helps to investigate the future improvement directions for LLMs. They construct the comparison dataset mainly from two sources: Publicly available question-answering datasets, where answers are given by experts in specific domains or the high-voted answers by web users; the second is Wiki text; Based on the collected human question-answering datasets, they use ChatGPT to generate answers to these questions. To make the answer more aligned with human answers, they add additional instructions to ChatGPT for specific datasets. 
  - Lincense: [cc-by-sa-4.0]
@@ -73,7 +75,30 @@
  - [CSL Dataset](https://drive.google.com/file/d/1xEDgtqHU4qm0Sp-dKjc5KerAmWydmh3-/view)
 
  ## [(MOSS)|0.6M](https://github.com/OpenLMLab/MOSS/tree/main/SFT_data)
+
  - Summary: MOSS is an open-sourced plugin-augmented conversational language model. The multi-turn conversational data (moss-002-sft-data) used to train MOSS-002, covering helpfulness, honesty, and harmlessness. The data is consisting of 570K English and 590K Chinese conversations generated by text-davinci-003. We open-sourced a small portion of other data(moss-003-sft-data, moss-003-sft-plugin-data, moss-003-pm-data) and will make public the full data in the near future. 
 
+ - Lincense: [cc-by-nc 4.0]
+
  - [(MOSS SFT Dataset)](https://github.com/OpenLMLab/MOSS/tree/main/SFT_data)
+
+ ## [(Safety-Prompts)|100K](https://github.com/thu-coai/Safety-Prompts)
+
+ - Summary: Chinese safety prompts for evaluating and improving the safety of LLMs. The benchmark explores the comprehensive safety performance of LLMs from two perspectives: 8 kinds of typical safety scenarios and 6 types of more challenging instruction attacks.
+ - Lincense: [apache-2.0]
+ - [(Safety-Prompts Dataset)](https://github.com/thu-coai/Safety-Prompts)
+
+ ## [(oa_leet10k)|10K](https://huggingface.co/datasets/ehartford/oa_leet10k)
+
+ - Summary: LeetCode problems solved in multiple programming languages
+ - Lincense: [apache-2.0]
+ - [(oa_leet10k Dataset)](https://huggingface.co/datasets/ehartford/oa_leet10k)
+
+
+
+ ## [(RefGPT-Fact-zh)|50K](https://huggingface.co/datasets/Mutonix/RefGPT-Fact/viewer/Mutonix--RefGPT-Fact/zh)
+
+ - Summary:  RefGPT-Fact is a datasets containing 100k multi-turn dialogues about factual knowledge with 50k English and 50k Chinese. The English version uses the English Wikipedia as the reference and the Chinese version uses the frequently-used Chinese online encyclopedia website, Baidu Baike.
+ - Lincense: [apache-2.0]
+ - [(RefGPT-Fact-zh Dataset)](https://huggingface.co/datasets/Mutonix/RefGPT-Fact/viewer/Mutonix--RefGPT-Fact/zh)
 
