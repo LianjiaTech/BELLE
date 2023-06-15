@@ -1,6 +1,6 @@
+import numpy as np
 import torch
-import json
-from transformers import LlamaForCausalLM, LlamaTokenizer, AutoTokenizer, AutoModelForCausalLM, AutoConfig
+from transformers import LlamaTokenizer, AutoTokenizer, AutoModelForCausalLM, AutoConfig
 from peft import  PeftModel
 import argparse
 from tqdm import tqdm

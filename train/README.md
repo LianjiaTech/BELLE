@@ -11,7 +11,6 @@
 
 当前v2版本的代码对环境的依赖性较低，而且更加简洁。
 
-
 ## 1. 准备环境
 
 ### 1.1 Docker镜像
@@ -86,9 +85,13 @@ tail -n +1001 school_math_0.25M_conv.json > belleMath.json
 wget https://huggingface.co/datasets/anon8231489123/ShareGPT_Vicuna_unfiltered/resolve/main/ShareGPT_V3_unfiltered_cleaned_split.json
 ```
 
-
-
 ### 2.2 模型训练
+
+支持配置
+
+* 全量微调 + Deepspeed
+* LoRA + Deepspeed
+* LoRA + int8
 
 训练的启动脚本写在scripts/run.sh，你需要按照实际需求修改run.sh中的参数
 
@@ -140,7 +143,7 @@ torchrun --nproc_per_node 8 train.py \
 
 1. 如果想要单卡训练，仅需将nproc_per_node设置为1即可
 2. 如果预训练模型不是LLaMA，则去掉--llama。如果是LLaMA模型，需要指定--llama。因为LLaMA模型需要采用LLamaTokenizer加载，如果用AutoTokenizer加载llama可能会出现无限递归的问题，这和transformers版本有关
-3. 如果运行环境不支持deepspeed，去掉--deepspeed 
+3. 如果运行环境不支持deepspeed，去掉--deepspeed
 
 deepspeed 的参数配置可参考：
 
@@ -150,8 +153,7 @@ deepspeed 的参数配置可参考：
 
 **关于deepspeed**
 
-如果显存充足，可优先考虑stage 2，对应的配置文件是configs/deepspeed_config.json。如果显存不足，可采用stage 3，该模式采用模型参数并行，可显著减小显存占用，对应的配置文件是configs/deepspeed_config_stage3.json。（需要注意的是在stage=3 模式下，默认不会保存模型的权重，要指定stage3_gather_16bit_weights_on_model_save 为True）
-
+如果显存充足，可优先考虑stage 2，对应的配置文件是configs/deepspeed_config.json。如果显存不足，可采用stage 3，该模式下模型参数将分布在多张显卡上，可显著减小显存占用，对应的配置文件是configs/deepspeed_config_stage3.json。
 
 训练日志和模型保存在output_dir目录下，目录下的文件结构应该如下：
 
@@ -200,18 +202,22 @@ torchrun --nproc_per_node 8 train.py \
     --seed 1234 \
     --gradient_checkpointing True \
     --cache_dir ${cache_dir} \
-    --output_dir ${output_dir}
+    --output_dir ${output_dir} \
+    # --deepspeed configs/deepspeed_config_stage3.json
 ```
 
 **参数说明**
 
-- use_lora 代表采用LoRA训练
-- use_int8_training 代表采用8bit量化训练，可显著减少显存占用
-- lora_config 给出了LoRA的参数配置。如果训练Bloom模型，则改为configs/lora_config_bloom.json
+* use_lora 代表采用LoRA训练
+* use_int8_training 代表采用8bit量化训练，可显著减少显存占用
+* lora_config 给出了LoRA的参数配置。如果训练Bloom模型，则改为configs/lora_config_bloom.json
+* deepspeed 训练的序列较长时，推荐使用deepspeed stage 3，能有效将模型参数分配到多卡上，留下空间加载更长的序列
+
+**注意**：use_int8_training和deepspeed只能二选一，不可同时使用
 
 output_dir目录的文件结构如下：
 
-```Arduino
+```
 output_dir/
 ├── checkpoint-244/
 │   ├── pytorch_model.bin
@@ -223,17 +229,7 @@ output_dir/
 ├── print_log.txt
 └── adapter_config.json
 ```
-
-**注：LoRA训练后保存的模型adapter_model.bin有可能是空文件，此时需要将其它checkpoint-step下保存的pytorch_model.bin复制到output_dir目录下。如：**
-
-```bash
-cd output_dir
-cp checkpoint-527/pytorch_model.bin adapter_model.bin
-```
-
-**确保adapter_model.bin是有效的LoRA权重**
-
-
+最上级目录存储训练的最终模型
 
 #### 2.2.3 合并LoRA权重
 
@@ -244,8 +240,6 @@ bash scripts/merge_lora.sh
 ```
 
 合并后的权重保存在output_path目录下，后续可通过from_pretrained直接加载
-
-
 
 #### 2.2.4 多机多卡训练
 
@@ -279,8 +273,6 @@ torchrun --nproc_per_node 8 --nnodes 2 --master_addr ${master_addr} --master_por
 - master_addr 代表主机器的ip地址
 - master_port 代表与主机器通信的端口号
 
-
-
 ## 3. Inference
 
 ### 3.1 Inference
@@ -308,7 +300,6 @@ CUDA_VISIBLE_DEVICES=0 python src/inference.py \
 
 ### 3.2 webUI
 
-
 我们也提供了一个简洁的基于gradio的交互式web界面，启动服务：
 
 ```bash
@@ -319,7 +310,7 @@ CUDA_VISIBLE_DEVICES=0 python src/interface.py \
     --use_lora
 ```
 
-服务访问地址是 hostip:17860 
+服务访问地址是 hostip:17860
 
 ![webUI](https://github.com/LianjiaTech/BELLE/blob/main/train/docs/interface.png)
 
@@ -344,8 +335,6 @@ python training_scripts/convert_llama_weights_to_hf.py --input_dir download_offi
 ### 4.2 合并词表
 
 如果您想在原版LLaMA的基础上扩充中文词表，可参考scripts/merge_tokenizers.py，后续会开放训练embedding的代码。扩充词表后的效果可参考我们的工作：[Towards Better Instruction Following Language Models for Chinese: Investigating the Impact of Training Data and Evaluation](https://arxiv.org/pdf/2304.07854.pdf)
-
-
 
 ## 5. 问题反馈
 
