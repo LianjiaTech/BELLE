@@ -17,7 +17,7 @@ cutoff_len=1024
 master_addr="10.111.112.223"
 
 # #Multi-node
-torchrun --nproc_per_node 8 --nnodes 2 --master_addr ${master_addr} --master_port 14545 --node_rank ${node_rank} src/train.py \
+torchrun --nproc_per_node 8 --nnodes 2 --master_addr ${master_addr} --master_port 14545 --node_rank ${node_rank} src/entry_point/train.py \
     --model_name_or_path ${model_name_or_path} \
     --llama \
     --deepspeed configs/deepspeed_config.json \
@@ -36,8 +36,8 @@ torchrun --nproc_per_node 8 --nnodes 2 --master_addr ${master_addr} --master_por
     --lr_scheduler_type "cosine" \
     --logging_steps 10 \
     --evaluation_strategy "steps" \
-    --fp16 True \
+    --fp16 \
     --seed 1234 \
-    --gradient_checkpointing True \
+    --gradient_checkpointing \
     --cache_dir ${cache_dir} \
     --output_dir ${output_dir}

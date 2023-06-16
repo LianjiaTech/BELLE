@@ -5,3 +5,7 @@ __pycache__
 regen.json
 .ipynb_checkpoints
 .idea
+saved_models
+wandb
+hf_cache_dir
+data
