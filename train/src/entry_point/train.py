@@ -330,40 +330,34 @@ def main():
         data_args.train_file
     )
 
-    with torch_distributed_zero_first(global_rank):
-        if data_args.train_file.endswith(".json") or data_args.train_file.endswith(
-            ".jsonl"
-        ):
-            data = load_dataset(
-                "json",
-                data_files=data_args.train_file,
-                cache_dir=model_args.cache_dir
-            )
-        else:
-            data = load_dataset(
-                data_args.train_file,
-                cache_dir=model_args.cache_dir
-            )
+    with torch_distributed_zero_first(global_rank):        
+        train_data = load_dataset(
+            "json",
+            data_files=data_args.train_file,
+            cache_dir=model_args.cache_dir
+        )       
 
-        train_data = data["train"].shuffle().map(
-            partial(
-                generate_and_tokenize_prompt,
-                training_args.model_max_length, 
-                tokenizer
-            )
-        )
         val_data = load_dataset(
             "json",
             data_files=data_args.validation_file,
             cache_dir=model_args.cache_dir
         )
-        val_data = val_data["train"].shuffle().map(
-            partial(
-                generate_and_tokenize_prompt,
-                training_args.model_max_length,
-                tokenizer
-            )
+
+    train_data = train_data["train"].shuffle().map(
+        partial(
+            generate_and_tokenize_prompt,
+            training_args.model_max_length, 
+            tokenizer
         )
+    )
+
+    val_data = val_data["train"].shuffle().map(
+        partial(
+            generate_and_tokenize_prompt,
+            training_args.model_max_length,
+            tokenizer
+        )
+    )
 
     for i in range(2):
         print_rank_0(
@@ -378,7 +372,7 @@ def main():
             global_rank
         )
 
-    training_nums = len(data["train"])
+    training_nums = len(train_data["train"])
     num_gpus = torch.cuda.device_count()
 
     batch_size = (

@@ -18,6 +18,7 @@ cutoff_len=1024
 
 #FT
 # torchrun --nproc_per_node 8 src/entry_point/train.py \
+#     --ddp_timeout 36000 \
 #     --model_name_or_path ${model_name_or_path} \
 #     --llama \
 #     --deepspeed configs/deepspeed_config.json \
@@ -45,34 +46,36 @@ cutoff_len=1024
 
 #LoRA with 8bit
 # torchrun --nproc_per_node 8 src/train.py \
-    # --model_name_or_path ${model_name_or_path} \
-    # --llama \
-    # --use_lora \
-    # --use_int8_training \
-    # --lora_config configs/lora_config_llama.json \
-    # --train_file ${train_file} \
-    # --validation_file ${validation_file} \
-    # --per_device_train_batch_size 1 \
-    # --per_device_eval_batch_size 1 \
-    # --gradient_accumulation_steps 8 \
-    # --num_train_epochs 2 \
-    # --model_max_length ${cutoff_len} \
-    # --save_strategy "steps" \
-    # --save_total_limit 3 \
-    # --learning_rate 8e-6 \
-    # --weight_decay 0.00001 \
-    # --warmup_ratio 0.05 \
-    # --lr_scheduler_type "cosine" \
-    # --logging_steps 10 \
-    # --evaluation_strategy "steps" \
-    # --fp16 \
-    # --seed 1234 \
-    # --gradient_checkpointing \
-    # --cache_dir ${cache_dir} \
-    # --output_dir ${output_dir}
+#     --ddp_timeout 36000 \
+#     --model_name_or_path ${model_name_or_path} \
+#     --llama \
+#     --use_lora \
+#     --use_int8_training \
+#     --lora_config configs/lora_config_llama.json \
+#     --train_file ${train_file} \
+#     --validation_file ${validation_file} \
+#     --per_device_train_batch_size 1 \
+#     --per_device_eval_batch_size 1 \
+#     --gradient_accumulation_steps 8 \
+#     --num_train_epochs 2 \
+#     --model_max_length ${cutoff_len} \
+#     --save_strategy "steps" \
+#     --save_total_limit 3 \
+#     --learning_rate 8e-6 \
+#     --weight_decay 0.00001 \
+#     --warmup_ratio 0.05 \
+#     --lr_scheduler_type "cosine" \
+#     --logging_steps 10 \
+#     --evaluation_strategy "steps" \
+#     --fp16 \
+#     --seed 1234 \
+#     --gradient_checkpointing \
+#     --cache_dir ${cache_dir} \
+#     --output_dir ${output_dir}
 
 # LoRA without 8bit
 torchrun --nproc_per_node 8 src/entry_point/continual_train.py \
+    --ddp_timeout 36000 \
     --model_name_or_path ${model_name_or_path} \
     --llama \
     --use_lora \
@@ -93,8 +96,8 @@ torchrun --nproc_per_node 8 src/entry_point/continual_train.py \
     --lr_scheduler_type "cosine" \
     --logging_steps 10 \
     --evaluation_strategy "steps" \
-    --fp16 True \
+    --fp16 \
     --seed 1234 \
-    --gradient_checkpointing True \
+    --gradient_checkpointing \
     --cache_dir ${cache_dir} \
     --output_dir ${output_dir} \
