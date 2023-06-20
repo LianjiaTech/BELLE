@@ -343,21 +343,21 @@ def main():
             cache_dir=model_args.cache_dir
         )
 
-    train_data = train_data["train"].shuffle().map(
-        partial(
-            generate_and_tokenize_prompt,
-            training_args.model_max_length, 
-            tokenizer
+        train_data = train_data["train"].shuffle().map(
+            partial(
+                generate_and_tokenize_prompt,
+                training_args.model_max_length, 
+                tokenizer
+            )
         )
-    )
 
-    val_data = val_data["train"].shuffle().map(
-        partial(
-            generate_and_tokenize_prompt,
-            training_args.model_max_length,
-            tokenizer
+        val_data = val_data["train"].shuffle().map(
+            partial(
+                generate_and_tokenize_prompt,
+                training_args.model_max_length,
+                tokenizer
+            )
         )
-    )
 
     for i in range(2):
         print_rank_0(
