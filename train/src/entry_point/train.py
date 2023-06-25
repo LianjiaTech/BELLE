@@ -372,7 +372,7 @@ def main():
             global_rank
         )
 
-    training_nums = len(train_data["train"])
+    training_nums = len(train_data)
     num_gpus = torch.cuda.device_count()
 
     batch_size = (

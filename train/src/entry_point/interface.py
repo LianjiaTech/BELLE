@@ -14,7 +14,7 @@ from transformers import (
     LlamaTokenizer,
 )
 
-world_size = int(os.getenv("WORLD_SIZE", "1"))
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--local_rank", type=int, default=0)
@@ -33,6 +33,7 @@ def generate_prompt(input_text):
 
 def evaluate(
     model,
+    tokenizer,
     input: str,
     temperature=0.1,
     top_p=0.75,
@@ -120,7 +121,7 @@ if __name__ == "__main__":
     else:
         model = deepspeed.init_inference(
             model,
-            mp_size=world_size,
+            mp_size=int(os.getenv("WORLD_SIZE", "1")),
             dtype=torch.half,
             checkpoint=None,
             replace_with_kernel_inject=True,
@@ -131,7 +132,7 @@ if __name__ == "__main__":
     print("Load model successfully")
     # https://gradio.app/docs/
     gr.Interface(
-        fn=partial(evaluate, model),
+        fn=partial(evaluate, model, tokenizer),
         inputs=[
             gr.components.Textbox(
                 lines=2, label="Input", placeholder="Welcome to the BELLE model"
@@ -172,5 +173,5 @@ if __name__ == "__main__":
         ],
         title="BELLE: Be Everyone's Large Language model Engine",
     ).queue().launch(
-        share=True, server_name="127.0.0.1", server_port=args.base_port + args.local_rank
+        share=True, server_name="0.0.0.0", server_port=args.base_port + args.local_rank
     )
