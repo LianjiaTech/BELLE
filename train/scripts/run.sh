@@ -45,7 +45,7 @@ cutoff_len=1024
 
 
 #LoRA with 8bit
-# torchrun --nproc_per_node 8 src/train.py \
+# torchrun --nproc_per_node 8 src/entry_point/train.py \
 #     --ddp_timeout 36000 \
 #     --model_name_or_path ${model_name_or_path} \
 #     --llama \
@@ -74,7 +74,7 @@ cutoff_len=1024
 #     --output_dir ${output_dir}
 
 # LoRA without 8bit
-torchrun --nproc_per_node 8 src/entry_point/continual_train.py \
+torchrun --nproc_per_node 8 src/entry_point/train.py \
     --ddp_timeout 36000 \
     --model_name_or_path ${model_name_or_path} \
     --llama \
@@ -100,4 +100,4 @@ torchrun --nproc_per_node 8 src/entry_point/continual_train.py \
     --seed 1234 \
     --gradient_checkpointing \
     --cache_dir ${cache_dir} \
-    --output_dir ${output_dir} \
+    --output_dir ${output_dir}
