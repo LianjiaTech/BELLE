@@ -3,6 +3,7 @@ export CUDA_VISIBLE_DEVICES='0,1,2,3,4,5,6,7'
 export WANDB_PROJECT=...
 export WANDB_RUN_ID=...
 export WANDB_RESUME=allow
+export PYTHONPATH='...'
 model_name_or_path=/path_to_llm/hf_llama_7b/ # or bloomz-7b1-mt
 
 train_file=belleMath.json
