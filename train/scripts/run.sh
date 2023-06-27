@@ -3,6 +3,7 @@ export CUDA_VISIBLE_DEVICES='0,1,2,3,4,5,6,7'
 export WANDB_PROJECT=...
 export WANDB_RUN_ID=...
 export WANDB_RESUME=allow
+export PYTHONPATH='...'
 model_name_or_path=/path_to_llm/hf_llama_7b/ # or bloomz-7b1-mt
 
 train_file=belleMath.json
@@ -45,7 +46,7 @@ cutoff_len=1024
 
 
 #LoRA with 8bit
-# torchrun --nproc_per_node 8 src/train.py \
+# torchrun --nproc_per_node 8 src/entry_point/train.py \
 #     --ddp_timeout 36000 \
 #     --model_name_or_path ${model_name_or_path} \
 #     --llama \
@@ -74,7 +75,7 @@ cutoff_len=1024
 #     --output_dir ${output_dir}
 
 # LoRA without 8bit
-torchrun --nproc_per_node 8 src/entry_point/continual_train.py \
+torchrun --nproc_per_node 8 src/entry_point/train.py \
     --ddp_timeout 36000 \
     --model_name_or_path ${model_name_or_path} \
     --llama \
@@ -100,4 +101,4 @@ torchrun --nproc_per_node 8 src/entry_point/continual_train.py \
     --seed 1234 \
     --gradient_checkpointing \
     --cache_dir ${cache_dir} \
-    --output_dir ${output_dir} \
+    --output_dir ${output_dir}
