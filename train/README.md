@@ -1,6 +1,6 @@
 # BELLE训练代码
 
- | [English](https://github.com/LianjiaTech/BELLE/blob/main/train/docs/README_en.md) | [中文](https://github.com/LianjiaTech/BELLE/blob/main/train/README.md) 
+ | [English](https://github.com/LianjiaTech/BELLE/blob/main/train/docs/README_en.md) | [中文](https://github.com/LianjiaTech/BELLE/blob/main/train/README.md)
 
 当前仓库的代码属于BELLE项目训练代码v2版，上一版基于deepspeed-chat的代码放在dschat_train_v1目录下，未做任何改动。
 
@@ -53,9 +53,9 @@ wget https://huggingface.co/datasets/BelleGroup/school_math_0.25M/resolve/main/s
 
 该数据是数学应用题求解任务，包含解题过程，共计约25万条。示例：
 
-| Instruction                                                  | Answer                                                       |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 一箱鸡蛋有25个，小明爸爸每天给他9个鸡蛋吃，那么一箱鸡蛋能够供小明吃几天？ | 一箱鸡蛋有25个，小明每天吃9个鸡蛋，用除法计算一下即可： 25 ÷ 9 = 2余7 也就是说，小明第1天到第2天共吃2个鸡蛋，第3天吃剩下的7个鸡蛋。 因此，一箱鸡蛋能够供小明吃2天。 |
+| Instruction                                                                                     | Answer                                                                                                                                                                                                                                  |
+| ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 一箱鸡蛋有25个，小明爸爸每天给他9个鸡蛋吃，那么一箱鸡蛋能够供小明吃几天？                       | 一箱鸡蛋有25个，小明每天吃9个鸡蛋，用除法计算一下即可： 25 ÷ 9 = 2余7 也就是说，小明第1天到第2天共吃2个鸡蛋，第3天吃剩下的7个鸡蛋。 因此，一箱鸡蛋能够供小明吃2天。                                                                    |
 | 小明手中有15颗糖果，他想要分给他的朋友小红和小李，每人分得的糖果数是3颗，那么他还剩下几颗糖果？ | 该题可以用减法来解决。小明手中有15颗糖果，每人分得3颗，所以小红和小李一共分得6颗糖果（3+3=6）。 2. 然后再用原来的糖果总数减去分给小红和小李的糖果数，即可得到小明手中剩余的糖果数。 计算过程如下： 15 - 6 = 9 所以，小明还剩下9颗糖果。 |
 
 #### 2.1.1 Convert data format
@@ -229,6 +229,7 @@ output_dir/
 ├── print_log.txt
 └── adapter_config.json
 ```
+
 最上级目录存储训练的最终模型
 
 #### 2.2.3 合并LoRA权重
@@ -313,6 +314,13 @@ CUDA_VISIBLE_DEVICES=0 python src/interface.py \
 服务访问地址是 hostip:17860
 
 ![webUI](https://github.com/LianjiaTech/BELLE/blob/main/train/docs/interface.png)
+
+### 3.3 并行推理
+```bash
+bash scripts/run_multi_backend.sh
+```
+
+打开`src/entry_point/evaluation.ipynb`，设置相应路径，加载自己的数据推理
 
 ## 4. Additional Notes
 
