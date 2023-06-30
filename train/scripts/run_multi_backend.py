@@ -2,25 +2,22 @@ import fcntl
 import subprocess
 import os
 import signal
-import argparse
 import sys
 import time
-import select
 from transformers import HfArgumentParser
 from dataclasses import dataclass, field
 
 cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "")
 if cuda_devices == "":
     num_process = 1
+    cudas = ['']
 else:
-    num_process = len([int(idx) for idx in cuda_devices.split(",")])
+    cudas = [cuda.strip() for cuda in cuda_devices.split(",")]
+    num_process = len(cudas)
 
 @dataclass
 class Arguments:
-    model_name_or_path: str = field(metadata={'help': 'raw ckpt'})
-    ckpt_path: str = field(metadata={'help': 'lora or raw ckpt'})
-    use_lora: bool = field(default=False)
-
+    command: str = field(metadata={'help': 'command'})
 
 args = HfArgumentParser((Arguments)).parse_args_into_dataclasses()[0]
 
@@ -73,16 +70,20 @@ def handle_termination(signal, frame):
 signal.signal(signal.SIGINT, handle_termination)
 signal.signal(signal.SIGTERM, handle_termination)
 
+# 获取父进程的环境变量
+parent_env = os.environ.copy()
+print(f'cudas: {cudas}')
+
 for local_rank in range(num_process):
+    # 设置新的环境变量
+    env = parent_env.copy()
+    env['CUDA_VISIBLE_DEVICES'] = f'{cudas[local_rank]}'
+    command = f'{args.command} --local_rank {local_rank}'
+    print(command)
     process = subprocess.Popen(        
-        [
-            "python",
-            "src/entry_point/interface.py",
-            "--local_rank", f"{local_rank}",
-            "--model_name_or_path", args.model_name_or_path,
-            "--ckpt_path", args.ckpt_path,
-            "--llama",      
-        ] + (["--use_lora"] if args.use_lora else []),
+        command,
+        shell=True,
+        env=env,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )

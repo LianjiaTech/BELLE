@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
     if not args.use_deepspeed:
         if torch.cuda.is_available():
-            device = torch.device(f'cuda:{args.local_rank}')
+            device = torch.device(f'cuda')
         else:
             device = torch.device('cpu')
         if device == torch.device('cpu'):
