@@ -3,19 +3,18 @@ export CUDA_VISIBLE_DEVICES='0,1,2,3,4,5,6,7'
 export WANDB_PROJECT=...
 export WANDB_RUN_ID=...
 export WANDB_RESUME=allow
-export PYTHONPATH='...'
+export ABS_PATH=...
+export PYTHONPATH="$ABS_PATH/BELLE/train"
 model_name_or_path=/path_to_llm/hf_llama_7b/ # or bloomz-7b1-mt
 
 train_file=belleMath.json
 validation_file=belleMath-dev1K.json
-output_dir="saved_models/${WANDB_PROJECT}_${WANDB_RUN_ID}"
-output_dir_lora=saved_models_lora
+output_dir="$ABS_PATH/saved_models/${WANDB_PROJECT}_${WANDB_RUN_ID}"
 mkdir -p ${output_dir}
 
 cache_dir=hf_cache_dir
 mkdir -p ${cache_dir}
 cutoff_len=1024
-
 
 #FT
 # torchrun --nproc_per_node 8 src/entry_point/train.py \
@@ -42,7 +41,8 @@ cutoff_len=1024
 #     --seed 1234 \
 #     --gradient_checkpointing \
 #     --cache_dir ${cache_dir} \
-#     --output_dir ${output_dir}
+#     --output_dir ${output_dir} \
+#    # --resume_from_checkpoint ...
 
 
 #LoRA with 8bit
@@ -72,7 +72,8 @@ cutoff_len=1024
 #     --seed 1234 \
 #     --gradient_checkpointing \
 #     --cache_dir ${cache_dir} \
-#     --output_dir ${output_dir}
+#     --output_dir ${output_dir} \
+#    # --resume_from_checkpoint ...
 
 # LoRA without 8bit
 torchrun --nproc_per_node 8 src/entry_point/train.py \
@@ -101,4 +102,5 @@ torchrun --nproc_per_node 8 src/entry_point/train.py \
     --seed 1234 \
     --gradient_checkpointing \
     --cache_dir ${cache_dir} \
-    --output_dir ${output_dir}
+    --output_dir ${output_dir} \
+   # --resume_from_checkpoint ...
