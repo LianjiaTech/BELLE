@@ -422,6 +422,7 @@ def main():
     # https://github.com/tatsu-lab/stanford_alpaca/issues/176
     trainer = Trainer(
         model=model,
+        tokenizer=tokenizer,
         args=training_args,
         train_dataset=train_data,
         eval_dataset=val_data,
@@ -483,7 +484,12 @@ def main():
     # https://discuss.huggingface.co/t/what-is-the-purpose-of-use-cache-in-decoder/958/3
     model.config.use_cache = False
 
-    trainer.train(resume_from_checkpoint=None)
+    checkpoint = None
+    if training_args.resume_from_checkpoint is not None:
+        checkpoint = training_args.resume_from_checkpoint
+    elif last_checkpoint is not None:
+        checkpoint = last_checkpoint
+    trainer.train(resume_from_checkpoint=checkpoint)
 
     print_rank_0(
         "\n Training completed!!! If there's a warning about missing keys above, please disregard :)",
