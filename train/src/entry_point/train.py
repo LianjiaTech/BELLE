@@ -213,6 +213,7 @@ def main():
 
     # Set seed before initializing model.
     set_seed(training_args.seed)
+    training_args.data_seed = training_args.seed
 
     torch_dtype = (
         model_args.torch_dtype
@@ -335,7 +336,7 @@ def main():
             "json",
             data_files=data_args.train_file,
             cache_dir=model_args.cache_dir
-        )       
+        )
 
         val_data = load_dataset(
             "json",
@@ -358,6 +359,7 @@ def main():
                 tokenizer
             )
         )
+        
 
     for i in range(2):
         print_rank_0(

@@ -7,7 +7,7 @@ from src.utils import get_ds_state_dict
 class MyTrainer(Trainer):
     def save_model(self, output_dir: Optional[str] = None, _internal_call: bool = False):
         """
-        Add supports for peft
+        Add supports for peft + deepspeed zero 3
 
         Will save the model, so you can reload it using `from_pretrained()`.
 
@@ -32,12 +32,17 @@ class MyTrainer(Trainer):
             ShardedDDPOption.ZERO_DP_2 in self.args.sharded_ddp
             or ShardedDDPOption.ZERO_DP_3 in self.args.sharded_ddp
             or self.fsdp is not None
+            or self.is_fsdp_enabled
         ):
-            state_dict = self.model.state_dict()
+            if self.is_fsdp_enabled:
+                os.makedirs(output_dir, exist_ok=True)
+                self.accelerator.state.fsdp_plugin.save_model(self.accelerator, self.model, output_dir)
+            else:
+                state_dict = self.model.state_dict()
 
-            if self.args.should_save:
-                self._save(output_dir, state_dict=state_dict)
-        elif self.deepspeed:
+                if self.args.should_save:
+                    self._save(output_dir, state_dict=state_dict)
+        elif self.is_deepspeed_enabled:
             # This must be called on all ranks in stage 3
             if is_deepspeed_zero3_enabled():
                 state_dict = get_ds_state_dict(self.deepspeed)
@@ -58,38 +63,84 @@ class MyTrainer(Trainer):
         if self.args.push_to_hub and not _internal_call:
             self.push_to_hub(commit_message="Model save")
 
-    def _save(self, output_dir: Optional[str] = None, state_dict=None):
+    def _load_from_checkpoint(self, resume_from_checkpoint, model=None):
         """
-        Add supports for peft
+        Add supports for peft resume
         """
-        # If we are executing this function, we are the process zero, so we don't check for that.
-        output_dir = output_dir if output_dir is not None else self.args.output_dir
-        os.makedirs(output_dir, exist_ok=True)
-        logger.info(f"Saving model checkpoint to {output_dir}")
-        # Save a trained model and configuration using `save_pretrained()`.
-        # They can then be reloaded using `from_pretrained()`
-        if not isinstance(self.model, (PreTrainedModel, PeftModel)):
-            if state_dict is None:
-                state_dict = self.model.state_dict()
+        if model is None:
+            model = self.model
 
-            if isinstance(unwrap_model(self.model), (PreTrainedModel, PeftModel)):
-                unwrap_model(self.model).save_pretrained(
-                    output_dir, state_dict=state_dict, safe_serialization=self.args.save_safetensors
+        config_file = os.path.join(resume_from_checkpoint, CONFIG_NAME)
+
+        weights_file = os.path.join(resume_from_checkpoint, WEIGHTS_NAME)
+        weights_index_file = os.path.join(resume_from_checkpoint, WEIGHTS_INDEX_NAME)
+        adapter_model_path = os.path.join(resume_from_checkpoint, ADAPTER_WEIGHTS_NAME)
+        safe_weights_file = os.path.join(resume_from_checkpoint, SAFE_WEIGHTS_NAME)
+        safe_weights_index_file = os.path.join(resume_from_checkpoint, SAFE_WEIGHTS_INDEX_NAME)
+        safe_adapter_model_path = os.path.join(resume_from_checkpoint, ADAPTER_SAFE_WEIGHTS_NAME)
+
+        if not any(
+            os.path.isfile(f) for f in [weights_file, safe_weights_file, adapter_model_path, weights_index_file, safe_weights_index_file, safe_adapter_model_path]
+        ):
+            raise ValueError(f"Can't find a valid checkpoint at {resume_from_checkpoint}")
+
+        logger.info(f"Loading model from {resume_from_checkpoint}.")
+
+        if os.path.isfile(config_file):
+            config = PretrainedConfig.from_json_file(config_file)
+            checkpoint_version = config.transformers_version
+            if checkpoint_version is not None and checkpoint_version != __version__:
+                logger.warning(
+                    f"You are resuming training from a checkpoint trained with {checkpoint_version} of "
+                    f"Transformers but your current version is {__version__}. This is not recommended and could "
+                    "yield to errors or unwanted behaviors."
                 )
-            else:
-                logger.info("Trainer.model is not a `PreTrainedModel`, only saving its state dict.")
-                if self.args.save_safetensors:
-                    safetensors.torch.save_file(state_dict, os.path.join(output_dir, SAFE_WEIGHTS_NAME))
+
+        if os.path.isfile(weights_file) or os.path.isfile(safe_weights_file) or \
+            os.path.isfile(adapter_model_path) or os.path.isfile(safe_adapter_model_path):
+            # If the model is on the GPU, it still works!
+            if is_sagemaker_mp_enabled():
+                if os.path.isfile(os.path.join(resume_from_checkpoint, "user_content.pt")):
+                    # If the 'user_content.pt' file exists, load with the new smp api.
+                    # Checkpoint must have been saved with the new smp api.
+                    smp.resume_from_checkpoint(
+                        path=resume_from_checkpoint, tag=WEIGHTS_NAME, partial=False, load_optimizer=False
+                    )
                 else:
-                    torch.save(state_dict, os.path.join(output_dir, WEIGHTS_NAME))
+                    # If the 'user_content.pt' file does NOT exist, load with the old smp api.
+                    # Checkpoint must have been saved with the old smp api.
+                    if hasattr(self.args, "fp16") and self.args.fp16 is True:
+                        logger.warning(
+                            "Enabling FP16 and loading from smp < 1.10 checkpoint together is not suppported."
+                        )
+                    state_dict = torch.load(weights_file, map_location="cpu")
+                    # Required for smp to not auto-translate state_dict from hf to smp (is already smp).
+                    state_dict["_smp_is_partial"] = False
+                    load_result = model.load_state_dict(state_dict, strict=True)
+                    # release memory
+                    del state_dict
+            elif self.is_fsdp_enabled:
+                self.accelerator.state.fsdp_plugin.load_model(self.accelerator, model, resume_from_checkpoint)
+            else:
+                if is_peft_available() and isinstance(model, PeftModel):
+                    model.load_adapter(resume_from_checkpoint, getattr(model, "active_adapter", "default"), is_trainable=True)
+                else:
+                    # We load the model state dict on the CPU to avoid an OOM error.
+                    if self.args.save_safetensors and os.path.isfile(safe_weights_file):
+                        state_dict = safetensors.torch.load_file(safe_weights_file, device="cpu")
+                    else:
+                        state_dict = torch.load(weights_file, map_location="cpu")
+
+                    # workaround for FSDP bug https://github.com/pytorch/pytorch/issues/82963
+                    # which takes *args instead of **kwargs
+                    load_result = model.load_state_dict(state_dict, False)
+                    # release memory
+                    del state_dict
+                    self._issue_warnings_after_load(load_result)
         else:
-            self.model.save_pretrained(
-                output_dir, state_dict=state_dict, safe_serialization=self.args.save_safetensors
+            # We load the sharded checkpoint
+            load_result = load_sharded_checkpoint(
+                model, resume_from_checkpoint, strict=is_sagemaker_mp_enabled(), prefer_safe=self.args.save_safetensors
             )
-
-        if self.tokenizer is not None:
-            self.tokenizer.save_pretrained(output_dir)
-
-        # Good practice: save your training arguments together with the trained model
-        torch.save(self.args, os.path.join(output_dir, TRAINING_ARGS_NAME))
-    
+            if not is_sagemaker_mp_enabled():
+                self._issue_warnings_after_load(load_result)

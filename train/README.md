@@ -108,6 +108,9 @@ bash scripts/run.sh
 
 run.sh中包含了全量参数微调和LoRA两种训练方式的启动命令，这里将简单说明下启动命令中各个参数的含义
 
+#### 模型resume from checkpoint
+如果`output_dir`包含了多个存档点，训练直接从最新的存档点恢复，也可以`resume_from_checkpoint ${output_dir}/checkpoint-xxx`手动指定从step xxx恢复
+
 #### 2.2.1 全量参数微调
 
 下面的命令是单机多卡进行全量参数微调，同时采用deepspeed，基础模型是LLaMA
