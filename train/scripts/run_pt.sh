@@ -17,7 +17,7 @@ mkdir -p ${cache_dir}
 cutoff_len=1024
 
 #FT
-# torchrun --nproc_per_node 8 src/entry_point/train.py \
+# torchrun --nproc_per_node 8 src/entry_point/pt_train.py \
 #     --ddp_timeout 36000 \
 #     --model_name_or_path ${model_name_or_path} \
 #     --llama \
@@ -46,7 +46,7 @@ cutoff_len=1024
 
 
 #LoRA with 8bit
-# torchrun --nproc_per_node 8 src/entry_point/train.py \
+# torchrun --nproc_per_node 8 src/entry_point/pt_train.py \
 #     --ddp_timeout 36000 \
 #     --model_name_or_path ${model_name_or_path} \
 #     --llama \
@@ -76,7 +76,7 @@ cutoff_len=1024
 #    # --resume_from_checkpoint ...
 
 # LoRA without 8bit
-torchrun --nproc_per_node 8 src/entry_point/train.py \
+torchrun --nproc_per_node 8 src/entry_point/pt_train.py \
     --ddp_timeout 36000 \
     --model_name_or_path ${model_name_or_path} \
     --llama \

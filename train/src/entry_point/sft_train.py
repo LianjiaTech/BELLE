@@ -9,6 +9,7 @@ from peft import LoraConfig, get_peft_model, prepare_model_for_int8_training
 from datasets import load_dataset
 import transformers
 import torch
+
 from typing import Optional
 from functools import partial
 from dataclasses import dataclass, field
@@ -21,6 +22,7 @@ import sys
 from src.utils import get_model_param_count
 from src.trainer import MyTrainer as Trainer
 from src.sample_generator import generate_and_tokenize_prompt
+
 
 
 logger = logging.getLogger(__name__)
@@ -213,6 +215,7 @@ def main():
 
     # Set seed before initializing model.
     set_seed(training_args.seed)
+    training_args.data_seed = training_args.seed
 
     torch_dtype = (
         model_args.torch_dtype
@@ -335,7 +338,7 @@ def main():
             "json",
             data_files=data_args.train_file,
             cache_dir=model_args.cache_dir
-        )       
+        )
 
         val_data = load_dataset(
             "json",
@@ -350,7 +353,7 @@ def main():
                 tokenizer
             )
         )
-
+        
         val_data = val_data["train"].shuffle().map(
             partial(
                 generate_and_tokenize_prompt,
@@ -358,6 +361,7 @@ def main():
                 tokenizer
             )
         )
+        
 
     for i in range(2):
         print_rank_0(

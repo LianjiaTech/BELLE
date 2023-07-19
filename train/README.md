@@ -96,7 +96,7 @@ wget https://huggingface.co/datasets/anon8231489123/ShareGPT_Vicuna_unfiltered/r
 训练的启动脚本写在scripts/run.sh，你需要按照实际需求修改run.sh中的参数
 
 ```bash
-bash scripts/run.sh
+bash scripts/run_sft.sh
 ```
 
 - model_name_or_path 代表预训练模型（如果是LLaMA模型，需事先转为hf格式才能通过from_pretrained读取）
@@ -108,12 +108,15 @@ bash scripts/run.sh
 
 run.sh中包含了全量参数微调和LoRA两种训练方式的启动命令，这里将简单说明下启动命令中各个参数的含义
 
+#### 模型resume from checkpoint
+如果`output_dir`包含了多个存档点，训练直接从最新的存档点恢复，也可以`resume_from_checkpoint ${output_dir}/checkpoint-xxx`手动指定从step xxx恢复
+
 #### 2.2.1 全量参数微调
 
 下面的命令是单机多卡进行全量参数微调，同时采用deepspeed，基础模型是LLaMA
 
 ```bash
-torchrun --nproc_per_node 8 train.py \
+torchrun --nproc_per_node 8 src/entrypoint/sft_train.py \
     --model_name_or_path ${model_name_or_path} \
     --llama \
     --deepspeed configs/deepspeed_config.json \
@@ -177,7 +180,7 @@ trainer_state.json记录了loss、learning_rate的变化
 #### 2.2.2 LoRA
 
 ```bash
-torchrun --nproc_per_node 8 train.py \
+torchrun --nproc_per_node 8 src/entry_point/sft_train.py \
     --model_name_or_path ${model_name_or_path} \
     --llama \
     --use_lora True \
@@ -281,7 +284,7 @@ torchrun --nproc_per_node 8 --nnodes 2 --master_addr ${master_addr} --master_por
 如果您看到了这里，说明您已经完成了训练。现在我们加载训练好的模型，验证模型生成文本的效果。
 
 ```bash
-CUDA_VISIBLE_DEVICES=0 python src/inference.py \
+CUDA_VISIBLE_DEVICES=0 python src/entry_point/inference.py \
     --model_name_or_path model_name_or_path \
     --ckpt_path ckpt_path \
     --llama \
@@ -304,7 +307,7 @@ CUDA_VISIBLE_DEVICES=0 python src/inference.py \
 我们也提供了一个简洁的基于gradio的交互式web界面，启动服务：
 
 ```bash
-CUDA_VISIBLE_DEVICES=0 python src/interface.py \
+CUDA_VISIBLE_DEVICES=0 python src/entry_point/interface.py \
     --model_name_or_path model_name_or_path \
     --ckpt_path ckpt_path \
     --llama \
@@ -331,7 +334,7 @@ bash scripts/run_multi_backend.sh
 首先，您需要从[facebookresearch/llama](https://github.com/facebookresearch/llama)获取LLaMA模型的访问权限，下载官方检查点
 
 ```bash
-python training_scripts/convert_llama_weights_to_hf.py --input_dir download_official_llama_path --model_size 7B --output_dir xx/llama-7b-hf
+python scripts/convert_llama_weights_to_hf.py --input_dir download_official_llama_path --model_size 7B --output_dir xx/llama-7b-hf
 ```
 
 运行训练脚本时将model_name_or_path改为xx/llama-7b-hf即可
