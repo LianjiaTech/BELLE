@@ -17,7 +17,7 @@ cutoff_len=1024
 master_addr="10.111.112.223"
 
 # #Multi-node
-torchrun --nproc_per_node 8 --nnodes 2 --master_addr ${master_addr} --master_port 14545 --node_rank ${node_rank} src/entry_point/train.py \
+torchrun --nproc_per_node 8 --nnodes 2 --master_addr ${master_addr} --master_port 14545 --node_rank ${node_rank} src/entry_point/sft_train.py \
     --model_name_or_path ${model_name_or_path} \
     --llama \
     --deepspeed configs/deepspeed_config.json \
