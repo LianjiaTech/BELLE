@@ -1,30 +1,4 @@
 {
-    "optimizer": {
-      "type": "AdamW",
-      "params": {
-          "lr": "auto",
-          "weight_decay": "auto",
-          "torch_adam": true,
-          "adam_w_mode": true
-      }
-    },
-    "scheduler": {
-      "type": "WarmupDecayLR",
-      "params": {
-          "warmup_min_lr": "auto",
-          "warmup_max_lr": "auto",
-          "warmup_num_steps": "auto",
-          "total_num_steps": "auto"
-      }
-    },
-    "fp16": {
-        "enabled": true,
-        "loss_scale": 0,
-        "loss_scale_window": 1000,
-        "initial_scale_power": 16,
-        "hysteresis": 2,
-        "min_loss_scale": 1
-    },
     "zero_optimization": {
         "stage": 2,
         "allgather_partitions": true,
@@ -33,6 +7,35 @@
         "reduce_bucket_size": "auto",
         "overlap_comm": true,
         "contiguous_gradients": true
+    },
+    "scheduler": {
+        "type": "WarmupDecayLR",
+        "params": {
+            "warmup_min_lr": "auto",
+            "warmup_max_lr": "auto",
+            "warmup_num_steps": "auto",
+            "total_num_steps": "auto"
+        }
+    },
+    "fp16": {
+        "enabled": true,
+        "auto_cast": false,
+        "loss_scale": 0,
+        "loss_scale_window": 1000,
+        "initial_scale_power": 32,
+        "hysteresis": 2,
+        "min_loss_scale": 1
+    },
+    "optimizer": {
+        "type": "AdamW",
+        "params": {
+            "lr": "auto",
+            "weight_decay": "auto",
+            "betas": "auto",
+            "eps": "auto",
+            "torch_adam": true,
+            "adam_w_mode": true
+        }
     },
     "gradient_accumulation_steps": "auto",
     "gradient_clipping": "auto",

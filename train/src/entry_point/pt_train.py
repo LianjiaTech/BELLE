@@ -9,7 +9,6 @@ from peft import LoraConfig, get_peft_model, prepare_model_for_int8_training
 from datasets import load_dataset
 import transformers
 import torch
-
 from typing import Optional
 from functools import partial
 from dataclasses import dataclass, field
@@ -22,6 +21,7 @@ import sys
 from src.utils import get_model_param_count
 from src.trainer import MyTrainer as Trainer
 from src.sample_generator import batch_grouped_pretrain_generate
+from src.models.llama.modeling_llama import LlamaForCausalLM
 
 
 
@@ -241,10 +241,16 @@ def main():
             torch_dtype=torch_dtype,
         )
     else:
-        model = AutoModelForCausalLM.from_pretrained(
+        if model_args.llama:
+            model = LlamaForCausalLM.from_pretrained(
             model_args.model_name_or_path,
             torch_dtype=torch_dtype,
         )
+        else:
+            model = AutoModelForCausalLM.from_pretrained(
+                model_args.model_name_or_path,
+                torch_dtype=torch_dtype,
+            )
 
     if model_args.llama:
         tokenizer = LlamaTokenizer.from_pretrained(
