@@ -9,6 +9,7 @@ from peft import LoraConfig, get_peft_model, prepare_model_for_int8_training
 from datasets import load_dataset
 import transformers
 import torch
+from packaging import version
 
 from typing import Optional
 from functools import partial
@@ -20,10 +21,12 @@ import json
 import sys
 
 from src.utils import get_model_param_count
-from src.trainer import MyTrainer as Trainer
 from src.sample_generator import generate_and_tokenize_prompt
 
-
+if version.parse(transformers.__version__) <= version.parse("4.30.2"):
+    from src.trainer import MyTrainer as Trainer
+else:
+    from transformers import Trainer
 
 logger = logging.getLogger(__name__)
 
@@ -139,17 +142,35 @@ class TrainingArguments(TrainingArguments):
     )
     # https://discuss.huggingface.co/t/wandb-does-not-display-train-eval-loss-except-for-last-one/9170
     evaluation_strategy: str = field(
-        default="steps", metadata={"help": "wandb bug fix"}
+        default="steps", metadata={"help": "The evaluation strategy to use."}
     )
     save_total_limit: Optional[int] = field(
         default=3,
         metadata={
-            "help": "keep saved model less than save_total_limit, delete old checkpoints when save new model"}
+            "help": (
+                "If a value is passed, will limit the total amount of checkpoints. Deletes the older checkpoints in"
+                " `output_dir`. When `load_best_model_at_end` is enabled, the 'best' checkpoint according to"
+                " `metric_for_best_model` will always be retained in addition to the most recent ones. For example,"
+                " for `save_total_limit=5` and `load_best_model_at_end=True`, the four last checkpoints will always be"
+                " retained alongside the best model. When `save_total_limit=1` and `load_best_model_at_end=True`,"
+                " it is possible that two checkpoints are saved: the last one and the best one (if they are different)."
+                " Default is unlimited checkpoints"
+            )
+        },
     )
     report_to: str = field(
-        default="wandb",
-        metadata={"help": "places where report the results"}
+        default="wandb", metadata={"help": "The list of integrations to report the results and logs to."}
     )
+    deepspeed: str = field(
+        default=None,
+        metadata={
+            "help": (
+                "Enable deepspeed and pass the path to deepspeed json config file (e.g. `ds_config.json`) or an already"
+                " loaded json file as a dict"
+            )
+        },
+    )
+    do_train: bool = field(default=True, metadata={"help": "Whether to run training."})
 
 
 def print_rank_0(msg, log_file, rank=0):
@@ -339,7 +360,7 @@ def main():
             data_files=data_args.train_file,
             cache_dir=model_args.cache_dir
         )
-
+        
         val_data = load_dataset(
             "json",
             data_files=data_args.validation_file,
