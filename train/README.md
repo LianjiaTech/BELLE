@@ -15,22 +15,43 @@
 
 ### 1.1 Docker镜像
 
-我们提供了一个完整可运行的Docker镜像，Dockerfile写在docker文件夹下.
+我们提供了一个完整可运行的Docker镜像，Dockerfile写在docker文件夹下。
 
-考虑到build存在一定的困难，我们提供了镜像下载，你可以使用下面命令从dockerhub拉取我们的镜像，然后在镜像中运行代码。
+考虑到build存在一定的困难，我们提供了镜像下载，你可以使用下面命令从dockerhub拉取我们的镜像，然后在镜像中运行代码，详见[docker环境说明](https://github.com/LianjiaTech/BELLE/blob/main/train/docker/README.md)。
 
 ```shell
-docker pull belleagi/belle:v1.0
+sudo docker tothemoon/belle:20230721
 git clone https://github.com/LianjiaTech/BELLE.git
-docker run -it --runtime=nvidia --shm-size="40g" -v /path/BELLE/train:/workspace/BELLE-train -v /path/huggingface_models/:/workspace/model_name_or_path belleagi/belle:v1.0 /bin/bash
 ```
+```
+sudo docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 \
+    --network host \
+    [--env https_proxy=$https_proxy \]
+    [--env http_proxy=$http_proxy \]
+    [--env all_proxy=$all_proxy \]
+    --env HF_HOME=$hf_home \
+    -it [--rm] \
+    --name belle \
+    -v $belle_path:$belle_path \
+    -v $hf_home:$hf_home \
+    -v $ssh_pub_key:/root/.ssh/authorized_keys \
+    -w $workdir \
+    $docker_user/belle:$tag \
+    [--sshd_port 2201 --cmd "echo 'Hello, world!' && /bin/bash"]
+```
+`[]`中内容可忽略
+- `--rm`：容器退出时销毁，如果长期在容器中工作，可忽略
+- `--sshd_port`：sshd监听端口，默认是22001
+- `--cmd`：容器要执行的命令`"echo 'Hello, world!' && /bin/bash"`，可忽略
+- `hf_home`：huggingface缓存目录
+- `$ssh_pub_key`：sshd公钥目录
 
 上述命令实现了以下几点：
 
 1. 拉取docker镜像
 2. clone BELLE仓库
-3. 将BELLE/train目录与Docker环境中/workspace/BELLE-train目录挂载
-4. 将huggingface_models目录与Docker环境中/workspace/model_name_or_path目录挂载。其中huggingface_models代表预训练模型的保存路径，该目录下存放所有需要的预训练语言模型，如llama-7b, bloomz-7b1-mt等
+3. 将BELLE目录挂载
+4. 将huggingface目录挂载。其中huggingface_models代表预训练模型的保存路径，该目录下存放所有需要的预训练语言模型，如llama-7b, bloomz-7b1-mt等
 5. 注意：上述挂载的目录必须是绝对路径
 
 ### 1.2 conda
