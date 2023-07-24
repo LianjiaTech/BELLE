@@ -37,7 +37,7 @@ cutoff_len=1024
 #     --lr_scheduler_type "cosine" \
 #     --logging_steps 10 \
 #     --evaluation_strategy "steps" \
-#     --fp16 \
+#     --bf16 \
 #     --seed 1234 \
 #     --gradient_checkpointing \
 #     --cache_dir ${cache_dir} \
@@ -68,7 +68,7 @@ cutoff_len=1024
 #     --lr_scheduler_type "cosine" \
 #     --logging_steps 10 \
 #     --evaluation_strategy "steps" \
-#     --fp16 \
+#     --bf16 \
 #     --seed 1234 \
 #     --gradient_checkpointing \
 #     --cache_dir ${cache_dir} \
@@ -98,7 +98,7 @@ torchrun --nproc_per_node 8 src/entry_point/pt_train.py \
     --lr_scheduler_type "cosine" \
     --logging_steps 10 \
     --evaluation_strategy "steps" \
-    --fp16 \
+    --bf16 \
     --seed 1234 \
     --gradient_checkpointing \
     --cache_dir ${cache_dir} \
