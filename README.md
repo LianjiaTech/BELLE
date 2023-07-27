@@ -15,13 +15,10 @@
 
 相比如何做好大语言模型的预训练，BELLE更关注如何在开源预训练大语言模型的基础上，帮助每一个人都能够得到一个属于自己的、效果尽可能好的具有指令表现能力的语言模型，降低大语言模型、特别是中文大语言模型的研究和应用门槛。为此，BELLE项目会持续开放指令训练数据、相关模型、训练代码、应用场景等，也会持续评估不同训练数据、训练算法等对模型表现的影响。BELLE针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
 
-下图是一个可以使用App在设备端本地运行4bit量化的BELLE-7B模型，在M1 Max CPU上实时运行的效果（未加速）。App下载详见[App配套模型下载及使用说明](chat/README.md)，App[下载链接](https://github.com/LianjiaTech/BELLE/releases/download/v0.95/chatbelle.dmg)，目前仅提供了mac os版本。模型需要单独下载。**模型经过量化后，效果损失明显，我们将持续研究如何提升。**
-
-<img src="./chat/chatbelle-demo.gif"></img>
-
 </br>
 
 ## 🔄 最近更新
+* [2023/07/27] 开放[BELLE-Llama2-13B-chat-0.4M](https://huggingface.co/BELLE-2/BELLE-Llama2-13B-chat-0.4M)，在Llama-2-13B的基础上采用40万高质量的对话数据上进行训练。在[评测集](https://github.com/LianjiaTech/BELLE/blob/main/eval/eval_set.json)上的效果相比BELLE-LLaMA-EXT-13B模型有显著提升。
 * [2023/05/14] 开放[BELLE-LLaMA-EXT-13B](https://huggingface.co/BelleGroup/BELLE-LLaMA-EXT-13B)，在LLaMA-13B的基础上扩展中文词表，并在400万高质量的对话数据上进行训练。
 * [2023/05/11] [BELLE/data/10M](data/10M)中，新加350万条生成多样化指令任务数据，包括单轮和多轮对话[train_3.5M_CN](https://huggingface.co/datasets/BelleGroup/train_3.5M_CN)。
 * [2023/04/19] 开放了其中一篇论文中的的相关模型：包括在LLaMA7B基础上增量预训练扩展中文词表的模（详见[BelleGroup/BELLE-LLaMA-EXT-7B](https://huggingface.co/BelleGroup/BELLE-LLaMA-EXT-7B)），以及基于多样化开源数据训练后的LLaMA-7B模型（详见[BelleGroup/BELLE-on-Open-Datasets](https://huggingface.co/BelleGroup/BELLE-on-Open-Datasets)）。
@@ -30,6 +27,15 @@
 * [2023/04/12] 发布了[ChatBELLE App](chat/README.md)，基于[llama.cpp](https://github.com/ggerganov/llama.cpp)和[Flutter](https://flutter.dev/)，实现跨平台的BELLE-7B离线模型实时交互。
 * [2023/04/11] 更新了一个人工精校的eval集合，大约一千多条
 * [2023/04/08] [BELLE/data/10M](data/10M)中，新加40万条生成的给定角色的多轮对话[Generated Chat](https://huggingface.co/datasets/BelleGroup/generated_chat_0.4M)，新加200万条生成多样化指令任务数据[train_2M_CN](https://huggingface.co/datasets/BelleGroup/train_2M_CN)。
+* 
+</br>
+  
+
+下图是一个可以使用App在设备端本地运行4bit量化的BELLE-7B模型，在M1 Max CPU上实时运行的效果（未加速）。App下载详见[App配套模型下载及使用说明](chat/README.md)，App[下载链接](https://github.com/LianjiaTech/BELLE/releases/download/v0.95/chatbelle.dmg)，目前仅提供了mac os版本。模型需要单独下载。**模型经过量化后，效果损失明显，我们将持续研究如何提升。**
+
+<img src="./chat/chatbelle-demo.gif"></img>
+
+
 
 </br>
 
