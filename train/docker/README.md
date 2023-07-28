@@ -19,7 +19,7 @@ sudo bash upload_image.sh
 ## 下载镜像
 已经构建好镜像，无需自行构建
 ```bash
-sudo docker tothemoon/belle:20230721
+sudo docker tothemoon/belle:20230728
 ```
 belle镜像中包含sshd，可以远程连接到容器内部
 
