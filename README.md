@@ -16,8 +16,9 @@
 相比如何做好大语言模型的预训练，BELLE更关注如何在开源预训练大语言模型的基础上，帮助每一个人都能够得到一个属于自己的、效果尽可能好的具有指令表现能力的语言模型，降低大语言模型、特别是中文大语言模型的研究和应用门槛。为此，BELLE项目会持续开放指令训练数据、相关模型、训练代码、应用场景等，也会持续评估不同训练数据、训练算法等对模型表现的影响。BELLE针对中文做了优化，模型调优仅使用由ChatGPT生产的数据（不包含任何其他数据）。
 
 </br>
-
+https://arxiv.org/abs/2307.15290
 ## 🔄 最近更新
+* [2023/07/31] 发布家装行业大模型[ChatHome](https://arxiv.org/pdf/2307.15290.pdf)的技术报告
 * [2023/07/27] 开放[BELLE-Llama2-13B-chat-0.4M](https://huggingface.co/BELLE-2/BELLE-Llama2-13B-chat-0.4M)，在Llama-2-13B的基础上采用40万高质量的对话数据上进行训练。在[评测集](https://github.com/LianjiaTech/BELLE/blob/main/eval/eval_set.json)上的效果相比BELLE-LLaMA-EXT-13B模型有显著提升。
 * [2023/05/14] 开放[BELLE-LLaMA-EXT-13B](https://huggingface.co/BelleGroup/BELLE-LLaMA-EXT-13B)，在LLaMA-13B的基础上扩展中文词表，并在400万高质量的对话数据上进行训练。
 * [2023/05/11] [BELLE/data/10M](data/10M)中，新加350万条生成多样化指令任务数据，包括单轮和多轮对话[train_3.5M_CN](https://huggingface.co/datasets/BelleGroup/train_3.5M_CN)。
