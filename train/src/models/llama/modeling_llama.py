@@ -34,7 +34,7 @@ from transformers.modeling_outputs import BaseModelOutputWithPast, CausalLMOutpu
 from transformers.modeling_utils import PreTrainedModel
 from transformers.utils import add_start_docstrings, add_start_docstrings_to_model_forward, logging, replace_return_docstrings
 from transformers.models.llama.configuration_llama import LlamaConfig
-from xformers import ops as xops
+from flash_attn import flash_attn_func
 
 
 logger = logging.get_logger(__name__)
@@ -217,9 +217,9 @@ class LlamaAttention(nn.Module):
             key_states = key_states.transpose(1, 2)
             value_states = value_states.transpose(1, 2)
 
-            attn_output = xops.memory_efficient_attention(
+            attn_output = flash_attn_func(
                 query_states, key_states, value_states,
-                attn_bias=xops.LowerTriangularMask()
+                causal=True
             )
             attn_output = attn_output.reshape(bsz, q_len, self.hidden_size)
             attn_output = self.o_proj(attn_output)
