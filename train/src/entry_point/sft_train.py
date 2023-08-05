@@ -1,10 +1,14 @@
-
 from transformers.utils import add_start_docstrings
 from transformers.trainer_utils import get_last_checkpoint
 from transformers.trainer_pt_utils import torch_distributed_zero_first
-from transformers import (AutoModelForCausalLM, AutoTokenizer,
-                          HfArgumentParser, LlamaTokenizer, TrainingArguments,
-                          set_seed)
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    HfArgumentParser,
+    LlamaTokenizer,
+    TrainingArguments,
+    set_seed,
+)
 from peft import LoraConfig, get_peft_model, prepare_model_for_int8_training
 from datasets import load_dataset
 import transformers
@@ -21,7 +25,10 @@ import json
 import sys
 
 from src.utils import get_model_param_count
-from src.sample_generator import generate_and_tokenize_prompt
+from src.sample_generator import (
+    batch_grouped_sft_generate,
+    generate_and_tokenize_prompt,
+)
 
 if version.parse(transformers.__version__) <= version.parse("4.30.2"):
     from src.trainer import MyTrainer as Trainer
@@ -45,28 +52,10 @@ class ModelArguments:
             )
         },
     )
-    config_name: Optional[str] = field(
-        default=None,
-        metadata={
-            "help": "Pretrained config name or path if not the same as model_name"
-        },
-    )
-    tokenizer_name: Optional[str] = field(
-        default=None,
-        metadata={
-            "help": "Pretrained tokenizer name or path if not the same as model_name"
-        },
-    )
     cache_dir: Optional[str] = field(
         default=None,
         metadata={
             "help": "Where do you want to store the pretrained models downloaded from huggingface.co"
-        },
-    )
-    use_fast_tokenizer: bool = field(
-        default=True,
-        metadata={
-            "help": "Whether to use one of the fast tokenizer (backed by the tokenizers library) or not."
         },
     )
     torch_dtype: Optional[str] = field(
@@ -79,6 +68,9 @@ class ModelArguments:
             "choices": ["auto", "bfloat16", "float16", "float32"],
         },
     )
+    use_flash_attention: bool = field(
+        default=False, metadata={"help": ("Whether to use memory efficient attention.")}
+    )
     llama: bool = field(default=False, metadata={"help": "Llama model"})
 
 
@@ -90,8 +82,7 @@ class DataArguments:
 
     dataset_name: Optional[str] = field(
         default=None,
-        metadata={
-            "help": "The name of the dataset to use (via the datasets library)."},
+        metadata={"help": "The name of the dataset to use (via the datasets library)."},
     )
     dataset_config_name: Optional[str] = field(
         default=None,
@@ -123,10 +114,7 @@ class TrainingArguments(TrainingArguments):
         default=512,
         metadata={"help": "Maximum sequence length."},
     )
-    use_lora: bool = field(
-        default=False,
-        metadata={"help": "Whether to use LoRA."}
-    )
+    use_lora: bool = field(default=False, metadata={"help": "Whether to use LoRA."})
     use_int8_training: bool = field(
         default=False, metadata={"help": "Whether to use int8 training."}
     )
@@ -159,7 +147,10 @@ class TrainingArguments(TrainingArguments):
         },
     )
     report_to: str = field(
-        default="wandb", metadata={"help": "The list of integrations to report the results and logs to."}
+        default="wandb",
+        metadata={
+            "help": "The list of integrations to report the results and logs to."
+        },
     )
     deepspeed: str = field(
         default=None,
@@ -181,9 +172,7 @@ def print_rank_0(msg, log_file, rank=0):
 
 
 def main():
-    parser = HfArgumentParser(
-        (ModelArguments, DataArguments, TrainingArguments)
-    )
+    parser = HfArgumentParser((ModelArguments, DataArguments, TrainingArguments))
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
     world_size = int(os.environ.get("WORLD_SIZE", 1))
@@ -245,14 +234,9 @@ def main():
     )
     # int8 is not compatible with DeepSpeed (require not to pass device_map)
     if training_args.use_int8_training:
-        print_rank_0(
-            "int8 is not compatible with DeepSpeed. ",
-            log_file,
-            global_rank
-        )
+        print_rank_0("int8 is not compatible with DeepSpeed. ", log_file, global_rank)
         device_map = (
-            {"": int(os.environ.get("LOCAL_RANK") or 0)}
-            if world_size != 1 else "auto"
+            {"": int(os.environ.get("LOCAL_RANK") or 0)} if world_size != 1 else "auto"
         )
         # device_map = "auto"
         model = AutoModelForCausalLM.from_pretrained(
@@ -262,15 +246,24 @@ def main():
             torch_dtype=torch_dtype,
         )
     else:
-        model = AutoModelForCausalLM.from_pretrained(
-            model_args.model_name_or_path,
-            torch_dtype=torch_dtype,
-        )
+        if model_args.llama:
+            if model_args.use_flash_attention:
+                from src.models.llama.modeling_llama import LlamaForCausalLM
+            else:
+                from transformers import LlamaForCausalLM
+
+            model = LlamaForCausalLM.from_pretrained(
+                model_args.model_name_or_path,
+                torch_dtype=torch_dtype,
+            )
+        else:
+            model = AutoModelForCausalLM.from_pretrained(
+                model_args.model_name_or_path,
+                torch_dtype=torch_dtype,
+            )
 
     if model_args.llama:
-        tokenizer = LlamaTokenizer.from_pretrained(
-            model_args.model_name_or_path
-        )
+        tokenizer = LlamaTokenizer.from_pretrained(model_args.model_name_or_path)
         print_rank_0(
             "Set the eos_token_id and bos_token_id of LLama model tokenizer",
             log_file,
@@ -279,9 +272,7 @@ def main():
         tokenizer.eos_token_id = 2
         tokenizer.bos_token_id = 1
     else:
-        tokenizer = AutoTokenizer.from_pretrained(
-            model_args.model_name_or_path
-        )
+        tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path)
 
     tokenizer.pad_token_id = 0
     tokenizer.padding_side = "left"  # Allow batched inference
@@ -310,11 +301,7 @@ def main():
             global_rank,
         )
         lora_config = json.load(open(training_args.lora_config))
-        print_rank_0(
-            "Lora config: {}".format(lora_config), 
-            log_file, 
-            global_rank
-        )
+        print_rank_0("Lora config: {}".format(lora_config), log_file, global_rank)
         if training_args.use_int8_training:
             print_rank_0(
                 "training_args.use_int8_training!!! (int8 is not compatible with DeepSpeed)",
@@ -354,47 +341,77 @@ def main():
         data_args.train_file
     )
 
-    with torch_distributed_zero_first(global_rank):        
+    with torch_distributed_zero_first(global_rank):
         train_data = load_dataset(
-            "json",
-            data_files=data_args.train_file,
-            cache_dir=model_args.cache_dir
+            "json", data_files=data_args.train_file, cache_dir=model_args.cache_dir
         )
-        
+
         val_data = load_dataset(
-            "json",
-            data_files=data_args.validation_file,
-            cache_dir=model_args.cache_dir
+            "json", data_files=data_args.validation_file, cache_dir=model_args.cache_dir
         )
 
-        train_data = train_data["train"].shuffle().map(
-            partial(
-                generate_and_tokenize_prompt,
-                training_args.model_max_length, 
-                tokenizer
+        if model_args.use_flash_attention:
+            train_data = (
+                train_data["train"]
+                .shuffle()
+                .map(
+                    partial(
+                        batch_grouped_sft_generate,
+                        training_args.model_max_length,
+                        tokenizer,
+                    ),
+                    batched=True,
+                    desc=f"Grouping texts in chunks of {training_args.model_max_length}",
+                    remove_columns=["id", "conversations"],
+                )
             )
-        )
-        
-        val_data = val_data["train"].shuffle().map(
-            partial(
-                generate_and_tokenize_prompt,
-                training_args.model_max_length,
-                tokenizer
+
+            val_data = (
+                val_data["train"]
+                .shuffle()
+                .map(
+                    partial(
+                        batch_grouped_sft_generate,
+                        training_args.model_max_length,
+                        tokenizer,
+                    ),
+                    batched=True,
+                    desc=f"Grouping texts in chunks of {training_args.model_max_length}",
+                    remove_columns=["id", "conversations"],
+                )
             )
-        )
-        
+        else:
+            train_data = (
+                train_data["train"]
+                .shuffle()
+                .map(
+                    partial(
+                        generate_and_tokenize_prompt,
+                        training_args.model_max_length,
+                        tokenizer,
+                    )
+                )
+            )
+
+            val_data = (
+                val_data["train"]
+                .shuffle()
+                .map(
+                    partial(
+                        generate_and_tokenize_prompt,
+                        training_args.model_max_length,
+                        tokenizer,
+                    )
+                )
+            )
 
     for i in range(2):
         print_rank_0(
-            "Eval tokenized example: {}".format(val_data[i]), 
-            log_file, 
-            global_rank
+            "Eval tokenized example: {}".format(val_data[i]), log_file, global_rank
         )
     for i in range(2):
         print_rank_0(
-            "Train tokenized example: {}".format(train_data[i]), 
-            log_file, 
-            global_rank
+            "Train tokenized example: {}".format(train_data[i]), log_file, global_rank
         )
 
     training_nums = len(train_data)
@@ -406,8 +423,7 @@ def main():
         * training_args.gradient_accumulation_steps
     )
     # train steps
-    t_total = math.ceil(training_nums / batch_size) * \
-        training_args.num_train_epochs
+    t_total = math.ceil(training_nums / batch_size) * training_args.num_train_epochs
     # eval steps
     training_args.eval_steps = max(t_total // 5, 5)
     # save steps
@@ -474,15 +490,10 @@ def main():
     )
     num_examples = trainer.num_examples(trainer.get_train_dataloader())
     num_train_samples = num_examples * training_args.num_train_epochs
-    max_steps = math.ceil(training_args.num_train_epochs * \
-                          num_update_steps_per_epoch)
+    max_steps = math.ceil(training_args.num_train_epochs * num_update_steps_per_epoch)
     print_rank_0("***** Running training *****", log_file, global_rank)
     print_rank_0(f"  Num examples = {num_examples}", log_file, global_rank)
-    print_rank_0(
-        f"  Num train samples = {num_train_samples}", 
-        log_file, 
-        global_rank
-    )
+    print_rank_0(f"  Num train samples = {num_train_samples}", log_file, global_rank)
     print_rank_0(f"  world_size = {world_size}", log_file, global_rank)
     print_rank_0(
         f"  Total train batch size (w. parallel, distributed & accumulation) = {total_train_batch_size}",
@@ -494,11 +505,7 @@ def main():
         log_file,
         global_rank,
     )
-    print_rank_0(
-        f"  Total optimization steps = {max_steps}", 
-        log_file, 
-        global_rank
-    )
+    print_rank_0(f"  Total optimization steps = {max_steps}", log_file, global_rank)
 
     print_rank_0(
         f"  Number of trainable parameters = {get_model_param_count(model, trainable_only=True)}",

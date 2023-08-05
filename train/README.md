@@ -20,7 +20,7 @@
 考虑到build存在一定的困难，我们提供了镜像下载，你可以使用下面命令从dockerhub拉取我们的镜像，然后在镜像中运行代码，详见[docker环境说明](https://github.com/LianjiaTech/BELLE/blob/main/train/docker/README.md)。
 
 ```shell
-sudo docker pull tothemoon/belle:20230728
+sudo docker pull tothemoon/belle:20230804
 git clone https://github.com/LianjiaTech/BELLE.git
 ```
 ```
@@ -54,9 +54,9 @@ sudo docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=6710886
 4. 将huggingface目录挂载。其中huggingface_models代表预训练模型的保存路径，该目录下存放所有需要的预训练语言模型，如llama-7b, bloomz-7b1-mt等
 5. 注意：上述挂载的目录必须是绝对路径
 
-### 1.2 conda
+### 1.2 conda（不推荐）
 
-假如由于机器等原因不能使用docker，也可以通过conda创建环境，然后pip安装需要的包
+由于部分包依赖系统环境编译，推荐使用docker。假如由于机器等原因不能使用docker，也可以通过conda创建环境，然后pip安装需要的包，需自行解决依赖问题
 
 ```bash
 pip install -r requirements.txt
@@ -65,8 +65,10 @@ pip install -r requirements.txt
 但是通过pip安装deepspeed很有可能安装或者运行失败，[FAQ](https://github.com/LianjiaTech/BELLE/blob/main/train/docs/FAQ.md) 中给出了一些安装deepspeed的教程以及可能遇到的问题
 
 ## 2. Run
+### 2.1 数据
 
-### 2.1 Download data
+#### 2.1.1 指令微调（SFT）
+##### 2.1.1.1 Download data
 
 ```bash
 wget https://huggingface.co/datasets/BelleGroup/school_math_0.25M/resolve/main/school_math_0.25M.json
@@ -79,7 +81,7 @@ wget https://huggingface.co/datasets/BelleGroup/school_math_0.25M/resolve/main/s
 | 一箱鸡蛋有25个，小明爸爸每天给他9个鸡蛋吃，那么一箱鸡蛋能够供小明吃几天？                       | 一箱鸡蛋有25个，小明每天吃9个鸡蛋，用除法计算一下即可： 25 ÷ 9 = 2余7 也就是说，小明第1天到第2天共吃2个鸡蛋，第3天吃剩下的7个鸡蛋。 因此，一箱鸡蛋能够供小明吃2天。                                                                    |
 | 小明手中有15颗糖果，他想要分给他的朋友小红和小李，每人分得的糖果数是3颗，那么他还剩下几颗糖果？ | 该题可以用减法来解决。小明手中有15颗糖果，每人分得3颗，所以小红和小李一共分得6颗糖果（3+3=6）。 2. 然后再用原来的糖果总数减去分给小红和小李的糖果数，即可得到小明手中剩余的糖果数。 计算过程如下： 15 - 6 = 9 所以，小明还剩下9颗糖果。 |
 
-#### 2.1.1 Convert data format
+##### 2.1.1.2 Convert data format
 
 ```bash
 python scripts/convert_to_conv_data.py --orig_data school_math_0.25M.json --write_data school_math_0.25M_conv.json --dataset_name bellemath
@@ -106,6 +108,13 @@ tail -n +1001 school_math_0.25M_conv.json > belleMath.json
 wget https://huggingface.co/datasets/anon8231489123/ShareGPT_Vicuna_unfiltered/resolve/main/ShareGPT_V3_unfiltered_cleaned_split.json
 ```
 
+#### 2.1.2 继续预训练（PT）
+数据格式
+```
+{"text": xxx}
+{"text": xxx}
+```
+
 ### 2.2 模型训练
 
 支持配置
@@ -114,7 +123,9 @@ wget https://huggingface.co/datasets/anon8231489123/ShareGPT_Vicuna_unfiltered/r
 * LoRA + Deepspeed
 * LoRA + int8
 
-训练的启动脚本写在scripts/run.sh，你需要按照实际需求修改run.sh中的参数
+训练的启动脚本写在`scripts/run_<pt|sft>.sh`，你需要按照实际需求修改`run_<pt|sft>.sh`中的参数。
+
+`run_pt.sh`实现了继续预训练，`run_sft.sh`实现了指令微调。
 
 ```bash
 bash scripts/run_sft.sh
@@ -127,10 +138,19 @@ bash scripts/run_sft.sh
 - cache_dir 代表缓存数据处理过程的路径
 - cutoff_len 代表最长输入序列长度（LLaMA模型建议设置为1024以上，Bloom模型设置为512以上）
 
-run.sh中包含了全量参数微调和LoRA两种训练方式的启动命令，这里将简单说明下启动命令中各个参数的含义
+`run_<pt|sft>.sh`中包含了全量参数微调和LoRA两种训练方式的启动命令，这里将简单说明下启动命令中各个参数的含义
 
-#### 模型resume from checkpoint
-如果`output_dir`包含了多个存档点，训练直接从最新的存档点恢复，也可以`resume_from_checkpoint ${output_dir}/checkpoint-xxx`手动指定从step xxx恢复
+**模型resume from checkpoint**
+
+如果`output_dir`包含了多个存档点，训练直接从最新的存档点恢复，也可以`--resume_from_checkpoint ${output_dir}/checkpoint-xxx`手动指定从step xxx恢复
+
+**Flash Attention**
+
+flash attention实现了高效利用显存的attention，可支持更大的序列长度
+
+`run_pt.sh`默认使用flash-attention-v2
+
+`run_sft.sh`flash-attention-v2可选，可通过`--use_flash_attention`打开
 
 #### 2.2.1 全量参数微调
 
@@ -249,7 +269,6 @@ output_dir/
 ├── checkpoint-527/
 │   ├── pytorch_model.bin
 │   └── trainer_state.json
-├── adapter_model.bin
 ├── print_log.txt
 └── adapter_config.json
 ```
