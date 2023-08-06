@@ -42,6 +42,7 @@ cutoff_len=1024
 #     --gradient_checkpointing \
 #     --cache_dir ${cache_dir} \
 #     --output_dir ${output_dir} \
+#    # --use_flash_attention
 #    # --resume_from_checkpoint ...
 
 
@@ -73,6 +74,7 @@ cutoff_len=1024
 #     --gradient_checkpointing \
 #     --cache_dir ${cache_dir} \
 #     --output_dir ${output_dir} \
+#    # --use_flash_attention
 #    # --resume_from_checkpoint ...
 
 # LoRA without 8bit
@@ -103,4 +105,5 @@ torchrun --nproc_per_node 8 src/entry_point/sft_train.py \
     --gradient_checkpointing \
     --cache_dir ${cache_dir} \
     --output_dir ${output_dir} \
+   # --use_flash_attention
    # --resume_from_checkpoint ...
