@@ -8,17 +8,10 @@ import json
 IGNORE_INDEX = -100
 
 
-def generate_and_tokenize_prompt(
-    model_max_length: int,
-    tokenizer: PreTrainedTokenizer,
-    data_point: Dict[str, Any],
-    fix_length=False,
-    padding_side="left",
-):
+def sft_sample_to_ids(conversations: Dict[str, Any], tokenizer: PreTrainedTokenizer):
     input_ids = []
     labels = []
-    source = data_point["conversations"]
-    for sentence in source:
+    for sentence in conversations:
         sentence_from = sentence["from"].lower()
         sentence_value = (
             "Human: \n" + sentence["value"] + "\n\nAssistant: \n"
@@ -40,6 +33,18 @@ def generate_and_tokenize_prompt(
         if sentence_from != "human":
             input_ids += [tokenizer.eos_token_id]  # make sure eos_token_id is correct
             labels += [tokenizer.eos_token_id]
+    return input_ids, labels
+
+
+def generate_and_tokenize_prompt(
+    model_max_length: int,
+    tokenizer: PreTrainedTokenizer,
+    data_point: Dict[str, Any],
+    fix_length=False,
+    padding_side="left",
+):
+    conversations = data_point["conversations"]
+    input_ids, labels = sft_sample_to_ids(conversations, tokenizer)
 
     input_ids = input_ids[:model_max_length]
     labels = labels[:model_max_length]
@@ -50,7 +55,7 @@ def generate_and_tokenize_prompt(
         ]  # labels can not have all values being -100. 18 and 24 are just random numbers
     attention_mask = [1] * len(input_ids)
 
-    if fix_length:
+    if fix_length and model_max_length > len(input_ids):
         if padding_side == "left":
             input_ids = [tokenizer.pad_token_id] * (
                 model_max_length - len(input_ids)
@@ -78,6 +83,33 @@ def generate_and_tokenize_prompt(
         "labels": labels,
     }
     return tokenized_full_prompt
+
+
+def batch_grouped_sft_generate(
+    model_max_length: int,
+    tokenizer: PreTrainedTokenizer,
+    examples: Dict[str, List[Any]],
+) -> Dict[str, List[List[int]]]:
+    input_ids_buffer = []
+    labels_buffer = []
+    for conversations in examples["conversations"]:
+        input_ids, labels = sft_sample_to_ids(conversations, tokenizer)
+        input_ids_buffer.extend(input_ids)
+        labels_buffer.extend(labels)
+    total_length = (len(input_ids_buffer) // model_max_length) * model_max_length
+    input_ids_list: List[List[int]] = [
+        input_ids_buffer[i : i + model_max_length]
+        for i in range(0, total_length, model_max_length)
+    ]
+    labels_list: List[List[int]] = [
+        labels_buffer[i : i + model_max_length]
+        for i in range(0, total_length, model_max_length)
+    ]
+    for i, labels in enumerate(labels_list):
+        if all(x == IGNORE_INDEX for x in labels):
+            # labels can not have all values being -100. 18 and 24 are just random numbers
+            labels[18:24] = input_ids[i][18:24]
+    return {"input_ids": input_ids_list, "labels": labels_list}
 
 
 def batch_grouped_pretrain_generate(
