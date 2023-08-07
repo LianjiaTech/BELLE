@@ -356,7 +356,7 @@ CUDA_VISIBLE_DEVICES=0 python src/entry_point/interface.py \
 
 服务访问地址是 hostip:17860
 
-![webUI](https://github.com/LianjiaTech/BELLE/blob/main/train/docs/interface.png)
+![webUI](docs/interface.png)
 
 ### 3.3 并行推理
 ```bash

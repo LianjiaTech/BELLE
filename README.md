@@ -18,6 +18,7 @@
 </br>
 
 ## 🔄 最近更新
+* [2023/08/07] 更新了继续预训练代码和指令微调代码，添加了flash attention 2，详见[train/README.md](train/README.md)。同时打包了运行环境，详见[train/docker/README.md](train/docker/README.md)
 * [2023/07/31] 更新了[一篇技术报告](https://arxiv.org/abs/2307.15290)，探索了针对下游任务时的增量预训练+指令微调的的策略方法
 * [2023/07/27] 开放[BELLE-Llama2-13B-chat-0.4M](https://huggingface.co/BELLE-2/BELLE-Llama2-13B-chat-0.4M)，在Llama-2-13B的基础上采用40万高质量的对话数据上进行训练。在[评测集](https://github.com/LianjiaTech/BELLE/blob/main/eval/eval_set.json)上的效果相比BELLE-LLaMA-EXT-13B模型有显著提升。
 * [2023/05/14] 开放[BELLE-LLaMA-EXT-13B](https://huggingface.co/BelleGroup/BELLE-LLaMA-EXT-13B)，在LLaMA-13B的基础上扩展中文词表，并在400万高质量的对话数据上进行训练。
@@ -28,7 +29,7 @@
 * [2023/04/12] 发布了[ChatBELLE App](chat/README.md)，基于[llama.cpp](https://github.com/ggerganov/llama.cpp)和[Flutter](https://flutter.dev/)，实现跨平台的BELLE-7B离线模型实时交互。
 * [2023/04/11] 更新了一个人工精校的eval集合，大约一千多条
 * [2023/04/08] [BELLE/data/10M](data/10M)中，新加40万条生成的给定角色的多轮对话[Generated Chat](https://huggingface.co/datasets/BelleGroup/generated_chat_0.4M)，新加200万条生成多样化指令任务数据[train_2M_CN](https://huggingface.co/datasets/BelleGroup/train_2M_CN)。
-* 
+
 </br>
   
 
