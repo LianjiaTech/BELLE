@@ -19,6 +19,7 @@ RUN python3 -m pip install -U --no-cache-dir xformers
 RUN python3 -m pip install -U --no-cache-dir bitsandbytes
 RUN python3 -m pip install -U --no-build-isolation --no-cache-dir flash-attn
 RUN python3 -m pip install -U --no-cache-dir ipykernel
+RUN python3 -m pip install -U --no-cache-dir install git+https://github.com/wookayin/gpustat.git@master
 
 RUN mkdir -p /scripts && echo -e '#!/bin/bash\n\
 SSHD_PORT=22001\n\

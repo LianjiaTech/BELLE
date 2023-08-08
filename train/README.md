@@ -20,7 +20,7 @@
 考虑到build存在一定的困难，我们提供了镜像下载，你可以使用下面命令从dockerhub拉取我们的镜像，然后在镜像中运行代码，详见[docker环境说明](https://github.com/LianjiaTech/BELLE/blob/main/train/docker/README.md)。
 
 ```shell
-sudo docker pull tothemoon/belle:20230804
+sudo docker pull tothemoon/belle:20230805
 git clone https://github.com/LianjiaTech/BELLE.git
 ```
 ```
