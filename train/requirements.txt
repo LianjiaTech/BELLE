@@ -8,4 +8,4 @@ tqdm
 transformers
 deepspeed
 gradio
-xformers
+flash-attn

@@ -3,8 +3,6 @@ import torch
 from transformers import LlamaTokenizer, AutoTokenizer, AutoModelForCausalLM, AutoConfig
 from peft import  PeftModel
 import argparse
-from tqdm import tqdm
-import json, os
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_name_or_path', type=str, required=True)
 parser.add_argument('--ckpt_path', type=str, required=True)

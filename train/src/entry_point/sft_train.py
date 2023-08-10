@@ -29,6 +29,7 @@ from src.sample_generator import (
     batch_grouped_sft_generate,
     generate_and_tokenize_prompt,
 )
+from src.models.llama.modeling_llama import LlamaForCausalLM
 
 if version.parse(transformers.__version__) <= version.parse("4.30.2"):
     from src.trainer import MyTrainer as Trainer
@@ -80,16 +81,6 @@ class DataArguments:
     Arguments pertaining to what data we are going to input our model for training and eval.
     """
 
-    dataset_name: Optional[str] = field(
-        default=None,
-        metadata={"help": "The name of the dataset to use (via the datasets library)."},
-    )
-    dataset_config_name: Optional[str] = field(
-        default=None,
-        metadata={
-            "help": "The configuration name of the dataset to use (via the datasets library)."
-        },
-    )
     train_file: Optional[str] = field(
         default=None, metadata={"help": "The input training data file (a text file)."}
     )
@@ -97,12 +88,6 @@ class DataArguments:
         default=None,
         metadata={
             "help": "An optional input evaluation data file to evaluate the perplexity on (a text file)."
-        },
-    )
-    validation_split_percentage: Optional[int] = field(
-        default=5,
-        metadata={
-            "help": "The percentage of the train set used as validation set in case there's no validation split"
         },
     )
 
@@ -247,15 +232,11 @@ def main():
         )
     else:
         if model_args.llama:
-            if model_args.use_flash_attention:
-                from src.models.llama.modeling_llama import LlamaForCausalLM
-            else:
-                from transformers import LlamaForCausalLM
-
             model = LlamaForCausalLM.from_pretrained(
                 model_args.model_name_or_path,
                 torch_dtype=torch_dtype,
             )
+            model.config.use_flash_attention = model_args.use_flash_attention
         else:
             model = AutoModelForCausalLM.from_pretrained(
                 model_args.model_name_or_path,
@@ -368,7 +349,6 @@ def main():
 
             val_data = (
                 val_data["train"]
-                .shuffle()
                 .map(
                     partial(
                         batch_grouped_sft_generate,
@@ -395,7 +375,6 @@ def main():
 
             val_data = (
                 val_data["train"]
-                .shuffle()
                 .map(
                     partial(
                         generate_and_tokenize_prompt,
@@ -522,7 +501,8 @@ def main():
     elif last_checkpoint is not None:
         checkpoint = last_checkpoint
     trainer.train(resume_from_checkpoint=checkpoint)
-
+    trainer.save_model(training_args.output_dir)
+    
     print_rank_0(
         "\n Training completed!!! If there's a warning about missing keys above, please disregard :)",
         log_file,

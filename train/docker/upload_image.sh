@@ -6,6 +6,8 @@ tag=$(date +%Y%m%d)
 
 docker tag transformers:ds $docker_user/transformers:ds_$tag
 docker push $docker_user/transformers:ds_$tag
+docker tag transformers:ds $docker_user/transformers:latest
+docker push $docker_user/transformers:latest
 docker tag belle:$tag $docker_user/belle:$tag
 docker push $docker_user/belle:$tag
 docker tag belle:$tag $docker_user/belle:latest

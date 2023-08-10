@@ -1,6 +1,5 @@
 from itertools import chain
-from typing import Any, Dict, List
-import pudb
+from typing import Any, Callable, Dict, List
 import copy
 from transformers import PreTrainedTokenizer
 import json
@@ -136,7 +135,6 @@ def batch_grouped_pretrain_generate(
 
 def exam_generate(model_max_length: int, tokenizer: PreTrainedTokenizer, data_point):
     template = "Human: \n{human}\n\nAssistant: \n"
-    # pudb.set_trace()
     input_str = template.format(
         human=f'回答下面的{data_point["type"]}题，用json返回答案，包括原因和答案，如{{"reason":..., "answer":...}}\n{data_point["question"]}\n选项：{" ".join(data_point["candidates"])}'
     )
@@ -161,4 +159,17 @@ def exam_generate(model_max_length: int, tokenizer: PreTrainedTokenizer, data_po
         "input_ids": input_ids,
         "attention_mask": [1] * len(input_ids),
         "labels": labels,
+    }
+
+def inference_generate(
+    model_max_length: int,
+    tokenizer: PreTrainedTokenizer,
+    model_prompt: Callable,
+    data_point: Dict[str, Any],
+):
+    text = data_point['text']
+    if model_prompt is not None:
+        text = model_prompt(text)
+    return {
+        "input_ids": tokenizer.encode(text, add_special_tokens=False)[:model_max_length]
     }

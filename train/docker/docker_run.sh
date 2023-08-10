@@ -22,7 +22,7 @@ chown root:root $ssh_pub_key
 #     -v $hf_home:$hf_home \
 #     -v $ssh_pub_key:/root/.ssh/authorized_keys \
 #     -w $workdir \
-#     $docker_user/transformers:ds_$tag \
+#     $docker_user/transformers:$tag \
 #     /bin/bash
 
 # 前台运行
@@ -64,3 +64,4 @@ docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 \
                             echo 'export all_proxy=$all_proxy' >> /root/.bashrc && \
                             echo 'export HF_HOME=$hf_home' >> /root/.bashrc && \
                             sleep infinity"
+                            

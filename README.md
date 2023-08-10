@@ -18,6 +18,7 @@
 </br>
 
 ## 🔄 最近更新
+* [2023/08/10] 更新了基于ZeRO Inference的推理代码，详见[train/README_ZERO_INFERENCE.md](train/README_ZERO_INFERENCE.md)
 * [2023/08/07] 更新了继续预训练代码和指令微调代码，添加了flash attention 2，详见[train/README.md](train/README.md)。同时打包了运行环境，详见[train/docker/README.md](train/docker/README.md)
 * [2023/07/31] 更新了[一篇技术报告](https://arxiv.org/abs/2307.15290)，探索了针对下游任务时的增量预训练+指令微调的的策略方法
 * [2023/07/27] 开放[BELLE-Llama2-13B-chat-0.4M](https://huggingface.co/BELLE-2/BELLE-Llama2-13B-chat-0.4M)，在Llama-2-13B的基础上采用40万高质量的对话数据上进行训练。在[评测集](https://github.com/LianjiaTech/BELLE/blob/main/eval/eval_set.json)上的效果相比BELLE-LLaMA-EXT-13B模型有显著提升。
