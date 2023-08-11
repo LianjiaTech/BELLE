@@ -1,5 +1,7 @@
+import copy
 import time
-from typing import Any, List, Union
+import types
+from typing import Any, List, Optional, Union
 from gradio_client import Client
 from tqdm import tqdm
 from transformers.deepspeed import is_deepspeed_zero3_enabled
@@ -34,11 +36,24 @@ def get_model_param_count(model: Union[DeepSpeedEngine, torch.nn.Module], traina
     return sum(numel(p) for p in model.parameters() if not trainable_only or p.requires_grad)
 
 
+def bind_methods_from_class_to_instance(to_instance, from_class, include: Optional[List[str]] = None):
+    for method_name, method in vars(from_class).items():
+        if callable(method) and (include is None or method_name in include):
+            setattr(to_instance, method_name, types.MethodType(method, to_instance))
+
+
 class MultiClient(object):
-    def __init__(self, worker_addrs) -> None:
+    def __init__(self, worker_addrs, synced_worker=False) -> None:
         self.clients = [Client(addr) for addr in worker_addrs]
+        self.synced_worker = synced_worker
 
     def predict(self, tasks: List[List], max_retries: int = 3) -> List[Any]:
+        assert len(tasks) >= 1, "No predict tasks!"
+        num_tasks = len(tasks)
+        if self.synced_worker and len(tasks) % len(self.clients) != 0:
+            num_dummy_tasks = len(self.clients) - len(tasks) % len(self.clients)            
+            tasks.extend([copy.deepcopy(tasks[-1]) for _ in range(num_dummy_tasks)])
+
         pbar = tqdm(total=len(tasks))
         jobs = {
             client: (i, client.submit(*(tasks[i]), api_name="/predict"))
@@ -68,16 +83,15 @@ class MultiClient(object):
                         else:
                             results[i] = None
 
-                    if tasks:
-                        new_i = len(results) + len(jobs)
-                        if new_i < len(tasks):
-                            new_task = tasks[new_i]
-                            new_job = client.submit(
-                                *new_task, api_name="/predict")
-                            jobs[client] = (new_i, new_job)
-            time.sleep(0.1)
+                    new_i = len(results) + len(jobs)
+                    if new_i < len(tasks):
+                        new_task = tasks[new_i]
+                        new_job = client.submit(
+                            *new_task, api_name="/predict")
+                        jobs[client] = (new_i, new_job)
+            time.sleep(1)
         pbar.close()
 
-        predicts = [results[i] for i in sorted(results)]
+        predicts = [results[i] for i in range(num_tasks)]
 
         return predicts

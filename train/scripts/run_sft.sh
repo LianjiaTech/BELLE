@@ -37,6 +37,7 @@ cutoff_len=1024
 #     --lr_scheduler_type "cosine" \
 #     --logging_steps 10 \
 #     --evaluation_strategy "steps" \
+#     --torch_dtype "bfloat16" \
 #     --bf16 \
 #     --seed 1234 \
 #     --gradient_checkpointing \
@@ -69,6 +70,7 @@ cutoff_len=1024
 #     --lr_scheduler_type "cosine" \
 #     --logging_steps 10 \
 #     --evaluation_strategy "steps" \
+#     --torch_dtype "bfloat16" \
 #     --bf16 \
 #     --seed 1234 \
 #     --gradient_checkpointing \
@@ -100,6 +102,7 @@ torchrun --nproc_per_node 8 src/entry_point/sft_train.py \
     --lr_scheduler_type "cosine" \
     --logging_steps 10 \
     --evaluation_strategy "steps" \
+    --torch_dtype "bfloat16" \
     --bf16 \
     --seed 1234 \
     --gradient_checkpointing \

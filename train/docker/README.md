@@ -19,7 +19,7 @@ sudo bash upload_image.sh
 ## 下载镜像
 已经构建好镜像，无需自行构建
 ```bash
-sudo docker tothemoon/belle:20230804
+sudo docker pull tothemoon/belle:latest
 ```
 belle镜像中包含sshd，可以远程连接到容器内部
 
@@ -52,6 +52,7 @@ binaryornot             0.4.4
 bitsandbytes            0.41.1
 black                   23.7.0
 bleach                  5.0.1
+blessed                 1.20.0
 blis                    0.7.9
 cachetools              5.2.0
 catalogue               2.0.8
@@ -64,7 +65,7 @@ cloudpickle             2.2.0
 cmaes                   0.10.0
 cmake                   3.24.1.1
 colorlog                6.7.0
-comm                    0.1.2
+comm                    0.1.4
 confection              0.0.3
 contourpy               1.0.6
 cookiecutter            1.7.3
@@ -81,13 +82,14 @@ dask-cuda               22.10.0a0+23.g62a1ee8
 dask-cudf               22.10.0a0+316.gad1ba132d2.dirty
 datasets                2.14.3
 dbus-python             1.2.16
-debugpy                 1.6.4
+debugpy                 1.6.7.post1
 decorator               5.1.1
 deepspeed               0.10.0
 defusedxml              0.7.1
 dill                    0.3.4
 distributed             2022.9.2
 distro                  1.4.0
+docker-pycreds          0.4.0
 einops                  0.6.1
 entrypoints             0.4
 evaluate                0.4.0
@@ -109,6 +111,7 @@ gitdb                   4.0.10
 GitPython               3.1.18
 google-auth             2.15.0
 google-auth-oauthlib    0.4.6
+gpustat                 1.2.dev7+g7c09a0f
 gql                     3.4.1
 gradio                  3.39.0
 gradio_client           0.3.0
@@ -128,10 +131,12 @@ idna                    3.4
 importlib-metadata      5.1.0
 importlib-resources     5.10.1
 iniconfig               1.1.1
+install                 1.3.5
 intel-openmp            2021.4.0
-ipykernel               6.19.2
+ipykernel               6.25.1
 ipython                 8.7.0
 ipython-genutils        0.2.0
+ipywidgets              8.1.0
 jedi                    0.18.2
 Jinja2                  3.1.2
 jinja2-time             0.2.0
@@ -144,6 +149,7 @@ jupyter-tensorboard     0.2.0
 jupyterlab              2.3.2
 jupyterlab-pygments     0.2.2
 jupyterlab-server       1.2.0
+jupyterlab-widgets      3.0.8
 jupytext                1.14.4
 kiwisolver              1.4.4
 langcodes               3.3.0
@@ -182,6 +188,7 @@ notebook                6.4.10
 numba                   0.56.4
 numpy                   1.22.2
 nvidia-dali-cuda110     1.20.0
+nvidia-ml-py            12.535.77
 nvidia-pyindex          1.0.9
 nvtx                    0.2.5
 oauthlib                3.2.2
@@ -196,6 +203,7 @@ parameterized           0.9.0
 parso                   0.8.3
 partd                   1.3.0
 pathspec                0.11.2
+pathtools               0.1.2
 pathy                   0.10.1
 peft                    0.4.0
 pexpect                 4.8.0
@@ -267,11 +275,14 @@ scipy                   1.6.3
 semantic-version        2.10.0
 Send2Trash              1.8.0
 sentencepiece           0.1.99
+sentry-sdk              1.29.2
+setproctitle            1.3.2
 setuptools              59.5.0
 six                     1.16.0
 smart-open              6.3.0
 smmap                   5.0.0
 sniffio                 1.3.0
+socksio                 1.0.0
 sortedcontainers        2.4.0
 soundfile               0.11.0
 soupsieve               2.3.2.post1
@@ -305,7 +316,7 @@ torch                   2.0.1+cu118
 torchaudio              2.0.2+cu118
 torchtext               0.13.0a0+fae8e8c
 torchvision             0.15.2+cu118
-tornado                 6.1
+tornado                 6.3.2
 tqdm                    4.64.1
 traitlets               5.7.1
 transformers            4.32.0.dev0
@@ -322,12 +333,14 @@ urllib3                 1.26.13
 urwid                   2.1.2
 urwid-readline          0.13
 uvicorn                 0.23.2
+wandb                   0.15.8
 wasabi                  0.10.1
 wcwidth                 0.2.5
 webencodings            0.5.1
 websockets              11.0.3
 Werkzeug                2.2.2
 wheel                   0.38.4
+widgetsnbextension      4.0.8
 xdoctest                1.0.2
 xformers                0.0.20
 xgboost                 1.6.2

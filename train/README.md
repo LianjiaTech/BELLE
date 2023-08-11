@@ -20,7 +20,7 @@
 考虑到build存在一定的困难，我们提供了镜像下载，你可以使用下面命令从dockerhub拉取我们的镜像，然后在镜像中运行代码，详见[docker环境说明](https://github.com/LianjiaTech/BELLE/blob/main/train/docker/README.md)。
 
 ```shell
-sudo docker pull tothemoon/belle:20230804
+sudo docker pull tothemoon/belle:latest
 git clone https://github.com/LianjiaTech/BELLE.git
 ```
 ```
@@ -325,8 +325,8 @@ torchrun --nproc_per_node 8 --nnodes 2 --master_addr ${master_addr} --master_por
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 python src/entry_point/inference.py \
-    --model_name_or_path model_name_or_path \
-    --ckpt_path ckpt_path \
+    --model_name_or_path $model_name_or_path \
+    --ckpt_path $ckpt_path \
     --llama \
     --use_lora
 ```
@@ -348,12 +348,11 @@ CUDA_VISIBLE_DEVICES=0 python src/entry_point/inference.py \
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 python src/entry_point/interface.py \
-    --model_name_or_path model_name_or_path \
-    --ckpt_path ckpt_path \
+    --model_name_or_path $model_name_or_path \
+    --ckpt_path $ckpt_path \
     --llama \
     --use_lora
 ```
-
 服务访问地址是 hostip:17860
 
 ![webUI](docs/interface.png)
@@ -362,8 +361,10 @@ CUDA_VISIBLE_DEVICES=0 python src/entry_point/interface.py \
 ```bash
 bash scripts/run_multi_backend.sh
 ```
-
 打开`src/entry_point/evaluation.ipynb`，设置相应路径，加载自己的数据推理
+
+### 3.4 ZeRO Inference
+详见[ZeRO Inference](README_ZERO_INFERENCE.md)
 
 ## 4. Additional Notes
 
