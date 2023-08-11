@@ -18,12 +18,12 @@ parser.add_argument("--ckpt_path", type=str, default=None)
 parser.add_argument("--use_lora", action="store_true")
 parser.add_argument("--llama", action="store_true")
 parser.add_argument("--base_port", default=17860, type=int)
-parser.add_argument("--use_belle_prompt", action="store_true")
+parser.add_argument("--use_raw_prompt", action="store_true")
 args = parser.parse_args()
 
 
 def generate_prompt(input_text):
-    if args.use_belle_prompt:
+    if not args.use_raw_prompt:
         return f"Human: \n{input_text}\n\nAssistant: \n"
     else:
         return input_text

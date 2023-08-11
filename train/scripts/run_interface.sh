@@ -10,6 +10,5 @@ python src/entry_point/interface.py \
     --model_name_or_path $model_name_or_path \
     --llama \
     --local_rank $1 \
-    --use_belle_prompt \
     # --ckpt_path ... \
     # --use_lora

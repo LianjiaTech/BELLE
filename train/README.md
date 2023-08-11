@@ -351,8 +351,7 @@ CUDA_VISIBLE_DEVICES=0 python src/entry_point/interface.py \
     --model_name_or_path $model_name_or_path \
     --ckpt_path $ckpt_path \
     --llama \
-    --use_lora \
-    --use_belle_prompt
+    --use_lora
 ```
 服务访问地址是 hostip:17860
 

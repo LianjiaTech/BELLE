@@ -1,7 +1,7 @@
 # ZeRO Inference
 
 ## 1.1 什么是ZeRO Inference
-Zero Inference利用ZeRO stage 3的数据并行特性，能够将模型分布到多张GPU上，或者Offload到内存或者NVMe上，推理单GPU无法加载的模型
+[Zero Inference](https://www.deepspeed.ai/2022/09/09/zero-inference.html)利用ZeRO stage 3的数据并行特性，能够将模型分布到多张GPU上，或者Offload到内存或者NVMe上，推理单GPU无法加载的模型
 
 ## 1.2 Zero Inference注意事项
 Zero Inference是数据并行的推理，因此需要在各个GPU同时启动推理进程并进行`model.forward`，否则会卡住
