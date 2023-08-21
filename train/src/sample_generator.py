@@ -107,7 +107,7 @@ def batch_grouped_sft_generate(
     for i, labels in enumerate(labels_list):
         if all(x == IGNORE_INDEX for x in labels):
             # labels can not have all values being -100. 18 and 24 are just random numbers
-            labels[18:24] = input_ids[i][18:24]
+            labels[18:24] = input_ids_list[i][18:24]
     return {"input_ids": input_ids_list, "labels": labels_list}
 
 
