@@ -13,8 +13,3 @@ docker tag belle $docker_user/belle:$tag
 docker push $docker_user/belle:$tag
 docker tag belle $docker_user/belle:latest
 docker push $docker_user/belle:latest
-
-docker tag roce $docker_user/roce:$tag
-docker push $docker_user/roce:$tag
-docker tag roce $docker_user/roce:latest
-docker push $docker_user/roce:latest
