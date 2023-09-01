@@ -210,6 +210,7 @@ def main():
 
     # Set seed before initializing model.
     set_seed(training_args.seed)
+    training_args._frozen = False
     training_args.data_seed = training_args.seed
 
     torch_dtype = (
@@ -404,7 +405,7 @@ def main():
     # train steps
     t_total = math.ceil(training_nums / batch_size) * training_args.num_train_epochs
     # eval steps
-    training_args.eval_steps = max(t_total // 5, 5)
+    training_args.eval_steps = max(t_total // (training_args.num_train_epochs * 4), 5)
     # save steps
     training_args.save_steps = training_args.eval_steps
     training_args.warmup_steps = (

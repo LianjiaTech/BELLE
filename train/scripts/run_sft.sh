@@ -9,7 +9,7 @@ model_name_or_path=/path_to_llm/hf_llama_7b/ # or bloomz-7b1-mt
 
 train_file=belleMath.json
 validation_file=belleMath-dev1K.json
-output_dir="$ABS_PATH/saved_models/${WANDB_PROJECT}_${WANDB_RUN_ID}"
+output_dir="$ABS_PATH/BELLE/saved_models/${WANDB_PROJECT}_${WANDB_RUN_ID}"
 mkdir -p ${output_dir}
 
 cache_dir=hf_cache_dir

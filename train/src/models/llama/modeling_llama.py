@@ -338,7 +338,6 @@ class LlamaAttention(nn.Module):
         self.k_proj = nn.Linear(self.hidden_size, self.num_key_value_heads * self.head_dim, bias=False)
         self.v_proj = nn.Linear(self.hidden_size, self.num_key_value_heads * self.head_dim, bias=False)
         self.o_proj = nn.Linear(self.num_heads * self.head_dim, self.hidden_size, bias=False)
-
         self.flash_attention = FlashSelfAttention(
             causal=True
         )
@@ -413,7 +412,7 @@ class LlamaAttention(nn.Module):
             value_states = torch.cat([past_key_value[1], value_states], dim=2)
 
         past_key_value = (key_states, value_states) if use_cache else None
-        
+
         if getattr(self.config, "use_flash_attention", False):
             # Flash attiontion
             # q, k, v: [batch_size, head_size, seq_len, hidden_size]
@@ -783,7 +782,7 @@ class LlamaModel(LlamaPreTrainedModel):
                 def create_custom_forward(module):
                     def custom_forward(*inputs):
                         # None for past_key_value
-                        return module(*inputs, output_attentions, None)
+                        return module(*inputs, past_key_value, output_attentions)
 
                     return custom_forward
 
@@ -792,7 +791,6 @@ class LlamaModel(LlamaPreTrainedModel):
                     hidden_states,
                     attention_mask,
                     position_ids,
-                    None,
                 )
             else:
                 layer_outputs = decoder_layer(
