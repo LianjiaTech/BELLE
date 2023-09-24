@@ -74,7 +74,7 @@ bash scripts/run_ppo.sh
 注意：
 - 支持deepspeed zero stage 3，拆分model、ref_model和reward_model
 - 支持deepspeed zero stage 3 + lora
-- $batch\_size \geq mini\_batch\_size * gradient\_accumulation\_steps$
+- $batch\\_size \geq mini\\_batch\\_size * gradient\\_accumulation\\_steps$
 - 数据集大小要大于`num_processes * batch_size`，否则部分进程拿不到数据，出现报错，输出中`Train dataset length`可以看到经过长度过滤的数据集大小
 
 ### TODO
