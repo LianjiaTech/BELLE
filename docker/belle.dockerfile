@@ -26,12 +26,13 @@ RUN apt install -y pdsh \
     && chmod 755 /usr/lib
 
 # https://docs.nvidia.com/networking/m/view-rendered-page.action?abstractPageId=15049785
+# https://network.nvidia.com/products/infiniband-drivers/linux/mlnx_ofed/
 ENV MOFED_VER=23.07-0.5.0.0
-ENV OS_VER=ubuntu20.04
 ENV PLATFORM=x86_64
-RUN wget http://content.mellanox.com/ofed/MLNX_OFED-${MOFED_VER}/MLNX_OFED_LINUX-${MOFED_VER}-${OS_VER}-${PLATFORM}.tgz && \
-    tar -xvf MLNX_OFED_LINUX-${MOFED_VER}-${OS_VER}-${PLATFORM}.tgz && \
-    MLNX_OFED_LINUX-${MOFED_VER}-${OS_VER}-${PLATFORM}/mlnxofedinstall --user-space-only --without-fw-update -q
+RUN OS_VER="ubuntu$(lsb_release -rs)" \
+    && wget http://content.mellanox.com/ofed/MLNX_OFED-${MOFED_VER}/MLNX_OFED_LINUX-${MOFED_VER}-${OS_VER}-${PLATFORM}.tgz \
+    && tar -xvf MLNX_OFED_LINUX-${MOFED_VER}-${OS_VER}-${PLATFORM}.tgz \
+    && MLNX_OFED_LINUX-${MOFED_VER}-${OS_VER}-${PLATFORM}/mlnxofedinstall --user-space-only --without-fw-update -q
 
 RUN python3 -m pip install -U --no-cache-dir pip
 RUN python3 -m pip install -U --no-cache-dir peft
@@ -45,6 +46,23 @@ RUN python3 -m pip install -U --no-cache-dir ipykernel
 RUN python3 -m pip install -U --no-cache-dir ipywidgets
 RUN python3 -m pip install -U --no-cache-dir httpx[socks]
 RUN python3 -m pip install -U --no-cache-dir wandb
+
+RUN cd /workspace && \
+    git clone https://github.com/huggingface/accelerate.git && \
+    python3 -m pip uninstall -y accelerate && \
+    cd accelerate && \
+    python3 -m pip install -e .
+
+RUN cd /workspace && \
+    git clone https://github.com/huggingface/trl.git && \
+    python3 -m pip uninstall -y trl && \
+    cd trl && \
+    python3 -m pip install -e .
+
+RUN cd /workspace/transformers && \
+    git pull && \
+    python3 -m pip uninstall -y transformers && \
+    python3 -m pip install -e .
 
 RUN mkdir -p /scripts && echo -e '#!/bin/bash\n\
 SSHD_PORT=22001\n\
