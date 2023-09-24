@@ -2,14 +2,14 @@ export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
 gpus=8
 
 BELLE_PATH=".../BELLE"
-export PYTHONPATH=$BELLE_PATH/rlhf
+export PYTHONPATH=$BELLE_PATH/train
 
 export WANDB_PROJECT=...
 export WANDB_RUN_ID=...
 export WANDB_RESUME=allow
 
 model_name_or_path=...
-output_dir="$BELLE_PATH/rlhf/saved_models/$WANDB_PROJECT/$WANDB_RUN_ID"
+output_dir="$BELLE_PATH/saved_models/$WANDB_PROJECT/$WANDB_RUN_ID"
 mkdir -p ${output_dir}
 
 train_file=$BELLE_PATH/data/xxx.jsonl
@@ -28,16 +28,21 @@ accelerate launch \
     --adafactor False \
     --save_freq 100 \
     --output_max_length 128 \
-    --batch_size 8 \
-    --mini_batch_size 1 \
-    --gradient_accumulation_steps 1 \
-    --batched_gen True \
-    --ppo_epochs 4 \
+    --batch_size 32 \
+    --mini_batch_size 2 \
+    --eval_batch_size 8 \
+    --gradient_accumulation_steps 2 \
+    --ppo_epochs 2 \
     --data_epochs 1 \
     --seed 42 \
     --learning_rate 1.4e-5 \
     --early_stopping True \
+    --do_sample True \
     --output_dir $output_dir \
     --log_with "tensorboard" \
     --logging_dir "$output_dir/logs" \
-    --use_llama False
+    --use_llama True \
+    --reward_model_use_llama True \
+    --use_lora False \
+    --input_length 512 \
+    --output_max_length 64 \

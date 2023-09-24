@@ -17,7 +17,7 @@
 
 我们提供了一个完整可运行的Docker镜像，Dockerfile写在docker文件夹下。
 
-考虑到build存在一定的困难，我们提供了镜像下载，你可以使用下面命令从dockerhub拉取我们的镜像，然后在镜像中运行代码，详见[docker环境说明](https://github.com/LianjiaTech/BELLE/blob/main/train/docker/README.md)。
+考虑到build存在一定的困难，我们提供了镜像下载，你可以使用下面命令从dockerhub拉取我们的镜像，然后在镜像中运行代码，详见[docker环境说明](../docker/README.md)。
 
 ```shell
 sudo docker pull tothemoon/belle:latest
@@ -26,6 +26,7 @@ git clone https://github.com/LianjiaTech/BELLE.git
 ```
 sudo docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 \
     --network host \
+    --privileged \
     [--env https_proxy=$https_proxy \]
     [--env http_proxy=$http_proxy \]
     [--env all_proxy=$all_proxy \]

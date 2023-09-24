@@ -34,6 +34,7 @@ sudo bash docker_run.sh
 ```
 docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 \
     --network host \
+    --privileged \
     [--env https_proxy=$https_proxy \]
     [--env http_proxy=$http_proxy \]
     [--env all_proxy=$all_proxy \]
