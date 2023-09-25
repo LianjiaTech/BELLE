@@ -79,5 +79,6 @@ bash scripts/run_ppo.sh
 
 ### TODO
 
-- [] 每次训练的batch_size是 `num_processes * batch_size`，每个进程只会从自己的 `batch`中采样，而不是从全局的 `num_processes * batch_size`中采样，这会导致每个gpu采到的 `mini_batch`不是完全随机的，`mini_batch`不包含其它进程 `batch`中的样本
-- [] gradient checkpointing
+- [ ] 每次训练的batch_size是 `num_processes * batch_size`，每个进程只会从自己的 `batch`中采样，而不是从全局的 `num_processes * batch_size`中采样，这会导致每个gpu采到的 `mini_batch`不是完全随机的，`mini_batch`不包含其它进程 `batch`中的样本
+- [ ] gradient checkpointing
+- [ ] resume from checkpoint
