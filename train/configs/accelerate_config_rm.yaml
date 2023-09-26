@@ -1,0 +1,12 @@
+compute_environment: LOCAL_MACHINE
+deepspeed_config:
+    deepspeed_config_file: configs/deepspeed_config_rm.json
+distributed_type: DEEPSPEED
+fsdp_config: {}
+machine_rank: 0
+main_process_ip: null
+main_process_port: null
+main_training_function: main
+num_machines: 1
+num_processes: 8
+use_cpu: false
