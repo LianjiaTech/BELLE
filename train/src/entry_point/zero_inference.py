@@ -46,11 +46,11 @@ class ModelArguments:
     Arguments pertaining to which model/config/tokenizer we are going to fine-tune, or train from scratch.
     """
 
-    model_name_or_path: str = field(
+    ckpt_path: str = field(
         default=None,
         metadata={"help": "The model checkpoint for weights initialization."},
     )
-    ckpt_path: Optional[str] = field(default=None, metadata={"help": "Checkpoint path."})
+    lora_path: Optional[str] = field(default=None, metadata={"help": "Checkpoint path."})
     use_lora: bool = field(default=False, metadata={"help": "Whether to use LoRA."})
     cache_dir: Optional[str] = field(
         default=None,
@@ -206,19 +206,7 @@ def main():
             "set use_flash_attention = False"
         )
         model_args.use_flash_attention = False
-
-    if model_args.use_flash_attention:
-        logger.warning(
-            "Flash attention does't support attention_mask, "
-            "to avoid padding, "
-            "we must set per_device_eval_batch_size = 1 "
-            "and carefully sent padding = False and pad_to_multiple_of = None to DataCollatorForSeq2Seq"
-        )
-        training_args.per_device_eval_batch_size = 1
     
-    if model_args.ckpt_path is None or model_args.ckpt_path == '':
-        model_args.ckpt_path = model_args.model_name_or_path
-
     # Log on each process the small summary:
     logger.warning(
         f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}, distributed training: {bool(training_args.local_rank != -1)}, fp16-bits training: {training_args.fp16}, bf16-bits training: {training_args.bf16}"
@@ -236,29 +224,7 @@ def main():
     )
 
     if model_args.llama:
-        model = LlamaForCausalLM.from_pretrained(
-            model_args.ckpt_path,
-            torch_dtype=torch_dtype
-        )
-        model.config.use_flash_attention = model_args.use_flash_attention
-        model.config.pad_token_id = 0
-        model.config.eos_token_id = 2
-    else:
-        model = AutoModelForCausalLM.from_pretrained(
-            model_args.ckpt_path,
-            torch_dtype=torch_dtype
-        )
-
-    # peft model
-    if model_args.use_lora:
-        model = PeftModel.from_pretrained(
-            model, 
-            model_args.ckpt_path, 
-            torch_dtype=torch_dtype
-        )
-
-    if model_args.llama:
-        tokenizer = LlamaTokenizer.from_pretrained(model_args.model_name_or_path)
+        tokenizer = LlamaTokenizer.from_pretrained(model_args.ckpt_path)
         print_rank_0(
             "Set the eos_token_id and bos_token_id of LLama model tokenizer",
             log_file,
@@ -273,10 +239,33 @@ def main():
             }
         )
     else:
-        tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path)
-
-    tokenizer.pad_token_id = 0
+        tokenizer = AutoTokenizer.from_pretrained(model_args.ckpt_path)
+        tokenizer.add_special_tokens({"pad_token": tokenizer.unk_token})
     tokenizer.padding_side = "left"  # Allow batched inference
+
+    if model_args.llama:
+        model = LlamaForCausalLM.from_pretrained(
+            model_args.ckpt_path,
+            torch_dtype=torch_dtype
+        )
+        model.config.use_flash_attention = model_args.use_flash_attention
+    else:
+        model = AutoModelForCausalLM.from_pretrained(
+            model_args.ckpt_path,
+            torch_dtype=torch_dtype
+        )
+    model.config.pad_token_id = tokenizer.pad_token_id
+    model.config.eos_token_id = tokenizer.eos_token_id
+
+    # peft model
+    if model_args.use_lora:
+        model = PeftModel.from_pretrained(
+            model, 
+            model_args.lora_path, 
+            torch_dtype=torch_dtype
+        )
+
+    
     generation_config = vars(generation_config)
     generation_config["bos_token_id"] = tokenizer.bos_token_id
     generation_config["eos_token_id"] = tokenizer.eos_token_id
@@ -350,8 +339,8 @@ def main():
         eval_dataset=None,
         data_collator=transformers.DataCollatorForSeq2Seq(
             tokenizer, 
-            pad_to_multiple_of=8 if not model_args.use_flash_attention else None, return_tensors="pt", 
-            padding=True if not model_args.use_flash_attention else False
+            pad_to_multiple_of=8 , return_tensors="pt", 
+            padding=True
         ),
     )
     

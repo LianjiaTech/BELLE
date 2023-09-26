@@ -8,13 +8,16 @@ Zero Inference是数据并行的推理，因此需要在各个GPU同时启动推
 
 ## 1.3 和其他并行策略的比较
 - 张量并行（对模型手动切分）
-    - 通信量：$O(batch \times len \times layer \times hidden)$
+    - 通信量：
+        - $O(batch \times len \times layer \times hidden)$
     - 计算和通讯不能同时进行
 - 流水线并行（`AutoModelForCausalLM.from_pretrained(device_map="auto")`）
-    - 通信量：$O(batch \times len \times layer \times hidden)$
+    - 通信量：
+        - $O(batch \times len \times layer \times hidden)$
     - 计算和通讯不能同时进行
 - 数据并行（ZeRO Inference）
-    - 通信量：$O(hidden \times hidden)$
+    - 通信量：
+        - $O(hidden \times hidden)$
     - 计算和通讯可以同时进行
 
 ## 2 运行代码

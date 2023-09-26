@@ -13,8 +13,8 @@ from src.models.llama.modeling_llama import LlamaForCausalLM
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--local_rank", type=int, default=0)
-parser.add_argument("--model_name_or_path", type=str, required=True)
-parser.add_argument("--ckpt_path", type=str, default=None)
+parser.add_argument("--ckpt_path", type=str, required=True)
+parser.add_argument("--lora_path", type=str, default=None)
 parser.add_argument("--use_lora", action="store_true")
 parser.add_argument("--llama", action="store_true")
 parser.add_argument("--base_port", default=17860, type=int)
@@ -77,11 +77,9 @@ def evaluate(
 
 if __name__ == "__main__":
     load_type = torch.float16  # Sometimes may need torch.float32
-    if args.ckpt_path is None or args.ckpt_path == '':
-        args.ckpt_path = args.model_name_or_path
 
     if args.llama:
-        tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)
+        tokenizer = LlamaTokenizer.from_pretrained(args.ckpt_path)
         tokenizer.add_special_tokens(
             {
                 "bos_token": "<s>",
@@ -91,21 +89,22 @@ if __name__ == "__main__":
             }
         )
     else:
-        tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+        tokenizer = AutoTokenizer.from_pretrained(args.ckpt_path)
+        tokenizer.add_special_tokens({"pad_token": tokenizer.unk_token})
 
     print(f"Rank {args.local_rank} loading model...")
 
     if args.llama:
         model = LlamaForCausalLM.from_pretrained(args.ckpt_path, torch_dtype=load_type)
         model.config.use_flash_attention = True
-        model.config.pad_token_id = 0
-        model.config.eos_token_id = 2
     else:
         model = AutoModelForCausalLM.from_pretrained(args.ckpt_path, torch_dtype=load_type)
+    model.config.pad_token_id = tokenizer.pad_token_id
+    model.config.eos_token_id = tokenizer.eos_token_id
 
     # peft model
     if args.use_lora:
-        model = PeftModel.from_pretrained(model, args.ckpt_path, torch_dtype=load_type)
+        model = PeftModel.from_pretrained(model, args.lora_path, torch_dtype=load_type)
 
     if torch.cuda.is_available():
         device = torch.device(f"cuda")

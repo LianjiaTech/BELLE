@@ -6,15 +6,12 @@ import argparse
 import pandas as pd
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model_name_or_path', type=str, required=True)
-parser.add_argument('--ckpt_path', type=str, default=None)
+parser.add_argument('--ckpt_path', type=str, required=True)
+parser.add_argument('--lora_path', type=str, default=None)
 parser.add_argument('--use_lora', action="store_true")
 parser.add_argument('--llama', action="store_true")
 parser.add_argument('--infer_file', type=str, required=True)
 args = parser.parse_args()
-
-if args.ckpt_path is None or args.ckpt_path == '':
-        args.ckpt_path = args.model_name_or_path
 
 max_new_tokens = 128
 generation_config = dict(
@@ -30,7 +27,7 @@ generation_config = dict(
 infer_data = pd.read_json(args.infer_file, lines=True)
 instruction_list = infer_data.apply(
     lambda row: pd.Series(
-        {'instruction': f"Human: \n" + row['text'] + "\n\nAssistant:\n"}
+        {'instruction': f"Human: \n" + row['text'] + "\n\nAssistant: \n"}
     ), axis=1
 )['instruction'].to_list()
 
@@ -42,19 +39,19 @@ if __name__ == '__main__':
         device = torch.device('cpu')
 
     if args.llama:
-        tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)
+        tokenizer = LlamaTokenizer.from_pretrained(args.ckpt_path)
     else:
-        tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+        tokenizer = AutoTokenizer.from_pretrained(args.ckpt_path)
 
     tokenizer.pad_token_id = 0
     tokenizer.bos_token_id = 1
     tokenizer.eos_token_id = 2
     tokenizer.padding_side = "left"
-    model_config = AutoConfig.from_pretrained(args.model_name_or_path)
+    model_config = AutoConfig.from_pretrained(args.ckpt_path)
 
     if args.use_lora:
-        base_model = AutoModelForCausalLM.from_pretrained(args.model_name_or_path, torch_dtype=load_type, device_map='auto')
-        model = PeftModel.from_pretrained(base_model, args.ckpt_path, torch_dtype=load_type)
+        base_model = AutoModelForCausalLM.from_pretrained(args.ckpt_path, torch_dtype=load_type, device_map='auto')
+        model = PeftModel.from_pretrained(base_model, args.lora_path, torch_dtype=load_type)
     else:
         model = AutoModelForCausalLM.from_pretrained(args.ckpt_path, torch_dtype=load_type, config=model_config, device_map='auto')
 
