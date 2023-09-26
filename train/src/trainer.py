@@ -1,6 +1,6 @@
 from peft import PeftModel
 from transformers.trainer import *
-from transformers import Seq2SeqTrainer
+from transformers import Seq2SeqTrainer, __version__
 from transformers.deepspeed import is_deepspeed_zero3_enabled
 from src.utils import bind_methods_from_class_to_instance, get_ds_state_dict
 from src.models.generation_utils import GenerationMixin
