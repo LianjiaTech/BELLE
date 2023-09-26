@@ -2099,7 +2099,7 @@ class GenerationMixin:
             if synced_gpus and this_peer_finished:
                 continue  # don't waste resources running the code we don't need
 
-            next_token_logits = outputs.logits[:, -1, :]
+            next_token_logits = getattr(outputs, "logits", outputs[0])[:, -1, :]
 
             # pre-process distribution
             next_tokens_scores = logits_processor(input_ids, next_token_logits)
@@ -2394,8 +2394,8 @@ class GenerationMixin:
 
             if synced_gpus and this_peer_finished:
                 continue  # don't waste resources running the code we don't need
-
-            next_token_logits = outputs.logits[:, -1, :]
+            
+            next_token_logits = getattr(outputs, "logits", outputs[0])[:, -1, :]
 
             # pre-process distribution
             next_token_scores = logits_processor(input_ids, next_token_logits)

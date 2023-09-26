@@ -429,8 +429,7 @@ def main():
     elif last_checkpoint is not None:
         checkpoint = last_checkpoint
     trainer.train(resume_from_checkpoint=checkpoint)
-    if accelerator.is_main_process:
-        trainer.save_model(training_args.output_dir)
+    trainer.save_model(training_args.output_dir)
     accelerator.wait_for_everyone()
     print_rank_0(
         "\n Training completed!!! If there's a warning about missing keys above, please disregard :)",
