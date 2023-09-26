@@ -1,34 +1,32 @@
 import argparse
 from functools import partial
-import os
-
-import deepspeed
 import gradio as gr
 import torch
 from peft import PeftModel
 from transformers import (
-    AutoConfig,
     AutoModelForCausalLM,
     AutoTokenizer,
     GenerationConfig,
     LlamaTokenizer,
 )
-
-
+from src.models.llama.modeling_llama import LlamaForCausalLM
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--local_rank", type=int, default=0)
-parser.add_argument("--model_name_or_path", type=str, required=True)
 parser.add_argument("--ckpt_path", type=str, required=True)
+parser.add_argument("--lora_path", type=str, default=None)
 parser.add_argument("--use_lora", action="store_true")
-parser.add_argument("--use_deepspeed", action="store_true")
 parser.add_argument("--llama", action="store_true")
 parser.add_argument("--base_port", default=17860, type=int)
+parser.add_argument("--use_raw_prompt", action="store_true")
 args = parser.parse_args()
 
 
 def generate_prompt(input_text):
-    return "Human: \n" + input_text + "\n\nAssistant:\n"
+    if not args.use_raw_prompt:
+        return f"Human: \n{input_text}\n\nAssistant: \n"
+    else:
+        return input_text
 
 
 def evaluate(
@@ -43,12 +41,11 @@ def evaluate(
     max_new_tokens=128,
     min_new_tokens=1,
     repetition_penalty=1.2,
-    **kwargs,
 ):
     prompt = generate_prompt(input)
-    inputs = tokenizer(prompt, return_tensors="pt")
+    inputs = tokenizer(prompt, add_special_tokens=False, return_tensors="pt")
 
-    input_ids = inputs["input_ids"].to(getattr(model, 'module', model).device)
+    input_ids = inputs["input_ids"].to(getattr(model, "module", model).device)
 
     generation_config = GenerationConfig(
         temperature=temperature,
@@ -62,21 +59,19 @@ def evaluate(
         min_new_tokens=min_new_tokens,  # min_length=min_new_tokens+input_sequence
         repetition_penalty=repetition_penalty,
         do_sample=do_sample,
-        **kwargs,
     )
     with torch.no_grad():
-        # pudb.set_trace()
         generation_output = model.generate(
             input_ids=input_ids,
             generation_config=generation_config,
             return_dict_in_generate=True,
-            output_scores=False
+            output_scores=False,
         )
         output = generation_output.sequences[0]
-        output = (
-            tokenizer.decode(output, skip_special_tokens=True)
-            .strip()
-        )[len(input):]
+        output = tokenizer.decode(
+            output, 
+            skip_special_tokens=True
+        )[len(prompt):].strip()
         return output
 
 
@@ -84,50 +79,43 @@ if __name__ == "__main__":
     load_type = torch.float16  # Sometimes may need torch.float32
 
     if args.llama:
-        tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)
+        tokenizer = LlamaTokenizer.from_pretrained(args.ckpt_path)
+        tokenizer.add_special_tokens(
+            {
+                "bos_token": "<s>",
+                "eos_token": "</s>",
+                "unk_token": "<unk>",
+                "pad_token": "<unk>",
+            }
+        )
     else:
-        tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
-
-    tokenizer.pad_token_id = 0
-    tokenizer.bos_token_id = 1
-    tokenizer.eos_token_id = 2
-    tokenizer.padding_side = "left"
-    model_config = AutoConfig.from_pretrained(args.model_name_or_path)
+        tokenizer = AutoTokenizer.from_pretrained(args.ckpt_path)
+        tokenizer.add_special_tokens({"pad_token": tokenizer.unk_token})
 
     print(f"Rank {args.local_rank} loading model...")
 
+    if args.llama:
+        model = LlamaForCausalLM.from_pretrained(args.ckpt_path, torch_dtype=load_type)
+        model.config.use_flash_attention = True
+    else:
+        model = AutoModelForCausalLM.from_pretrained(args.ckpt_path, torch_dtype=load_type)
+    model.config.pad_token_id = tokenizer.pad_token_id
+    model.config.eos_token_id = tokenizer.eos_token_id
+
+    # peft model
     if args.use_lora:
-        base_model = AutoModelForCausalLM.from_pretrained(
-            args.model_name_or_path, torch_dtype=load_type, config=model_config
-        )
-        model = PeftModel.from_pretrained(
-            base_model, args.ckpt_path, torch_dtype=load_type
-        )
-    else:
-        model = AutoModelForCausalLM.from_pretrained(
-            args.ckpt_path, torch_dtype=load_type, config=model_config
-        )
+        model = PeftModel.from_pretrained(model, args.lora_path, torch_dtype=load_type)
 
-    if not args.use_deepspeed:
-        if torch.cuda.is_available():
-            device = torch.device(f'cuda')
-        else:
-            device = torch.device('cpu')
-        if device == torch.device('cpu'):
-            model.float()
-        print(f'device: {device}')
-        model.to(device)
-        model.eval()
+    if torch.cuda.is_available():
+        device = torch.device(f"cuda")
     else:
-        model = deepspeed.init_inference(
-            model,
-            mp_size=int(os.getenv("WORLD_SIZE", "1")),
-            dtype=torch.half,
-            checkpoint=None,
-            replace_with_kernel_inject=True,
-        )
-
-    # model = None
+        device = torch.device("cpu")
+    if device == torch.device("cpu"):
+        model.float()
+    print(f"device: {device}")
+    model.to(device)
+    model.eval()
+    
 
     print("Load model successfully")
     # https://gradio.app/docs/
@@ -137,20 +125,15 @@ if __name__ == "__main__":
             gr.components.Textbox(
                 lines=2, label="Input", placeholder="Welcome to the BELLE model"
             ),
-            gr.components.Slider(minimum=0, maximum=1,
-                                 value=0.1, label="Temperature"),
-            gr.components.Slider(minimum=0, maximum=1,
-                                 value=0.75, label="Top p"),
+            gr.components.Slider(minimum=0, maximum=1, value=0.1, label="Temperature"),
+            gr.components.Slider(minimum=0, maximum=1, value=0.75, label="Top p"),
             gr.components.Slider(
                 minimum=0, maximum=100, step=1, value=40, label="Top k"
             ),
             gr.components.Slider(
                 minimum=1, maximum=4, step=1, value=1, label="Beams Number"
             ),
-            gr.components.Checkbox(
-                value=False,
-                label="Do sample"
-            ),
+            gr.components.Checkbox(value=False, label="Do sample"),
             gr.components.Slider(
                 minimum=1, maximum=2000, step=10, value=512, label="Max New Tokens"
             ),
@@ -163,10 +146,10 @@ if __name__ == "__main__":
                 step=0.1,
                 value=1.2,
                 label="Repetition Penalty",
-            )
+            ),
         ],
         outputs=[
-            gr.inputs.Textbox(
+            gr.components.Textbox(
                 lines=25,
                 label="Output",
             )

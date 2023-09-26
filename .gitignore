@@ -6,6 +6,9 @@ regen.json
 .ipynb_checkpoints
 .idea
 saved_models
+*.code-workspace
+.hypothesis
+infer_res
 wandb
 hf_cache_dir
 data

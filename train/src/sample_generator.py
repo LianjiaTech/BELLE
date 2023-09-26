@@ -1,6 +1,5 @@
 from itertools import chain
-from typing import Any, Dict, List
-import pudb
+from typing import Any, Callable, Dict, List
 import copy
 from transformers import PreTrainedTokenizer
 import json
@@ -94,6 +93,8 @@ def batch_grouped_sft_generate(
     labels_buffer = []
     for conversations in examples["conversations"]:
         input_ids, labels = sft_sample_to_ids(conversations, tokenizer)
+        input_ids = [tokenizer.bos_token_id] + input_ids
+        labels = [tokenizer.bos_token_id] + labels
         input_ids_buffer.extend(input_ids)
         labels_buffer.extend(labels)
     total_length = (len(input_ids_buffer) // model_max_length) * model_max_length
@@ -108,7 +109,7 @@ def batch_grouped_sft_generate(
     for i, labels in enumerate(labels_list):
         if all(x == IGNORE_INDEX for x in labels):
             # labels can not have all values being -100. 18 and 24 are just random numbers
-            labels[18:24] = input_ids[i][18:24]
+            labels[18:24] = input_ids_list[i][18:24]
     return {"input_ids": input_ids_list, "labels": labels_list}
 
 
@@ -136,7 +137,6 @@ def batch_grouped_pretrain_generate(
 
 def exam_generate(model_max_length: int, tokenizer: PreTrainedTokenizer, data_point):
     template = "Human: \n{human}\n\nAssistant: \n"
-    # pudb.set_trace()
     input_str = template.format(
         human=f'回答下面的{data_point["type"]}题，用json返回答案，包括原因和答案，如{{"reason":..., "answer":...}}\n{data_point["question"]}\n选项：{" ".join(data_point["candidates"])}'
     )
@@ -161,4 +161,17 @@ def exam_generate(model_max_length: int, tokenizer: PreTrainedTokenizer, data_po
         "input_ids": input_ids,
         "attention_mask": [1] * len(input_ids),
         "labels": labels,
+    }
+
+def inference_generate(
+    model_max_length: int,
+    tokenizer: PreTrainedTokenizer,
+    model_prompt: Callable,
+    data_point: Dict[str, Any],
+):
+    text = data_point['text']
+    if model_prompt is not None:
+        text = model_prompt(text)
+    return {
+        "input_ids": tokenizer.encode(text, add_special_tokens=False)[:model_max_length]
     }

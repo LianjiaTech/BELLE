@@ -8,3 +8,6 @@ peft
 datasets
 bitsandbytes
 deepspeed
+flash-attn
+trl
+accelerate

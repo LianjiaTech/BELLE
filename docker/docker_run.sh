@@ -8,12 +8,13 @@ export all_proxy=...
 belle_path=...
 docker_user=...
 tag=...
-hf_home="/.../.cache/huggingface"
+hf_home=".../.cache/huggingface"
 ssh_pub_key="/home/.../.ssh/id_rsa.pub"
 workdir="$belle_path/train"
 chown root:root $ssh_pub_key
 
 # docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 \
+#     --privileged \
 #     --network host \
 #     --env HTTP_PROXY=$http_proxy \
 #     --env HF_HOME=$hf_home \
@@ -22,11 +23,12 @@ chown root:root $ssh_pub_key
 #     -v $hf_home:$hf_home \
 #     -v $ssh_pub_key:/root/.ssh/authorized_keys \
 #     -w $workdir \
-#     $docker_user/transformers:ds_$tag \
+#     $docker_user/transformers:$tag \
 #     /bin/bash
 
 # 前台运行
 # docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 \
+#     --privileged \
 #     --network host \
 #     --env https_proxy=$https_proxy \
 #     --env http_proxy=$http_proxy \
@@ -47,6 +49,7 @@ chown root:root $ssh_pub_key
 
 # 后台运行
 docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 \
+    --privileged \
     --network host \
     --env https_proxy=$https_proxy \
     --env http_proxy=$http_proxy \
@@ -64,3 +67,4 @@ docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 \
                             echo 'export all_proxy=$all_proxy' >> /root/.bashrc && \
                             echo 'export HF_HOME=$hf_home' >> /root/.bashrc && \
                             sleep infinity"
+                            
