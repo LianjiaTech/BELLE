@@ -19,7 +19,7 @@ sudo docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=6710886
 
 ### 手动安装
 
-参见[requirements.txt](requirements.txt)
+参见[requirements.txt](../requirements.txt)
 
 ## 奖励模型
 
