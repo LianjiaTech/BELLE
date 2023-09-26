@@ -47,6 +47,8 @@ bash scripts/run_rm.sh
 - 支持deepspeed stage 3直接运行
 - 不支持deepspeed stage 3 + lora，deepspeed stage 1/2 + lora可以运行
 - load_in_8bit和load_in_4bit不能和deepspeed同时使用，可以和lora同时使用。需要将`configs/accelerate_config_rm.yaml`中"distributed_type"从"DEEPSPEED"改为"MULTI_GPU"
+### TODO
+- [ ] deepspeed stage 3 + lora支持
 ## PPO
 
 ### 准备数据

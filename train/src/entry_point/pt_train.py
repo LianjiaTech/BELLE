@@ -469,8 +469,7 @@ def main():
     elif last_checkpoint is not None:
         checkpoint = last_checkpoint
     trainer.train(resume_from_checkpoint=checkpoint)
-    if global_rank in [-1, 0]:
-        trainer.save_model(training_args.output_dir)
+    trainer.save_model(training_args.output_dir)
     print_rank_0(
         "\n Training completed!!! If there's a warning about missing keys above, please disregard :)",
         log_file,
