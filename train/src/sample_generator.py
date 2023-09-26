@@ -93,6 +93,8 @@ def batch_grouped_sft_generate(
     labels_buffer = []
     for conversations in examples["conversations"]:
         input_ids, labels = sft_sample_to_ids(conversations, tokenizer)
+        input_ids = [tokenizer.bos_token_id] + input_ids
+        labels = [tokenizer.bos_token_id] + labels
         input_ids_buffer.extend(input_ids)
         labels_buffer.extend(labels)
     total_length = (len(input_ids_buffer) // model_max_length) * model_max_length

@@ -244,12 +244,10 @@ def main():
             log_file,
             global_rank,
         )
-        tokenizer.eos_token_id = 2
-        tokenizer.bos_token_id = 1
+        tokenizer.add_special_tokens({'bos_token': '<s>', 'eos_token': '</s>', 'unk_token': '<unk>', 'pad_token': '<unk>'})
     else:
         tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path)
-
-    tokenizer.pad_token_id = 0
+        tokenizer.add_special_tokens({"pad_token": tokenizer.unk_token})
     tokenizer.padding_side = "left"  # Allow batched inference
 
     print_rank_0(
@@ -472,7 +470,6 @@ def main():
         checkpoint = last_checkpoint
     trainer.train(resume_from_checkpoint=checkpoint)
     trainer.save_model(training_args.output_dir)
-
     print_rank_0(
         "\n Training completed!!! If there's a warning about missing keys above, please disregard :)",
         log_file,
