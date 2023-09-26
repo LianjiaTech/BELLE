@@ -1,75 +1,9 @@
-# BELLE训练代码
+# BELLE微调流程
+## 1. Run
+### 1.1 数据
 
- | [English](https://github.com/LianjiaTech/BELLE/blob/main/train/docs/README_en.md) | [中文](https://github.com/LianjiaTech/BELLE/blob/main/train/README.md)
-
-当前仓库的代码属于BELLE项目训练代码v2版，上一版基于deepspeed-chat的代码放在dschat_train_v1目录下，未做任何改动。
-
-考虑到如下因素和目前大家提出的issues，我们更新了仓库的训练代码
-
-1. 没有deepspeed环境时无法使用仓库代码训练模型
-2. deepspeed-chat没有集成peft包，对参数高效微调这一块的可扩展性不高
-
-当前v2版本的代码对环境的依赖性较低，而且更加简洁。
-
-## 1. 准备环境
-
-### 1.1 Docker镜像
-
-我们提供了一个完整可运行的Docker镜像，Dockerfile写在docker文件夹下。
-
-考虑到build存在一定的困难，我们提供了镜像下载，你可以使用下面命令从dockerhub拉取我们的镜像，然后在镜像中运行代码，详见[docker环境说明](../docker/README.md)。
-
-```shell
-sudo docker pull tothemoon/belle:latest
-git clone https://github.com/LianjiaTech/BELLE.git
-```
-```
-sudo docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 \
-    --network host \
-    --privileged \
-    [--env https_proxy=$https_proxy \]
-    [--env http_proxy=$http_proxy \]
-    [--env all_proxy=$all_proxy \]
-    --env HF_HOME=$hf_home \
-    -it [--rm] \
-    --name belle \
-    -v $belle_path:$belle_path \
-    -v $hf_home:$hf_home \
-    -v $ssh_pub_key:/root/.ssh/authorized_keys \
-    -w $workdir \
-    $docker_user/belle:$tag \
-    [--sshd_port 2201 --cmd "echo 'Hello, world!' && /bin/bash"]
-```
-`[]`中内容可忽略
-- `--rm`：容器退出时销毁，如果长期在容器中工作，可忽略
-- `--sshd_port`：sshd监听端口，默认是22001
-- `--cmd`：容器要执行的命令`"echo 'Hello, world!' && /bin/bash"`，可忽略
-- `hf_home`：huggingface缓存目录
-- `$ssh_pub_key`：sshd公钥目录
-
-上述命令实现了以下几点：
-
-1. 拉取docker镜像
-2. clone BELLE仓库
-3. 将BELLE目录挂载
-4. 将huggingface目录挂载。其中huggingface_models代表预训练模型的保存路径，该目录下存放所有需要的预训练语言模型，如llama-7b, bloomz-7b1-mt等
-5. 注意：上述挂载的目录必须是绝对路径
-
-### 1.2 conda（不推荐）
-
-由于部分包依赖系统环境编译，推荐使用docker。假如由于机器等原因不能使用docker，也可以通过conda创建环境，然后pip安装需要的包，需自行解决依赖问题
-
-```bash
-pip install -r requirements.txt
-```
-
-但是通过pip安装deepspeed很有可能安装或者运行失败，[FAQ](https://github.com/LianjiaTech/BELLE/blob/main/train/docs/FAQ.md) 中给出了一些安装deepspeed的教程以及可能遇到的问题
-
-## 2. Run
-### 2.1 数据
-
-#### 2.1.1 指令微调（SFT）
-##### 2.1.1.1 Download data
+#### 1.1.1 指令微调（SFT）
+##### 1.1.1.1 Download data
 
 ```bash
 wget https://huggingface.co/datasets/BelleGroup/school_math_0.25M/resolve/main/school_math_0.25M.json
@@ -82,7 +16,7 @@ wget https://huggingface.co/datasets/BelleGroup/school_math_0.25M/resolve/main/s
 | 一箱鸡蛋有25个，小明爸爸每天给他9个鸡蛋吃，那么一箱鸡蛋能够供小明吃几天？                       | 一箱鸡蛋有25个，小明每天吃9个鸡蛋，用除法计算一下即可： 25 ÷ 9 = 2余7 也就是说，小明第1天到第2天共吃2个鸡蛋，第3天吃剩下的7个鸡蛋。 因此，一箱鸡蛋能够供小明吃2天。                                                                    |
 | 小明手中有15颗糖果，他想要分给他的朋友小红和小李，每人分得的糖果数是3颗，那么他还剩下几颗糖果？ | 该题可以用减法来解决。小明手中有15颗糖果，每人分得3颗，所以小红和小李一共分得6颗糖果（3+3=6）。 2. 然后再用原来的糖果总数减去分给小红和小李的糖果数，即可得到小明手中剩余的糖果数。 计算过程如下： 15 - 6 = 9 所以，小明还剩下9颗糖果。 |
 
-##### 2.1.1.2 Convert data format
+##### 1.1.1.2 Convert data format
 
 ```bash
 python scripts/convert_to_conv_data.py --orig_data school_math_0.25M.json --write_data school_math_0.25M_conv.json --dataset_name bellemath
@@ -109,14 +43,14 @@ tail -n +1001 school_math_0.25M_conv.json > belleMath.json
 wget https://huggingface.co/datasets/anon8231489123/ShareGPT_Vicuna_unfiltered/resolve/main/ShareGPT_V3_unfiltered_cleaned_split.json
 ```
 
-#### 2.1.2 继续预训练（PT）
+#### 1.1.2 继续预训练（PT）
 数据格式
 ```
 {"text": xxx}
 {"text": xxx}
 ```
 
-### 2.2 模型训练
+### 1.2 模型训练
 
 支持配置
 
@@ -153,7 +87,7 @@ flash attention实现了高效利用显存的attention，可支持更大的序�
 
 `run_sft.sh`flash-attention-v2可选，可通过`--use_flash_attention`打开
 
-#### 2.2.1 全量参数微调
+#### 1.2.1 全量参数微调
 
 下面的命令是单机多卡进行全量参数微调，同时采用deepspeed，基础模型是LLaMA
 
@@ -219,7 +153,7 @@ output_dir/
 
 trainer_state.json记录了loss、learning_rate的变化
 
-#### 2.2.2 LoRA
+#### 1.2.2 LoRA
 
 ```bash
 torchrun --nproc_per_node 8 src/entry_point/sft_train.py \
@@ -276,7 +210,7 @@ output_dir/
 
 最上级目录存储训练的最终模型
 
-#### 2.2.3 合并LoRA权重
+#### 1.2.3 合并LoRA权重
 
 如果您想要实现LoRA权重与预训练模型的合并，可运行如下命令：
 
@@ -286,7 +220,7 @@ bash scripts/merge_lora.sh
 
 合并后的权重保存在output_path目录下，后续可通过from_pretrained直接加载
 
-#### 2.2.4 多机多卡训练
+#### 1.2.4 多机多卡训练
 
 以两台机器为例，每台机器上有8张卡
 
@@ -318,9 +252,9 @@ torchrun --nproc_per_node 8 --nnodes 2 --master_addr ${master_addr} --master_por
 - master_addr 代表主机器的ip地址
 - master_port 代表与主机器通信的端口号
 
-## 3. Inference
+## 2. Inference
 
-### 3.1 Inference
+### 2.1 Inference
 
 如果您看到了这里，说明您已经完成了训练。现在我们加载训练好的模型，验证模型生成文本的效果。
 
@@ -343,7 +277,7 @@ CUDA_VISIBLE_DEVICES=0 python src/entry_point/inference.py \
 
 此外，如果您已经将LoRA权重与预训练模型进行了合并，则ckpt_path指定为合并后权重保存的路径即可，不需要再指定use_lora
 
-### 3.2 webUI
+### 2.2 webUI
 
 我们也提供了一个简洁的基于gradio的交互式web界面，启动服务：
 
@@ -358,20 +292,20 @@ CUDA_VISIBLE_DEVICES=0 python src/entry_point/interface.py \
 
 ![webUI](docs/interface.png)
 
-### 3.3 并行推理
+### 2.3 并行推理
 ```bash
 bash scripts/run_multi_backend.sh
 ```
 打开`src/entry_point/evaluation.ipynb`，设置相应路径，加载自己的数据推理
 
-### 3.4 ZeRO Inference
+### 2.4 ZeRO Inference
 详见[ZeRO Inference](README_ZERO_INFERENCE.md)
 
-## 4. Additional Notes
+## 3. Additional Notes
 
-### 4.1 LLaMA模型的使用
+### 3.1 LLaMA模型的使用
 
-#### 4.1.1 facebook官方LLaMA权重转为hf格式
+#### 3.1.1 facebook官方LLaMA权重转为hf格式
 
 首先，您需要从[facebookresearch/llama](https://github.com/facebookresearch/llama)获取LLaMA模型的访问权限，下载官方检查点
 
@@ -381,14 +315,14 @@ python scripts/convert_llama_weights_to_hf.py --input_dir download_official_llam
 
 运行训练脚本时将model_name_or_path改为xx/llama-7b-hf即可
 
-#### 4.1.2 BELLE-LLaMA转为hf格式
+#### 3.1.2 BELLE-LLaMA转为hf格式
 
 由于LLaMA模型的使用约束，我们只能开源与原始模型的diff（如：[BELLE-LLaMA-7B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc)）。当您已经从[facebookresearch/llama](https://github.com/facebookresearch/llama)获取LLaMA模型的访问权限后，可参考 https://github.com/LianjiaTech/BELLE/tree/main/models ，转换后的模型即为我们指令调优后的LLaMA模型。
 
-### 4.2 合并词表
+### 3.2 合并词表
 
 如果您想在原版LLaMA的基础上扩充中文词表，可参考scripts/merge_tokenizers.py，后续会开放训练embedding的代码。扩充词表后的效果可参考我们的工作：[Towards Better Instruction Following Language Models for Chinese: Investigating the Impact of Training Data and Evaluation](https://arxiv.org/pdf/2304.07854.pdf)
 
-## 5. 问题反馈
+## 4. 问题反馈
 
 如有问题，请在GitHub Issue中提交。在遇到问题前，请先在 [FAQ](https://github.com/LianjiaTech/BELLE/blob/main/train/docs/FAQ.md) 中查找相似问题的解决方案。

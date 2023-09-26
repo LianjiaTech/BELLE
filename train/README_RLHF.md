@@ -1,29 +1,7 @@
 # RLHF训练流程
+## 1. 奖励模型
 
-## 准备环境
-
-### docker
-
-```bash
-sudo docker pull tothemoon/belle:latest
-sudo docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 \
-    --network host \
-    --privileged \
-    -it --rm \
-    --name belle \
-    [-v $belle_path:$belle_path] \
-    [-w $workdir] \
-    tothemoon/belle:latest \
-    [--sshd_port 2201 --cmd "echo 'Hello, world!' && /bin/bash"]
-```
-
-### 手动安装
-
-参见[requirements.txt](../requirements.txt)
-
-## 奖励模型
-
-### 准备数据
+### 1.1 准备数据
 
 ```jsonl
 {"chosen": xxx, "rejected": xxx}
@@ -32,7 +10,7 @@ sudo docker run --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=6710886
 注意：
 xxx文本已经添加了正确的提示，用于区别人类和bot，如 `Human: \n{text}\n\nAssistant: \n{text}`
 
-### 训练
+### 1.2 训练
 
 ```bash
 bash scripts/run_rm.sh
@@ -49,9 +27,9 @@ bash scripts/run_rm.sh
 - load_in_8bit和load_in_4bit不能和deepspeed同时使用，可以和lora同时使用。需要将`configs/accelerate_config_rm.yaml`中"distributed_type"从"DEEPSPEED"改为"MULTI_GPU"
 ### TODO
 - [ ] deepspeed stage 3 + lora支持
-## PPO
+## 2. PPO
 
-### 准备数据
+### 2.1 准备数据
 
 ```jsonl
 {"text": xxx}
@@ -59,7 +37,7 @@ bash scripts/run_rm.sh
 
 注意：xxx文本已经添加了正确的提示，用于区别人类和bot，如 `Human: \n{text}\n\nAssistant: \n`
 
-### 训练
+### 2.2 训练
 
 ```bash
 bash scripts/run_ppo.sh
