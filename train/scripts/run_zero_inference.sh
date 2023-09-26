@@ -2,7 +2,7 @@ export CUDA_VISIBLE_DEVICES='0,1,2,3,4,5,6,7'
 export ABS_PATH=...
 export PYTHONPATH="$ABS_PATH/BELLE/train"
 
-model_name_or_path=BELLE-2/BELLE-Llama2-13B-chat-0.4M
+ckpt_path=BELLE-2/BELLE-Llama2-13B-chat-0.4M
 infer_file=$ABS_PATH/BELLE/data/test_data/test_infer.jsonl
 
 cache_dir=hf_cache_dir
@@ -15,7 +15,7 @@ mkdir -p ${output_dir}
 torchrun --nproc_per_node 8 \
      src/entry_point/zero_inference.py \
     --ddp_timeout 36000 \
-    --model_name_or_path ${model_name_or_path} \
+    --ckpt_path ${ckpt_path} \
     --deepspeed configs/deepspeed_config_stage3_inference.json \
     --infer_file ${infer_file} \
     --per_device_eval_batch_size 1 \

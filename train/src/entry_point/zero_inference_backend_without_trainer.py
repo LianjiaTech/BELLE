@@ -32,7 +32,7 @@ class Arguments:
     Arguments pertaining to which model/config/tokenizer we are going to fine-tune, or train from scratch.
     """
 
-    model_name_or_path: str = field(
+    ckpt_path: str = field(
         default=None,
         metadata={"help": "The model checkpoint for weights initialization."},
     )
@@ -44,7 +44,7 @@ class Arguments:
         default=None,
         metadata={"help": "Local rank."},
     )
-    ckpt_path: Optional[str] = field(default=None, metadata={"help": "Checkpoint path."})
+    lora_path: Optional[str] = field(default=None, metadata={"help": "Checkpoint path."})
     use_lora: bool = field(default=False, metadata={"help": "Whether to use LoRA."})
     llama: bool = field(default=False, metadata={"help": "Llama model."})
     base_port: int = field(default=17860, metadata={"help": "Multi process bose port."})
@@ -121,8 +121,6 @@ def evaluate(
 def main():
     parser = HfArgumentParser((Arguments,))
     args = parser.parse_args_into_dataclasses()[0]
-    if args.ckpt_path is None or args.ckpt_path == '':
-        args.ckpt_path = args.model_name_or_path
     # distributed setup
     local_rank = int(os.getenv("LOCAL_RANK", "0"))
 
@@ -144,26 +142,8 @@ def main():
     # less efficient and when there is little CPU RAM may fail
     dschf = HfDeepSpeedConfig(ds_config)  # keep this object alive
 
-    # now a model can be loaded.
     if args.llama:
-        model = LlamaForCausalLM.from_pretrained(args.ckpt_path)
-        model.config.use_flash_attention = True
-        model.config.pad_token_id = 0
-        model.config.eos_token_id = 2
-    else:
-        model = AutoModelForCausalLM.from_pretrained(args.ckpt_path)
-
-    # peft model
-    if args.use_lora:
-        model = PeftModel.from_pretrained(model, args.ckpt_path)
-
-    # initialise Deepspeed ZeRO and store only the engine object
-    ds_engine = deepspeed.initialize(model=model, config_params=ds_config)[0]
-    # inference
-    ds_engine.module.eval()
-
-    if args.llama:
-        tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path)
+        tokenizer = LlamaTokenizer.from_pretrained(args.ckpt_path)
         tokenizer.add_special_tokens(
             {
                 "bos_token": "<s>",
@@ -173,9 +153,28 @@ def main():
             }
         )
     else:
-        tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
-
+        tokenizer = AutoTokenizer.from_pretrained(args.ckpt_path)
+        tokenizer.add_special_tokens({"pad_token": tokenizer.unk_token})
     tokenizer.padding_side = "left"
+
+    # now a model can be loaded.
+    if args.llama:
+        model = LlamaForCausalLM.from_pretrained(args.ckpt_path)
+        model.config.use_flash_attention = True
+    else:
+        model = AutoModelForCausalLM.from_pretrained(args.ckpt_path)
+    model.config.pad_token_id = tokenizer.pad_token_id
+    model.config.eos_token_id = tokenizer.eos_token_id
+
+    # peft model
+    if args.use_lora:
+        model = PeftModel.from_pretrained(model, args.lora_path)
+
+    # initialise Deepspeed ZeRO and store only the engine object
+    ds_engine = deepspeed.initialize(model=model, config_params=ds_config)[0]
+    # inference
+    ds_engine.module.eval()
+
     bind_methods_from_class_to_instance(
         ds_engine.module,
         GenerationMixin,
