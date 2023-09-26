@@ -9,6 +9,7 @@
 [![Generic badge](https://img.shields.io/badge/discord-BELLE%20Group-green.svg?logo=discord)](https://discord.gg/pMPY53UUGq)
 [![Generic badge](https://img.shields.io/badge/wechat-BELLE-green.svg?logo=wechat)](https://github.com/LianjiaTech/BELLE/blob/main/assets/belle_wechat.jpg)
 [![Generic badge](https://img.shields.io/badge/🤗-Huggingface%20Repo-green.svg)](https://huggingface.co/BelleGroup)
+[![Generic badge](https://img.shields.io/badge/🤗-Huggingface%20Repo2-green.svg)](https://huggingface.co/BELLE-2)
 </div>
 
 本项目的目标是促进中文对话大模型开源社区的发展，愿景是成为能够帮到每一个人的LLM Engine。
