@@ -27,7 +27,7 @@ logging_dir=/.../${output_model_name}
 # here we recommend use configs/deepspeed_config_stage3_dpo.json
 deepspeed_config=...
 
-torchrun --nnodes=1 --nproc_per_node=8 ../src/dpo_trainer.py \
+torchrun --nnodes=1 --nproc_per_node=8 ../src/entry_point/dpo_train.py \
     --ddp_timeout 50000 \
     --model_name_or_path ${model_name_or_path} \
     --torch_dtype ${torch_dtype} \
