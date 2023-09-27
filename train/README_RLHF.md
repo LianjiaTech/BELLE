@@ -71,8 +71,6 @@ bash scripts/run_ppo.sh
 - [ ] gradient checkpointing
 - [ ] resume from checkpoint
 
-
-
 ## 二、DPO
 
 ### 2.1 准备数据
@@ -100,5 +98,4 @@ cd train/scripts
 bash run_dpo.sh
 ```
 
-
-
+注：DPO部分代码基于[trl项目](https://github.com/huggingface/trl)，具体原理见[论文](https://arxiv.org/abs/2305.18290)
