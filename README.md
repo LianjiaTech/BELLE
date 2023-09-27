@@ -19,7 +19,7 @@
 </br>
 
 ## 🔄 最近更新
-* [2023/09/26] 更新了RLHF的训练代码，具体细节见：[README_RLHF.md](train/README_RLHF.md)
+* [2023/09/26] 更新了RLHF的训练代码，支持PPO和DPO训练，具体细节见：[README_RLHF.md](train/README_RLHF.md)
 * [2023/08/16] 基于原有的[train_3.5M_CN](https://huggingface.co/datasets/BelleGroup/train_3.5M_CN)数据新增了指令类别字段，共包括13个类别，具体细节见：[train_3.5M_CN_With_Category](https://huggingface.co/datasets/BELLE-2/train_3.5M_CN_With_Category)
 * [2023/08/10] 更新了基于ZeRO Inference的推理代码，详见[train/README_ZERO_INFERENCE.md](train/README_ZERO_INFERENCE.md)
 * [2023/08/07] 更新了继续预训练代码和指令微调代码，添加了flash attention 2，详见[train/README.md](train/README.md)。同时打包了运行环境，详见[train/docker/README.md](train/docker/README.md)
