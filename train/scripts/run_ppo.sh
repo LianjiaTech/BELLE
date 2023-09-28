@@ -44,5 +44,4 @@ accelerate launch \
     --use_llama True \
     --reward_model_use_llama True \
     --use_lora False \
-    --input_length 512 \
-    --output_max_length 64 \
+    --input_length 512 
