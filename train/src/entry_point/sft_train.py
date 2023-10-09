@@ -241,6 +241,7 @@ def main():
             model = AutoModelForCausalLM.from_pretrained(
                 model_args.model_name_or_path,
                 torch_dtype=torch_dtype,
+                trust_remote_code=True,
             )
 
     if model_args.llama:
@@ -252,8 +253,13 @@ def main():
         )
         tokenizer.add_special_tokens({'bos_token': '<s>', 'eos_token': '</s>', 'unk_token': '<unk>', 'pad_token': '<unk>'})
     else:
-        tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path)
-        tokenizer.add_special_tokens({"pad_token": tokenizer.unk_token})
+        tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path,trust_remote_code=True)
+        if tokenizer.__class__.__name__ == 'QWenTokenizer': #special token of QWen
+            tokenizer.pad_token_id = tokenizer.eod_id
+            tokenizer.bos_token_id = tokenizer.eod_id
+            tokenizer.eos_token_id = tokenizer.eod_id
+        else:
+            tokenizer.add_special_tokens({"pad_token": tokenizer.unk_token})
     tokenizer.padding_side = "left"  # Allow batched inference
 
     print_rank_0(
