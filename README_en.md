@@ -259,6 +259,13 @@ Please cite us when using our code, data or model.
   journal={arXiv preprint arXiv:2303.14742},
   year={2023}
 }
+
+@article{wen2023chathome,
+  title={ChatHome: Development and Evaluation of a Domain-Specific Language Model for Home Renovation},
+  author={Wen, Cheng and Sun, Xianghui and Zhao, Shuaijiang and Fang, Xiaoquan and Chen, Liangyu and Zou, Wei},
+  journal={arXiv preprint arXiv:2307.15290},
+  year={2023}
+}
 ```
 
 Cite the original BLOOM, LLaMA, Stanford Alpaca and Self-Instruct papers as well!
