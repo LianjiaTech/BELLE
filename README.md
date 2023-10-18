@@ -253,10 +253,18 @@ LLaMA-7B + FT(2M) + LoRA(math_0.25M) 代表了一个在0.25M数学指令数据�
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/LianjiaTech/BELLE}},
 }
+
 @article{belle2023exploring,
   title={Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases},
   author={Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Lei Zhang, Baochang Ma, Xiangang Li},
   journal={arXiv preprint arXiv:2303.14742},
+  year={2023}
+}
+
+@article{wen2023chathome,
+  title={ChatHome: Development and Evaluation of a Domain-Specific Language Model for Home Renovation},
+  author={Wen, Cheng and Sun, Xianghui and Zhao, Shuaijiang and Fang, Xiaoquan and Chen, Liangyu and Zou, Wei},
+  journal={arXiv preprint arXiv:2307.15290},
   year={2023}
 }
 ```
