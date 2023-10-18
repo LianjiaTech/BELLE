@@ -246,7 +246,7 @@ LLaMA-7B + FT(2M) + LoRA(math_0.25M) 代表了一个在0.25M数学指令数据�
 
 ```
 @misc{BELLE,
-  author = {Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Baochang Ma and Xiangang Li},
+  author = {BELLEGroup},
   title = {BELLE: Be Everyone's Large Language model Engine },
   year = {2023},
   publisher = {GitHub},
