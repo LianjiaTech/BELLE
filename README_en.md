@@ -245,7 +245,7 @@ Please cite us when using our code, data or model.
 
 ```
 @misc{BELLE,
-  author = {Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Baochang Ma and Xiangang Li},
+  author = {BELLEGroup},
   title = {BELLE: Be Everyone's Large Language model Engine},
   year = {2023},
   publisher = {GitHub},
