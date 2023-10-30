@@ -41,6 +41,11 @@ BELLE项目目标是促进中文对话大模型开源社区的发展，愿景做
 详见论文：[Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases](https://arxiv.org/abs/2303.14742)。
 <br/>
 
+## 调优LLaMA2模型
+
+### 模型列表
+* [BELLE-Llama2-13B-chat-0.4M](https://huggingface.co/BELLE-2/BELLE-Llama2-13B-chat-0.4M)
+
 ## 调优LLaMA模型
 
 考虑到LLaMA模型的限制，调优后的模型只能用作研究和学习使用，请严格遵守LLaMA的使用约束。LLaMA模型不允许发布调优后的完整模型权重，但是可以发布原始的模型的diff。因此，我们使用文件间的XOR，保证拥有LLaMA原始模型授权的人才可以将本项目发布的模型转化成可以使用的格式。文件XOR的代码参考[point-alpaca](https://github.com/pointnetwork/point-alpaca) 

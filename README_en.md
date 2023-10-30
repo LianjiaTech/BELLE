@@ -31,7 +31,14 @@ The following screencap ran on an M1 Max CPU real-time (no speed adjustment).
 <img src="./chat/chatbelle-demo.gif"></img>
 
 ## 🔄 What‘s new
-
+* [2023/10/27] Updated a technical report [DUMA](https://arxiv.org/pdf/2310.18075.pdf), exploring the Agent based on fast-slow brain architecture in conversational scenarios.
+* [2023/09/26] Updated the RLHF training code, supporting PPO and [DPO](https://arxiv.org/abs/2305.18290) training. Details: [README_RLHF.md](train/README_RLHF.md).
+* [2023/08/16] Based on [train_3.5M_CN](https://huggingface.co/datasets/BelleGroup/train_3.5M_CN), added instruction category field with 13 categories. Details: [train_3.5M_CN_With_Category](https://huggingface.co/datasets/BELLE-2/train_3.5M_CN_With_Category).
+* [2023/08/10] Updated inference code based on ZeRO Inference. Details: [train/README_ZERO_INFERENCE.md](train/README_ZERO_INFERENCE.md).
+* [2023/08/07] Updated continuous pre-training and instruction fine-tuning codes, added flash attention 2. See [train/README.md](train/README.md). Packaged runtime environment at [train/docker/README.md](train/docker/README.md).
+* [2023/07/31] Updated a [technical report](https://arxiv.org/abs/2307.15290), exploring strategies for incremental pre-training + instruction fine-tuning in niche domains.
+* [2023/07/27] Released [BELLE-Llama2-13B-chat-0.4M](https://huggingface.co/BELLE-2/BELLE-Llama2-13B-chat-0.4M), trained on 400,000 quality conversations based on Llama-2-13B. Improved performance on [evaluation set](https://github.com/LianjiaTech/BELLE/blob/main/eval/eval_set.json) compared to BELLE-LLaMA-EXT-13B model.
+* [2023/05/14] Released [BELLE-LLaMA-EXT-13B](https://huggingface.co/BelleGroup/BELLE-LLaMA-EXT-13B), expanded Chinese vocabulary from LLaMA-13B-chat, trained on 4 million quality conversations.
 * [2023/05/11] In [BELLE/10M](https://github.com/LianjiaTech/BELLE/tree/main/10M), a new dataset named ["train_3.5M_CN"]((https://huggingface.co/datasets/BelleGroup/train_3.5M_CN)) containing 3.5 million newly added diverse instruction task data.
 * [2023/04/18] The train code has been updated and can be found in [BELLE/train](train). Deepspeed-Chat has been integrated, and relevant Docker containers have been provided.
 * [2023/04/17] Two new papers have been published that compare the effects of different training data generation methods and different training methods (LoRA, finetune) on model performance.
@@ -245,7 +252,7 @@ Please cite us when using our code, data or model.
 
 ```
 @misc{BELLE,
-  author = {Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Baochang Ma and Xiangang Li},
+  author = {BELLEGroup},
   title = {BELLE: Be Everyone's Large Language model Engine},
   year = {2023},
   publisher = {GitHub},
@@ -257,6 +264,13 @@ Please cite us when using our code, data or model.
   title={Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases},
   author={Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Lei Zhang, Baochang Ma, Xiangang Li},
   journal={arXiv preprint arXiv:2303.14742},
+  year={2023}
+}
+
+@article{wen2023chathome,
+  title={ChatHome: Development and Evaluation of a Domain-Specific Language Model for Home Renovation},
+  author={Wen, Cheng and Sun, Xianghui and Zhao, Shuaijiang and Fang, Xiaoquan and Chen, Liangyu and Zou, Wei},
+  journal={arXiv preprint arXiv:2307.15290},
   year={2023}
 }
 ```
