@@ -31,7 +31,7 @@ The following screencap ran on an M1 Max CPU real-time (no speed adjustment).
 <img src="./chat/chatbelle-demo.gif"></img>
 
 ## 🔄 What‘s new
-* [2023/10/27] Updated a technical report [DUMA](https://github.com/LianjiaTech/BELLE/blob/main/docs/DUMA%20a%20Dual-Mind%20Conversational%20Agent%20with%20Fast%20and%20Slow%20Thinking.pdf), exploring the Agent based on fast-slow brain architecture in conversational scenarios.
+* [2023/10/27] Updated a technical report [DUMA](https://arxiv.org/pdf/2310.18075.pdf), exploring the Agent based on fast-slow brain architecture in conversational scenarios.
 * [2023/09/26] Updated the RLHF training code, supporting PPO and [DPO](https://arxiv.org/abs/2305.18290) training. Details: [README_RLHF.md](train/README_RLHF.md).
 * [2023/08/16] Based on [train_3.5M_CN](https://huggingface.co/datasets/BelleGroup/train_3.5M_CN), added instruction category field with 13 categories. Details: [train_3.5M_CN_With_Category](https://huggingface.co/datasets/BELLE-2/train_3.5M_CN_With_Category).
 * [2023/08/10] Updated inference code based on ZeRO Inference. Details: [train/README_ZERO_INFERENCE.md](train/README_ZERO_INFERENCE.md).

@@ -37,7 +37,7 @@ This paper presents the development and evaluation of ChatHome, a domain-specifi
 
 <br/>
 
-[6] Xiaoyu Tian, Liangyu Chen, Na Liu, Yaxuan Liu, Wei Zou, Kaijiang Chen, Ming Cui, "DUMA: a Dual-Mind Conversational Agent with Fast and Slow Thinking", [arXiv link will be uploaded soon]
+[6] Xiaoyu Tian, Liangyu Chen, Na Liu, Yaxuan Liu, Wei Zou, Kaijiang Chen, Ming Cui, "DUMA: a Dual-Mind Conversational Agent with Fast and Slow Thinking", [arXiv:2310.18075](https://arxiv.org/abs/2310.18075#)
 
 * **Abstract**
 Inspired by the dual-process theory of human cognition, we introduce DUMA, a novel conversational agent framework that embodies a dual-mind mechanism through the utilization of two generative Large Language Models (LLMs) dedicated to fast and slow thinking respectively. The fast thinking model serves as the primary interface for external interactions and initial response generation, evaluating the necessity for engaging the slow thinking model based on the complexity of the complete response. When invoked, the slow thinking model takes over the conversation, engaging in meticulous planning, reasoning, and tool utilization to provide a well-analyzed response. This dual-mind configuration allows for a seamless transition between intuitive responses and deliberate problem-solving processes based on the situation. We have constructed a conversational agent to handle online inquiries in the real estate industry. The experiment proves that our method balances effectiveness and efficiency, and has a significant improvement compared to the baseline.
