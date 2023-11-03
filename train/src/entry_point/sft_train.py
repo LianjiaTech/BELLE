@@ -206,6 +206,7 @@ def main():
                 f"Checkpoint detected, resuming training at {last_checkpoint}. To avoid this behavior, change "
                 "the `--output_dir` or add `--overwrite_output_dir` to train from scratch."
             )
+    torch.distributed.barrier()
 
     # Set seed before initializing model.
     set_seed(training_args.seed)
