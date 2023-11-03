@@ -374,6 +374,7 @@ def main():
                 f"Checkpoint detected, resuming training at {last_checkpoint}. To avoid this behavior, change "
                 "the `--output_dir` or add `--overwrite_output_dir` to train from scratch."
             )
+    torch.distributed.barrier()
 
     checkpoint = None
     if training_args.resume_from_checkpoint is not None:
