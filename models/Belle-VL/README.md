@@ -14,7 +14,7 @@
 ### 训练数据
 * 预训练数据：预训练数据主要是基于LLava 的[558k](https://huggingface.co/datasets/liuhaotian/LLaVA-Pretrain)英文指令数据及其对应的中文翻译数据，此外我们还收集了[Flickr30k-CNA](https://zero.so.com/) 以及从[AI Challenger](https://tianchi.aliyun.com/dataset/145781?spm=a2c22.12282016.0.0.5c823721PG2nBW)随机选取的100k数据
 
-* 多模态指令数据：指令微调阶段，数据主要来自[LLava](https://github.com/haotian-liu/LLaVA), [LRV-Instruction](https://github.com/FuxiaoLiu/LRV-Instruction), [LLaVAR](https://github.com/SALT-NLP/LLaVAR),[LVIS-INSTRUCT4V](https://github.com/X2FD/LVIS-INSTRUCT4V)等开源，我们也对其中部分数据进行了翻译，在此真诚的感谢他们为开源所做出的贡献！
+* 多模态指令数据：指令微调阶段，数据主要来自[LLava](https://github.com/haotian-liu/LLaVA), [LRV-Instruction](https://github.com/FuxiaoLiu/LRV-Instruction), [LLaVAR](https://github.com/SALT-NLP/LLaVAR),[LVIS-INSTRUCT4V](https://github.com/X2FD/LVIS-INSTRUCT4V)等开源项目，我们也对其中部分数据进行了翻译，在此真诚的感谢他们为开源所做出的贡献！
 
 ### [MME Benchmark](https://github.com/BradyFU/Awesome-Multimodal-Large-Language-Models/tree/Evaluation)
 待更新
