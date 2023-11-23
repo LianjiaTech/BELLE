@@ -19,11 +19,12 @@
 </br>
 
 ## 🔄 最近更新
+* [2023/10/27] 更新了一篇技术报告[DUMA](https://arxiv.org/abs/2310.18075#)，探索了对话场景下基于快慢脑架构的Agent实现方法
 * [2023/09/26] 更新了RLHF的训练代码，支持PPO和[DPO](https://arxiv.org/abs/2305.18290)训练，具体细节见：[README_RLHF.md](train/README_RLHF.md)
 * [2023/08/16] 基于原有的[train_3.5M_CN](https://huggingface.co/datasets/BelleGroup/train_3.5M_CN)数据新增了指令类别字段，共包括13个类别，具体细节见：[train_3.5M_CN_With_Category](https://huggingface.co/datasets/BELLE-2/train_3.5M_CN_With_Category)
 * [2023/08/10] 更新了基于ZeRO Inference的推理代码，详见[train/README_ZERO_INFERENCE.md](train/README_ZERO_INFERENCE.md)
 * [2023/08/07] 更新了继续预训练代码和指令微调代码，添加了flash attention 2，详见[train/README.md](train/README.md)。同时打包了运行环境，详见[train/docker/README.md](train/docker/README.md)
-* [2023/07/31] 更新了[一篇技术报告](https://arxiv.org/abs/2307.15290)，探索了针对下游任务时的增量预训练+指令微调的的策略方法
+* [2023/07/31] 更新了[一篇技术报告](https://arxiv.org/abs/2307.15290)，探索了针对垂直领域时的增量预训练+指令微调的的策略方法
 * [2023/07/27] 开放[BELLE-Llama2-13B-chat-0.4M](https://huggingface.co/BELLE-2/BELLE-Llama2-13B-chat-0.4M)，在Llama-2-13B的基础上采用40万高质量的对话数据上进行训练。在[评测集](https://github.com/LianjiaTech/BELLE/blob/main/eval/eval_set.json)上的效果相比BELLE-LLaMA-EXT-13B模型有显著提升。
 * [2023/05/14] 开放[BELLE-LLaMA-EXT-13B](https://huggingface.co/BelleGroup/BELLE-LLaMA-EXT-13B)，在LLaMA-13B的基础上扩展中文词表，并在400万高质量的对话数据上进行训练。
 * [2023/05/11] [BELLE/data/10M](data/10M)中，新加350万条生成多样化指令任务数据，包括单轮和多轮对话[train_3.5M_CN](https://huggingface.co/datasets/BelleGroup/train_3.5M_CN)。
@@ -64,8 +65,6 @@
 ### 🤖 模型
 
 详见[BELLE/models](models/)
-
-* 基于BLOOMZ-7B1-mt优化后的模型：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
 * 基于[Meta LLaMA2](https://github.com/facebookresearch/llama)实现调优的模型：[BELLE-Llama2-13B-chat-0.4M](https://huggingface.co/BELLE-2/BELLE-Llama2-13B-chat-0.4M)
 * 基于[Meta LLaMA](https://github.com/facebookresearch/llama)实现调优的模型：[BELLE-LLaMA-7B-0.6M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-0.6M-enc)
 , [BELLE-LLaMA-7B-2M-enc](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc)
@@ -74,7 +73,8 @@
 , [BELLE-on-Open-Datasets](https://huggingface.co/BelleGroup/BELLE-on-Open-Datasets) 以及基于LLaMA做了中文词表扩充的预训练模型[BELLE-LLaMA-EXT-7B](https://huggingface.co/BelleGroup/BELLE-LLaMA-EXT-7B)。
 
   * 请参考[Meta LLaMA的License](https://github.com/facebookresearch/llama/blob/main/LICENSE)，目前仅供学习交流。请严遵守LLaMA的使用限制。LLaMA模型不允许发布调优后的完整模型权重，但是可以发布原始的模型的diff。因此，我们使用文件间的XOR，保证拥有LLaMA原始模型授权的人才可以将本项目发布的模型转化成可以使用的格式。格式转化代码参考[BELLE/models](https://github.com/LianjiaTech/BELLE/tree/main/models)
-
+    
+* 基于BLOOMZ-7B1-mt优化后的模型：[BELLE-7B-0.2M](https://huggingface.co/BelleGroup/BELLE-7B-0.2M)，[BELLE-7B-0.6M](https://huggingface.co/BelleGroup/BELLE-7B-0.6M)，[BELLE-7B-1M](https://huggingface.co/BelleGroup/BELLE-7B-1M)，[BELLE-7B-2M](https://huggingface.co/BelleGroup/BELLE-7B-2M)
 ### ⚖️ 模型量化gptq
 
 详见[BELLE/gptq](https://github.com/LianjiaTech/BELLE/tree/main/models/gptq)，参考gptq的实现，对本项目中相关模型进行了量化
@@ -247,17 +247,25 @@ LLaMA-7B + FT(2M) + LoRA(math_0.25M) 代表了一个在0.25M数学指令数据�
 
 ```
 @misc{BELLE,
-  author = {Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Baochang Ma and Xiangang Li},
+  author = {BELLEGroup},
   title = {BELLE: Be Everyone's Large Language model Engine },
   year = {2023},
   publisher = {GitHub},
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/LianjiaTech/BELLE}},
 }
+
 @article{belle2023exploring,
   title={Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases},
   author={Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Lei Zhang, Baochang Ma, Xiangang Li},
   journal={arXiv preprint arXiv:2303.14742},
+  year={2023}
+}
+
+@article{wen2023chathome,
+  title={ChatHome: Development and Evaluation of a Domain-Specific Language Model for Home Renovation},
+  author={Wen, Cheng and Sun, Xianghui and Zhao, Shuaijiang and Fang, Xiaoquan and Chen, Liangyu and Zou, Wei},
+  journal={arXiv preprint arXiv:2307.15290},
   year={2023}
 }
 ```
