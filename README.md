@@ -19,6 +19,7 @@
 </br>
 
 ## 🔄 最近更新
+* [2023/11/24] 开源[BELLE-VL](https://huggingface.co/BELLE-2/BELLE-VL)多模态大语言模型，基于中文能力更强的语言模型基座来扩展模型的视觉能力，为社区提供更加灵活的选择
 * [2023/10/27] 更新了一篇技术报告[DUMA](https://arxiv.org/abs/2310.18075#)，探索了对话场景下基于快慢脑架构的Agent实现方法
 * [2023/09/26] 更新了RLHF的训练代码，支持PPO和[DPO](https://arxiv.org/abs/2305.18290)训练，具体细节见：[README_RLHF.md](train/README_RLHF.md)
 * [2023/08/16] 基于原有的[train_3.5M_CN](https://huggingface.co/datasets/BelleGroup/train_3.5M_CN)数据新增了指令类别字段，共包括13个类别，具体细节见：[train_3.5M_CN_With_Category](https://huggingface.co/datasets/BELLE-2/train_3.5M_CN_With_Category)
