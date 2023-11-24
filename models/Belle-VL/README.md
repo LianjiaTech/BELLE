@@ -44,21 +44,24 @@ print(response)
 | Category               | Score |
 |------------------------|-------|
 | **Perception**         | **1595.34**    |
-| Existence              | 190   |
-| Count                  | 150   |
-| Position               | 130   |
-| Color                  | 175   |
-| Posters                | 166.33|
-| Celebrity              | 136.76|
-| Scene                  | 156.25|
-| Landmark               | 174   |
-| Artwork                | 139.5 |
-| OCR                    | 177.5 |
+| --Existence              | 190   |
+| --Count                  | 150   |
+| --Position               | 130   |
+| --Color                  | 175   |
+| --Posters                | 166.33|
+| --Celebrity              | 136.76|
+| --Scene                  | 156.25|
+| --Landmark               | 174   |
+| --Artwork                | 139.5 |
+| --OCR                    | 177.5 |
+
+| Category               | Score |
+|------------------------|-------|
 | **Cognition**          | **332.14**    |
-| CommonsenseReasoning   | 127.14|
-| Numerical calculation  | 47.5  |
-| Text translation       | 102.5 |
-| code_reasoning         | 55    |
+| --Commonsense reasoning   | 127.14|
+| --Numerical calculation  | 47.5  |
+| --Text translation       | 102.5 |
+| --Code reasoning         | 55    |
 
 
 
