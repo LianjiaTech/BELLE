@@ -16,6 +16,30 @@
 
 * 多模态指令数据：指令微调阶段，数据主要来自[LLava](https://github.com/haotian-liu/LLaVA), [LRV-Instruction](https://github.com/FuxiaoLiu/LRV-Instruction), [LLaVAR](https://github.com/SALT-NLP/LLaVAR),[LVIS-INSTRUCT4V](https://github.com/X2FD/LVIS-INSTRUCT4V)等开源项目，我们也对其中部分数据进行了翻译，在此真诚的感谢他们为开源所做出的贡献！
 
+### 模型使用
+``` python
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+model_dir = '/path/to_finetuned_model/'
+img_path = 'you_image_path'
+tokenizer = AutoTokenizer.from_pretrained(model_dir, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(model_dir, trust_remote_code=True).eval()
+model.generation_config = GenerationConfig.from_pretrained(model_dir, trust_remote_code=True)
+question = '详细描述一下这张图'
+
+query = tokenizer.from_list_format([
+    {'image': img_path}, # Either a local path or an url
+    {'text': question},
+])
+response, history = model.chat(tokenizer, query=query, history=None)
+print(response)
+
+#or
+query = f'<img>{img_path}</img>\n{question}'
+response, history = model.chat(tokenizer, query=query, history=None)
+print(response)
+```
+
 ### [MME Benchmark](https://github.com/BradyFU/Awesome-Multimodal-Large-Language-Models/tree/Evaluation)
 | Category               | Score |
 |------------------------|-------|
