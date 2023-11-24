@@ -58,10 +58,10 @@ print(response)
 | Category               | Score |
 |------------------------|-------|
 | **Cognition**          | **332.14**    |
-| --Commonsense reasoning   | 127.14|
-| --Numerical calculation  | 47.5  |
-| --Text translation       | 102.5 |
-| --Code reasoning         | 55    |
+| --Commonsense Reasoning   | 127.14|
+| --Numerical Calculation  | 47.5  |
+| --Text Translation       | 102.5 |
+| --Code Reasoning         | 55    |
 
 
 
