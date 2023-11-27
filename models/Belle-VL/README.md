@@ -40,7 +40,9 @@ response, history = model.chat(tokenizer, query=query, history=None)
 print(response)
 ```
 
-### [MME Benchmark](https://github.com/BradyFU/Awesome-Multimodal-Large-Language-Models/tree/Evaluation)
+### MME Benchmark
+[MME](https://github.com/BradyFU/Awesome-Multimodal-Large-Language-Models/tree/Evaluation)是一个针对多模态大型语言模型的全面评估基准。它在总共14个子任务上测量感知和认知能力,包括
+包括存在性、计数、位置、颜色、海报、名人、场景、地标、艺术作品、OCR、常识推理、数值计算、文本翻译和代码推理等。BELLE-VL在感知评测共获得1595.34分，超过LLava和Qwen-VL.详情如下：
 | Category               | Score |
 |------------------------|-------|
 | **Perception**         | **1595.34**    |
