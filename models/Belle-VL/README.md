@@ -42,28 +42,28 @@ print(response)
 
 ### MME Benchmark
 [MME](https://github.com/BradyFU/Awesome-Multimodal-Large-Language-Models/tree/Evaluation)是一个针对多模态大型语言模型的全面评估基准。它在总共14个子任务上测量感知和认知能力,包括
-包括存在性、计数、位置、颜色、海报、名人、场景、地标、艺术作品、OCR、常识推理、数值计算、文本翻译和代码推理等。BELLE-VL在感知评测共获得1595.34分，超过LLava和Qwen-VL.详情如下：
+包括存在性、计数、位置、颜色、海报、名人、场景、地标、艺术作品、OCR、常识推理、数值计算、文本翻译和代码推理等。BELLE-VL在感知评测共获得1620.10分，超过LLava和Qwen-VL.详情如下：
 | Category               | Score |
 |------------------------|-------|
-| **Perception**         | **1595.34**    |
-| --Existence              | 190   |
-| --Count                  | 150   |
-| --Position               | 130   |
-| --Color                  | 175   |
-| --Posters                | 166.33|
-| --Celebrity              | 136.76|
-| --Scene                  | 156.25|
-| --Landmark               | 174   |
-| --Artwork                | 139.5 |
-| --OCR                    | 177.5 |
+| **Perception**         | **1620.10**    |
+| --Existence              | 195.00   |
+| --Count                  | 173.33   |
+| --Position               | 1310.00   |
+| --Color                  | 185.00   |
+| --Posters                | 160.88|
+| --Celebrity              | 135.88|
+| --Scene                  | 150.00|
+| --Landmark               | 169.25   |
+| --Artwork                | 143.50 |
+| --OCR                    | 177.50 |
 
 | Category               | Score |
 |------------------------|-------|
-| **Cognition**          | **332.14**    |
-| --Commonsense Reasoning   | 127.14|
-| --Numerical Calculation  | 47.5  |
-| --Text Translation       | 102.5 |
-| --Code Reasoning         | 55    |
+| **Cognition**          | **305.36**    |
+| --Commonsense Reasoning   | 132.86|
+| --Numerical Calculation  | 42.50  |
+| --Text Translation       | 72.50 |
+| --Code Reasoning         | 57.00    |
 
 
 
