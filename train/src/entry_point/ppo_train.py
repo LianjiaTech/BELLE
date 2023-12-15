@@ -1,136 +1,86 @@
-# coding=utf-8
 from dataclasses import dataclass, field
-import os
-from typing import Any, Dict, List, Optional, Union
+from typing import Optional
 
 import torch
+import tyro
 from accelerate import Accelerator
 from accelerate.utils import DummyOptim
 from datasets import load_dataset
 from peft import LoraConfig
 from tqdm import tqdm
-from transformers import (
-    Adafactor,
-    AutoTokenizer,
-    HfArgumentParser,
-    LlamaTokenizer,
-    PreTrainedTokenizerBase,
-    AutoModelForSequenceClassification,
-)
-from transformers.utils import PaddingStrategy
-from trl import AutoModelForCausalLMWithValueHead, PPOConfig, set_seed
-from trl.core import LengthSampler
-from multiprocessing import cpu_count
-from src.utils import prepare_deepspeed, zero_infer
-from src.ppo_trainer import PPOTrainerForZero3 as PPOTrainer
+from transformers import AutoTokenizer, pipeline
 
-accelerator = Accelerator()
+from trl import AutoModelForCausalLMWithValueHead, AutoModelForSeq2SeqLMWithValueHead, PPOConfig, PPOTrainer, set_seed
+from trl.core import LengthSampler
+from trl.import_utils import is_xpu_available
+from multiprocessing import cpu_count
+
 
 tqdm.pandas()
-import logging
-
-logging.basicConfig(
-    format=f"[%(asctime)s] [%(levelname)s] [%(filename)s:%(lineno)d:%(funcName)s] [Rank {accelerator.process_index}] %(message)s"
-)
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
-
-def print_rank_0(msg, log_file):
-    if accelerator.is_main_process:
-        with open(log_file, "a") as f:
-            print(msg)
-            f.write(msg + "\n")
 
 
 @dataclass
 class ScriptArguments:
-    """
-    The name of the Casual LM model we wish to fine with PPO
-    """
-
-    # NOTE: gpt2 models use Conv1D instead of Linear layers which are not yet supported in 8 bit mode
-    # models like gpt-neo* models are more suitable.
-    model_name: Optional[str] = field(default="", metadata={"help": "the model name"})
-    reward_model_name: Optional[str] = field(
-        default="", metadata={"help": "the reward model name"}
-    )
-    log_with: Optional[str] = field(
-        default=None, metadata={"help": "use 'wandb' to log with wandb"}
-    )
-    learning_rate: Optional[float] = field(
-        default=1.41e-5, metadata={"help": "the learning rate"}
-    )
-    output_max_length: Optional[int] = field(
-        default=128, metadata={"help": "maximum length for generation"}
-    )
-    mini_batch_size: Optional[int] = field(
-        default=1, metadata={"help": "the PPO minibatch size"}
-    )
-    eval_batch_size: Optional[int] = field(
-        default=1,
-        metadata={
-            "help": "the batch size for reward model rating and actor generating"
-        },
-    )
-    batch_size: Optional[int] = field(default=32, metadata={"help": "the batch size"})
-    ppo_epochs: Optional[int] = field(
-        default=4, metadata={"help": "the number of ppo epochs"}
-    )
     data_epochs: Optional[int] = field(
-        default=1, metadata={"help": "the number of data epochs"}
-    )
-    gradient_accumulation_steps: Optional[int] = field(
-        default=4, metadata={"help": "the number of gradient accumulation steps"}
-    )
-    adafactor: Optional[bool] = field(
-        default=False, metadata={"help": "whether to use the adafactor optimizer"}
-    )
-    early_stopping: Optional[bool] = field(
-        default=False, metadata={"help": "whether to early stop"}
-    )
-    target_kl: Optional[float] = field(
-        default=0.1, metadata={"help": "kl target for early stopping"}
-    )
-    reward_baseline: Optional[float] = field(
-        default=0.0,
-        metadata={"help": "a baseline value that is subtracted from the reward"},
-    )
-    save_freq: Optional[int] = field(
-        default=None, metadata={"help": "n steps to save the model"}
+        default=1, metadata={"help": "The number of overall training epochs."}
     )
     output_dir: Optional[str] = field(
-        default="runs/", metadata={"help": "n steps to save the model"}
+        default=None, metadata={"help": "Where to save the model."}
     )
-    seed: Optional[int] = field(default=0, metadata={"help": "the seed"})
-    steps: Optional[int] = field(default=20000, metadata={"help": "number of epochs"})
-    init_kl_coef: Optional[float] = field(
-        default=0.2,
-        metadata={
-            "help": "Initial KL penalty coefficient (used for adaptive and linear control)"
-        },
-    )
-    adap_kl_ctrl: Optional[bool] = field(
-        default=True, metadata={"help": "Use adaptive KL control, otherwise linear"}
-    )
-    do_sample: Optional[bool] = field(
-        default=True, metadata={"help": "Do sample when generating"}
-    )
-    logging_dir: Optional[str] = field(default="logs", metadata={"help": "Logging dir"})
-    use_llama: Optional[bool] = field(default=True, metadata={"help": "Use llama"})
-    reward_model_use_llama: Optional[bool] = field(
-        default=True, metadata={"help": "Reward model use llama"}
-    )
-    use_lora: Optional[bool] = field(default=False, metadata={"help": "Use lora"})
-    train_data: str = field(default="", metadata={"help": "Train file"})
     cache_dir: Optional[str] = field(
-        default="hf_cache_dir", metadata={"help": "Dataset cache dir"}
+        default=None, metadata={"help": "Dataset cache dir."}
     )
     input_length: Optional[int] = field(
-        default=512, metadata={"help": "Input token length"}
+        default=128, metadata={"help": "Maximum input token length."}
     )
+    ppo_config: PPOConfig = field(
+        default_factory=lambda: PPOConfig(
+            model_name=None,
+            query_dataset=None,
+            reward_model=None,
+            learning_rate=1.41e-5,
+            log_with=None,
+            mini_batch_size=1,
+            batch_size=2,
+            gradient_accumulation_steps=2,
+            optimize_device_cache=True,
+            early_stopping=False,
+            target_kl=0.1,
+            ppo_epochs=4,
+            kl_penalty="kl",
+            seed=0,
+            init_kl_coef=0.2,
+            adap_kl_ctrl=True,
+            project_kwargs={"logging_dir": "logs"},
+            use_score_scaling=False,
+            use_score_norm=False,
+            score_clip=None,
+        )
+    )
+    use_seq2seq: bool = field(default=False, metadata={"help": "Whether to use seq2seq models."})
+    use_peft: bool = field(default=False, metadata={"help": "Whether to use peft."})
+    peft_config: Optional[LoraConfig] = field(
+        default_factory=lambda: LoraConfig(
+            r=16,
+            lora_alpha=16,
+            lora_dropout=0.05,
+            bias="none",
+            task_type="CAUSAL_LM",
+        ),
+    )
+    trust_remote_code: bool = field(default=False, metadata={"help": "Enable `trust_remote_code`"})
 
 
+args = tyro.cli(ScriptArguments)
+
+
+# We then define the arguments to pass to the sentiment analysis pipeline.
+# We set `return_all_scores` to True to get the sentiment score for each token.
+sent_kwargs = {"return_all_scores": True, "function_to_apply": "none", "batch_size": 16}
+
+trl_model_class = AutoModelForCausalLMWithValueHead if not args.use_seq2seq else AutoModelForSeq2SeqLMWithValueHead
+
+# Let's begin building the datset!
 def build_dataset(tokenizer, dataset_name, input_length, cache_dir="hf_cache_dir"):
     """
     Build dataset for training. This builds the dataset from `load_dataset`, one should
@@ -173,248 +123,124 @@ def build_dataset(tokenizer, dataset_name, input_length, cache_dir="hf_cache_dir
         remove_columns=original_columns,
     )
     ds = ds.filter(lambda x: len(x["input_ids"]) <= input_length)
+    ds.set_format(type="torch")
     return ds
 
 
-@dataclass
-class DataCollatorWithPadding:
-    tokenizer: PreTrainedTokenizerBase
-    padding: Union[bool, str, PaddingStrategy] = True
-    max_length: Optional[int] = None
-    pad_to_multiple_of: Optional[int] = 8
-    return_tensors: str = "pt"
+tokenizer = AutoTokenizer.from_pretrained(args.ppo_config.model_name, trust_remote_code=args.trust_remote_code)
+# Some tokenizers like GPT-2's don't have a padding token by default, so we set one here.
+tokenizer.pad_token_id = tokenizer.eos_token_id if tokenizer.pad_token_id is None else tokenizer.pad_token_id
 
-    def __call__(self, features: List[Dict[str, Any]]) -> Dict[str, Any]:
-        batch: Dict[str, Any] = {"query": [feature["query"] for feature in features]}
-        input_ids = [{"input_ids": feature["input_ids"]} for feature in features]
-        input_ids = self.tokenizer.pad(
-            input_ids,
-            padding=self.padding,
-            max_length=self.max_length,
-            pad_to_multiple_of=self.pad_to_multiple_of,
-            return_tensors=self.return_tensors,
-        )["input_ids"].unbind(0)
-        batch["input_ids"] = list(input_ids)
-        return batch
+# We retrieve the dataloader by calling the `build_dataset` function.
+dataset = build_dataset(tokenizer, args.ppo_config.query_dataset, args.input_length, args.cache_dir)
 
+def collator(data):
+    return dict((key, [d[key] for d in data]) for key in data[0])
 
-def main():
-    parser = HfArgumentParser(ScriptArguments)
-    script_args: ScriptArguments = parser.parse_args_into_dataclasses()[0]
-    log_file = os.path.join(script_args.output_dir, "print_log.txt")
+# set seed before initializing value head for deterministic eval
+set_seed(args.ppo_config.seed)
 
-    if script_args.use_llama:
-        tokenizer = LlamaTokenizer.from_pretrained(script_args.model_name)
-        tokenizer.add_special_tokens(
-            {
-                "bos_token": "<s>",
-                "eos_token": "</s>",
-                "unk_token": "<unk>",
-                "pad_token": "<unk>",
-            }
-        )
+# Now let's build the model, the reference model, and the tokenizer.
+if not args.use_peft:
+    ref_model = trl_model_class.from_pretrained(args.ppo_config.model_name, trust_remote_code=args.trust_remote_code)
+    device_map = None
+    peft_config = None
+else:
+    peft_config = args.peft_config
+    ref_model = None
+    # Copy the model to each device
+    device_map = {"": Accelerator().local_process_index}
+
+model = trl_model_class.from_pretrained(
+    args.ppo_config.model_name,
+    trust_remote_code=args.trust_remote_code,
+    device_map=device_map,
+    peft_config=peft_config,
+)
+
+# dummy optimizer
+optimizer = DummyOptim(
+    filter(lambda p: p.requires_grad, model.parameters()), lr=args.ppo_config.learning_rate
+)
+
+# We then build the PPOTrainer, passing the model, the reference model, the tokenizer
+# ppo_trainer = PPOTrainer(args.ppo_config, model, ref_model, tokenizer, dataset=dataset, data_collator=collator, optimizer=optimizer)
+ppo_trainer = PPOTrainer(
+    args.ppo_config,
+    model,
+    ref_model,
+    tokenizer,
+    dataset=dataset,
+    data_collator=collator,
+    optimizer=optimizer
+)
+
+# We then build the sentiment analysis pipeline, passing the model name and the
+# sentiment analysis (text-classification) pipeline arguments. Let's also make sure to set the device
+# to the same device as the PPOTrainer.
+device = ppo_trainer.accelerator.device
+if ppo_trainer.accelerator.num_processes == 1:
+    if is_xpu_available():
+        device = "xpu:0"
     else:
-        tokenizer = AutoTokenizer.from_pretrained(script_args.model_name)
-        tokenizer.add_special_tokens({"pad_token": tokenizer.unk_token})
-    tokenizer.padding_side = "left"
-    print_rank_0(
-        f"unk token: {tokenizer.unk_token}, "
-        f"unk token id: {tokenizer.unk_token_id}, "
-        f"pad token: {tokenizer.pad_token}, "
-        f"pad token id: {tokenizer.pad_token_id}",
-        log_file,
-    )
+        device = 0 if torch.cuda.is_available() else "cpu"  # to avoid a `pipeline` bug
+ds_plugin = ppo_trainer.accelerator.state.deepspeed_plugin
+# sentiment-analysis is an alias of text-classification
+# https://huggingface.co/docs/transformers/v4.36.0/en/main_classes/pipelines#transformers.pipeline.task
+task = 'text-classification'
+if ds_plugin is not None and ds_plugin.is_zero3_init_enabled():
+    with ds_plugin.zero3_init_context_manager(enable=False):
+        reward_pipe = pipeline(task, model=args.ppo_config.reward_model, device=device)
+else:
+    reward_pipe = pipeline(task, model=args.ppo_config.reward_model, device=device)
 
-    with accelerator.main_process_first():
-        # We retrieve the dataloader by calling the `build_dataset` function.
-        dataset = build_dataset(
-            tokenizer,
-            dataset_name=script_args.train_data,
-            input_length=script_args.input_length,
-            cache_dir=script_args.cache_dir,
+# Some tokenizers like GPT-2's don't have a padding token by default, so we set one here.
+if reward_pipe.tokenizer.pad_token_id is None:
+    reward_pipe.tokenizer.pad_token_id = tokenizer.pad_token_id
+
+if reward_pipe.model.config.pad_token_id is None:
+    reward_pipe.model.config.pad_token_id = tokenizer.pad_token_id
+
+# We then define the arguments to pass to the `generate` function. These arguments
+# are passed to the `generate` function of the PPOTrainer, which is a wrapper around
+# the `generate` function of the trained model.
+generation_kwargs = {
+    "min_length": -1,
+    "top_k": 0.0,
+    "top_p": 1.0,
+    "do_sample": True,
+    "pad_token_id": tokenizer.eos_token_id,
+    "max_new_tokens": 32,
+}
+
+# Train every data epoch
+for data_epoch in tqdm(
+    range(args.data_epochs),
+    desc=f"Epoch",
+):
+    # Each epoch training
+    for batch in tqdm(ppo_trainer.dataloader, desc='Training'):
+        query_tensors = batch["input_ids"]
+
+        # Get response from model
+        response_tensors, ref_response_tensors = ppo_trainer.generate(
+            query_tensors, return_prompt=False, generate_ref_response=True, **generation_kwargs
         )
-        for i in range(2):
-            print_rank_0("Train tokenized example: {}".format(dataset[i]), log_file)
-        print_rank_0(f"Train dataset length: {len(dataset)}", log_file)
+        batch["response"] = tokenizer.batch_decode(response_tensors)
+        batch["ref_response"] = tokenizer.batch_decode(ref_response_tensors)
 
-    config = PPOConfig(
-        steps=len(dataset) // accelerator.num_processes,
-        model_name=script_args.model_name,
-        learning_rate=script_args.learning_rate,
-        log_with=script_args.log_with,
-        batch_size=script_args.batch_size,
-        mini_batch_size=script_args.mini_batch_size,
-        gradient_accumulation_steps=script_args.gradient_accumulation_steps,
-        optimize_cuda_cache=True,
-        early_stopping=script_args.early_stopping,
-        target_kl=script_args.target_kl,
-        ppo_epochs=script_args.ppo_epochs,
-        seed=script_args.seed,
-        init_kl_coef=script_args.init_kl_coef,
-        adap_kl_ctrl=script_args.adap_kl_ctrl,
-        project_kwargs={"logging_dir": script_args.logging_dir},
-    )
-    # set seed before initializing value head for deterministic eval
-    set_seed(config.seed)
+        # Compute score score
+        texts = [q + r for q, r in zip(batch["query"], batch["response"])]
+        pipe_outputs = reward_pipe(texts, **sent_kwargs)
+        rewards = [torch.tensor(output[0]["score"]) for output in pipe_outputs]
+        ref_texts = [q + r for q, r in zip(batch["query"], batch["ref_response"])]
+        ref_pipe_outputs = reward_pipe(ref_texts, **sent_kwargs)
+        ref_rewards = [torch.tensor(output[0]["score"]) for output in ref_pipe_outputs]
+        batch["ref_rewards"] = ref_rewards
 
-    # Now let's build the model, the reference model, and the tokenizer.
-
-    if script_args.use_lora:
-        lora_config = LoraConfig(
-            r=16,
-            lora_alpha=32,
-            lora_dropout=0.05,
-            bias="none",
-            task_type="CAUSAL_LM",
-        )
-    else:
-        lora_config = None
-
-    model = AutoModelForCausalLMWithValueHead.from_pretrained(
-        config.model_name,
-        peft_config=lora_config,
-    )
-    model.config.pad_token_id = tokenizer.pad_token_id
-    model.config.eos_token_id = tokenizer.eos_token_id
-    model.config.use_cache = True
-
-    ref_model = AutoModelForCausalLMWithValueHead.from_pretrained(
-        config.model_name,
-        peft_config=lora_config,
-    )
-    ref_model.config.pad_token_id = tokenizer.pad_token_id
-    ref_model.config.use_cache = False
-
-    optimizer = DummyOptim(
-        filter(lambda p: p.requires_grad, model.parameters()), lr=config.learning_rate
-    )
-    if script_args.adafactor:
-        optimizer = Adafactor(
-            filter(lambda p: p.requires_grad, model.parameters()),
-            scale_parameter=False,
-            relative_step=False,
-            warmup_init=False,
-            lr=config.learning_rate,
-        )
-    # We then build the PPOTrainer, passing the model, the reference model, the tokenizer
-    ppo_trainer = PPOTrainer(
-        config,
-        model,
-        ref_model=ref_model,
-        tokenizer=tokenizer,
-        dataset=dataset,
-        data_collator=DataCollatorWithPadding(
-            tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
-        ),
-        optimizer=optimizer,
-    )
-    ppo_trainer.current_device = accelerator.device
-    logger.debug("After ppo_trainer initialized")
-    # We then build the text classification pipeline using our reward model, passing the
-    # model name and the text classification pipeline arguments. Let's also make sure to
-    # set the device to the same device as the PPOTrainer.
-    if script_args.reward_model_use_llama:
-        rw_tokenizer = LlamaTokenizer.from_pretrained(script_args.reward_model_name)
-        rw_tokenizer.add_special_tokens(
-            {
-                "bos_token": "<s>",
-                "eos_token": "</s>",
-                "unk_token": "<unk>",
-                "pad_token": "<unk>",
-            }
-        )
-    else:
-        rw_tokenizer = AutoTokenizer.from_pretrained(script_args.reward_model_name)
-        rw_tokenizer.add_special_tokens({"pad_token": tokenizer.unk_token})
-
-    # 使用deepspeed做reward model的inference
-    reward_model = AutoModelForSequenceClassification.from_pretrained(
-        script_args.reward_model_name, num_labels=1
-    )
-    reward_model.config.pad_token_id = rw_tokenizer.pad_token_id
-    reward_model = prepare_deepspeed(accelerator, reward_model)
-
-    # We then define the arguments to pass to the `generate` function. These arguments
-    # are passed to the `generate` function of the PPOTrainer, which is a wrapper around
-    # the `generate` function of the trained model.
-    generation_kwargs = {
-        # "min_length": -1,
-        "top_k": 0,
-        "top_p": 1.0,
-        "do_sample": script_args.do_sample,
-        "pad_token_id": tokenizer.pad_token_id,
-        "eos_token_id": tokenizer.eos_token_id,
-    }
-    output_min_length = 32
-    output_max_length = script_args.output_max_length
-    output_length_sampler = LengthSampler(output_min_length, output_max_length)
-
-    for data_epoch in tqdm(
-        range(script_args.data_epochs),
-        desc=f"rank: {accelerator.process_index}, data_epoch",
-    ):
-        # batch: 因为dataloader用accelerate prepare，prepare调用prepare_data_loader，prepare_data_loader会为dataloader加入分布式采样，因此每个进程都是不一样的batch
-        for ppo_epoch, batch in tqdm(
-            enumerate(ppo_trainer.dataloader),
-            total=config.total_ppo_epochs,
-            desc=f"rank: {accelerator.process_index}, ppo_epoch",
-        ):
-            # actor生成回复
-            question_tensors = batch["input_ids"]
-            logger.debug("Begin ppo_trainer.generate")
-            output_strs = []
-            response_tensors = []
-            for i in range(0, script_args.batch_size, script_args.eval_batch_size):
-                input_ids = batch["input_ids"][i : i + script_args.eval_batch_size]
-                output_ids = ppo_trainer.generate(
-                    input_ids,
-                    return_prompt=False,
-                    length_sampler=output_length_sampler,
-                    **generation_kwargs,
-                )
-                response_tensors.extend(output_ids)
-                output_strs.extend(
-                    tokenizer.batch_decode(output_ids, skip_special_tokens=True)
-                )
-            batch["response"] = output_strs
-            logger.debug("After ppo_trainer.generate")
-
-            # 获得rewards
-            texts = [q + r for q, r in zip(batch["query"], batch["response"])]
-            outputs: List[Dict[str, Any]] = zero_infer(
-                accelerator,
-                reward_model,
-                rw_tokenizer,
-                texts,
-                script_args.eval_batch_size,
-            )
-            rewards = []
-            for output in outputs:
-                rewards.extend(output.logits.tolist())
-            rewards = [
-                torch.tensor(reward, device=accelerator.device)
-                - script_args.reward_baseline
-                for reward in rewards
-            ]
-
-            # Run PPO step
-            logger.debug("Begin ppo_trainer.step")
-            stats = ppo_trainer.step(question_tensors, response_tensors, rewards)
-            logger.debug("After ppo_trainer.step")
-            ppo_trainer.log_stats(stats, batch, rewards)
-            accelerator.wait_for_everyone()
-            # 保存
-            total_ppo_epoch = data_epoch * config.total_ppo_epochs + ppo_epoch
-            if (
-                script_args.save_freq
-                and (total_ppo_epoch + 1) % script_args.save_freq == 0
-            ):
-                ppo_trainer.save_pretrained(
-                    f"{script_args.output_dir}/step_{total_ppo_epoch}"
-                )
-    ppo_trainer.save_pretrained(script_args.output_dir)
-    accelerator.wait_for_everyone()
-
-
-if __name__ == "__main__":
-    main()
+        # Run PPO step
+        stats = ppo_trainer.step(query_tensors, response_tensors, rewards)
+        ppo_trainer.log_stats(stats, batch, rewards, columns_to_log=["query", "response", "ref_response", "ref_rewards"])
+    
+    # Save for every epoch
+    ppo_trainer._save_pretrained(args.output_dir)
