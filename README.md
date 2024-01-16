@@ -19,6 +19,7 @@
 </br>
 
 ## 🔄 最近更新
+* [2024/01/16] 更新了一篇技术报告[RAISE](https://arxiv.org/pdf/2401.02777.pdf). RAISE通过实验发现构造少量的样例数据，就能有效的激发大模型，生成对话也更可控
 * [2023/12/29] 开源[Belle-whisper-larger-v2-zh](https://huggingface.co/BELLE-2/Belle-whisper-large-v2-zh)和[Belle-distilwhisper-large-v2-zh](https://huggingface.co/BELLE-2/Belle-distilwhisper-large-v2-zh)两个针对中文能力强化后的语音识别模型，方便大家在语音场景下使用大语言模型
 * [2023/11/24] 开源[BELLE-VL](https://huggingface.co/BELLE-2/BELLE-VL)多模态大语言模型，基于中文能力更强的语言模型基座来扩展模型的视觉能力，为社区提供更加灵活的选择（目前BELLE-VL最新的模型在[MME](https://github.com/BradyFU/Awesome-Multimodal-Large-Language-Models/tree/Evaluation)感知评测维度共获得**1620.10**分,超过Qwen-VL、Llava、mplug-owl）
 * [2023/10/27] 更新了一篇技术报告[DUMA](https://arxiv.org/abs/2310.18075#)，探索了对话场景下基于快慢脑架构的Agent实现方法

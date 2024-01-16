@@ -31,6 +31,7 @@ The following screencap ran on an M1 Max CPU real-time (no speed adjustment).
 <img src="./chat/chatbelle-demo.gif"></img>
 
 ## 🔄 What‘s new
+* [2024/01/16] Updated a technical report [RAISE](https://arxiv.org/pdf/2401.02777.pdf). RAISE found through experiments that constructing a small amount of sample data can effectively stimulate large models and generate more controllable dialogues
 * [2023/12/29] The open-source ASR model with enhanced Chinese capabilities [Belle-whisper-larger-v2-zh](https://huggingface.co/BELLE-2/Belle-whisper-large-v2-zh) and [Belle-distilwhisper-large -v2-zh](https://huggingface.co/BELLE-2/Belle-distilwhisper-large-v2-zh) are released, making it easier for everyone to use large language models in speech scenarios.
 * [2023/11/24] The open-source [BELLE-VL](https://huggingface.co/BELLE-2/BELLE-VL) multimodal large language model is released, expanding the model's visual capabilities based on a language model foundation with enhanced Chinese language abilities. This provides the community with more flexible options. Currently, the latest version of BELLE-VL has scored 1620.10 points in the [MME](https://github.com/BradyFU/Awesome-Multimodal-Large-Language-Models/tree/Evaluation) perception evaluation dimension, surpassing Qwen-VL, Llava, and mplug-owl."
 * [2023/10/27] Updated a technical report [DUMA](https://arxiv.org/pdf/2310.18075.pdf), exploring the Agent based on fast-slow brain architecture in conversational scenarios.
