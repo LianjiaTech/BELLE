@@ -19,6 +19,7 @@
 </br>
 
 ## 🔄 最近更新
+* [2024/10/16] 开源[Belle-whisper-larger-v3-turbo-zh](https://huggingface.co/BELLE-2/Belle-whisper-large-v3-turbo-zh)  中文能力强化后的语音识别模型，识别精度相比whisper-large-v3-turbo相对提升24~64%，识别速度相比whisper-large-v3有7-8倍提升。
 * [2024/03/15] 更新了一篇技术报告[Dial-insight](https://arxiv.org/pdf/2403.09167.pdf)  在垂直领域场景微调大模型时，使用高质量的垂直领域数据可以在使模型的垂直领域能力增强的同时，有效的抵抗模型通用能力的坍缩。
 * [2024/03/11] 开源[Belle-whisper-larger-v3-zh](https://huggingface.co/BELLE-2/Belle-whisper-large-v3-zh)  中文能力强化后的语音识别模型，相比whisper-large-v3相对提升24~65%，特别是在高噪、混响等复杂场景下有突出表现。
 * [2024/01/16] 更新了一篇技术报告[RAISE](https://arxiv.org/pdf/2401.02777.pdf). RAISE通过实验发现构造少量的样例数据，就能有效的激发大模型，生成对话也更可控
